@@ -117,6 +117,13 @@ $l10n.EXTTIMECARD_OVERTIME_TYPE_DAY2</p>
 $l10n.EXTTIMECARD_OVERTIME_TYPE_O
 #end
 #ALtditemfooter()
+#ALtdcaption($l10n.EXTTIMECARD_CONSIDERED_OVERTIME)
+#ALtditemheader()
+<input type="checkbox" name="considered_overtime_flag" value="T" id="considered_overtime_flag" #if($result.ConsideredOvertimeFlag.toString() == 'T'&&$mode!="new_form")checked="checked"#end/>
+$l10n.EXTTIMECARD_CONSIDERED_OVERTIME_MONTH1
+<input class="text" name="considered_overtime" value="$!result.ConsideredOvertime.toString()" type="text" size="3" maxlength="3">
+$l10n.EXTTIMECARD_CONSIDERED_OVERTIME_MONTH2
+#ALtditemfooter()
 #ALtdcaption("#ALrequired($l10n.EXTTIMECARD_HOLIDAY_SETTING)")
 #ALtditemheader()
 <p><input name="default_holiday_flag" type="radio" value="A" id="default_holiday_flagA_$!{portlet.ID}" #if ($!{result.DefaultHolidayFlag.toString()} == "A") checked="checked" #end onclick="aipo.exttimecardsystem.originalHolidayFieldOFF()"/>&nbsp;<label for="default_holiday_flagA_$!{portlet.ID}" onclick="aipo.exttimecardsystem.originalHolidayFieldOFF()">$l10n.EXTTIMECARD_HOLIDAY_SETTING_DEFAULT_HOLIDAY</label></p>

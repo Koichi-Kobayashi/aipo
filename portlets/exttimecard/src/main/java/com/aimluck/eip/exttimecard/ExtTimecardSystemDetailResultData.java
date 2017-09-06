@@ -85,6 +85,10 @@ public class ExtTimecardSystemDetailResultData extends
 
   private ALStringField holiday;
 
+  private ALStringField considered_overtime_flag;
+
+  private ALNumberField considered_overtime;
+
   private boolean hasHoliday;
 
   /**
@@ -120,6 +124,8 @@ public class ExtTimecardSystemDetailResultData extends
     week7 = new ALStringField();
     statutoryHoliday = new ALStringField();
     holiday = new ALStringField();
+    considered_overtime_flag = new ALStringField();
+    considered_overtime = new ALNumberField();
   }
 
   public String getUserId() {
@@ -381,6 +387,38 @@ public class ExtTimecardSystemDetailResultData extends
    */
   public void setHasHoliday(boolean hasHoliday) {
     this.hasHoliday = hasHoliday;
+  }
+
+  /**
+   * @return considered_overtime_flag
+   */
+  public ALStringField getConsideredOvertimeFlag() {
+    return considered_overtime_flag;
+  }
+
+  /**
+   * @param considered_overtime_flag
+   *          セットする considered_overtime_flag
+   */
+
+  public void setConsideredOvertimeFlag(String type) {
+    considered_overtime_flag.setValue(type);
+  }
+
+  /**
+   * @return considered_overtime
+   */
+  public ALNumberField getConsideredOvertime() {
+    return considered_overtime;
+  }
+
+  /**
+   * @param considered_overtime
+   *          セットする considered_overtime
+   */
+
+  public void setConsideredOvertime(int i) {
+    considered_overtime.setValue(i);
   }
 
 }
