@@ -418,9 +418,13 @@ public class ReportSelectData extends
       select.append(" t0.report_name, ");
       select.append(" t0.start_date, ");
       select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0 ");
+      body.append(" FROM eip_t_report t0, eip_t_report_map t1 ");
+      // if (isMySQL) {
+      // body.append(" FORCE INDEX (eip_t_report_index2) ");
+      // }
       body.append(" WHERE ");
-      body.append(" t0.report_name <> '' ");
+      body.append(" t0.report_id = t1.report_id AND ");
+      body.append(" parent_id = 0 ");
     }
 
     // 検索
@@ -432,6 +436,7 @@ public class ReportSelectData extends
       body.append(" AND ");
       body.append(" (t0.report_name LIKE #bind($search) OR ");
       body.append(" t0.note LIKE #bind($search)) ");
+      // body.append(" GROUP BY t0.report_id ");
     }
     // replyを除く
 
