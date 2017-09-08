@@ -124,7 +124,11 @@
 #ALtdcellAtt("$!{key.WorkDay}$l10n.EXTTIMECARD_DAY<br>（$!{key.WorkHour}$l10n.EXTTIMECARD_HOURS）" "nowrap='nowrap' align='center' class='doubleHeight'")
 ##ALtdcellAtt("$!{key.OvertimeWithinStatutoryWorkingHour}$l10n.EXTTIMECARD_HOURS" "nowrap='nowrap' align='center' class=''")
 #ALtdcellAtt("$!{key.OvertimeHour}$l10n.EXTTIMECARD_HOURS" "nowrap='nowrap' align='center' class=''")
+#if("${key.ConsideredOvertimeOutsideHour}"=="-1.0")
+#ALtdcellAtt("-" "nowrap='nowrap' align='center' class=''")
+#else
 #ALtdcellAtt("$!{key.ConsideredOvertimeOutsideHour}$l10n.EXTTIMECARD_HOURS" "nowrap='nowrap' align='center' class=''")
+#end
 #ALtdcellAtt("$!{key.OfficialOffDay}$l10n.EXTTIMECARD_DAY<br>（$!{key.TotalOfficialOffHour}$l10n.EXTTIMECARD_HOURS）" "nowrap='nowrap' align='center' class='doubleHeight'")
 #ALtdcellAtt("$!{key.StatutoryOffDay}$l10n.EXTTIMECARD_DAY<br>（$!{key.TotalStatutoryOffHour}$l10n.EXTTIMECARD_HOURS）" "nowrap='nowrap' align='center' class='doubleHeight'")
 #ALtdcellAtt("$!{key.TotalMidnightWorkHour}$l10n.EXTTIMECARD_HOURS" "nowrap='nowrap' align='center' class=''")

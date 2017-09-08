@@ -96,6 +96,7 @@
 #ALtdheadAtt($l10n.EXTTIMECARD_WORKING_ARRANGEMENTS "class='center'")
 #ALtdheadAtt($l10n.EXTTIMECARD_WORK_DAY "class='doubleHeight center'")
 #ALtdheadAtt($l10n.EXTTIMECARD_OVERTIME_DAY "class='doubleHeight center'")
+#ALtdheadAtt($l10n.EXTTIMECARD_CONSIDERED_OVERTIME_OUTSIDE "class='center'")
 #ALtdheadAtt($l10n.EXTTIMECARD_OFF_DAY "class='doubleHeight center'")
 #ALtdheadAtt($l10n.EXTTIMECARD_LATE_COMING_DAY "class='center'")
 #ALtdheadAtt($l10n.EXTTIMECARD_EARLY_LEAVING_DAY "class='center'")
@@ -112,6 +113,11 @@
 #ALtdcellAtt("$!{key.SystemNameHtml}" "align='center' class='wType'")
 #ALtdcellAtt("$!{key.WorkDay}$l10n.EXTTIMECARD_DAY<br>（$!{key.WorkHour}$l10n.EXTTIMECARD_HOURS）" "nowrap='nowrap' align='center' class='wTime doubleHeight'")
 #ALtdcellAtt("$!{key.OvertimeDay}$l10n.EXTTIMECARD_DAY<br>（$!{key.OvertimeHour}$l10n.EXTTIMECARD_HOURS）" "nowrap='nowrap' align='center' class='wTime doubleHeight'")
+#if("${key.ConsideredOvertimeOutsideHour}"=="-1.0")
+#ALtdcellAtt("-" "nowrap='nowrap' align='center' class='wTime'")
+#else
+#ALtdcellAtt("$!{key.ConsideredOvertimeOutsideHour}$l10n.EXTTIMECARD_HOURS" "nowrap='nowrap' align='center' class='wTime'")
+#end
 #ALtdcellAtt("$!{key.OffDay}$l10n.EXTTIMECARD_DAY<br>（$!{key.OffHour}$l10n.EXTTIMECARD_HOURS）" "nowrap='nowrap' align='center' class='wTime doubleHeight'")
 #ALtdcellAtt("$!{key.LateComingDay}$l10n.EXTTIMECARD_DAY" "nowrap='nowrap' align='center' class='wDays'")
 #ALtdcellAtt("$!{key.EarlyLeavingDay}$l10n.EXTTIMECARD_DAY" "nowrap='nowrap' align='center' class='wDays'")
