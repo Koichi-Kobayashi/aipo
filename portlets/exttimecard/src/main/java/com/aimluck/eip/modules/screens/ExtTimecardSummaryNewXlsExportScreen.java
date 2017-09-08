@@ -205,7 +205,15 @@ public class ExtTimecardSummaryNewXlsExportScreen extends ALXlsScreen {
         tclistrd.getOvertimeWithinStatutoryWorkingHour().getValueAsString();
       // 残業時間
       // String overtime_day = tclistrd.getOvertimeDay().getValueAsString();
-      String overtime_hour = tclistrd.getOvertimeHour().getValueAsString();
+      // みなし外残業時間を見て-1ならみなし残業設定なしで通常の残業時間、それ以外だったらみなし外残業時間を残業時間として返す
+      String tmp =
+        tclistrd.getConsideredOvertimeOutsideHour().getValueAsString();
+      String overtime_hour;
+      if (tmp.equals("-1.0")) {
+        overtime_hour = tclistrd.getOvertimeHour().getValueAsString();
+      } else {
+        overtime_hour = tmp;
+      }
       // 所定休日労働時間
       String total_official_off_hour =
         tclistrd.getTotalOfficialOffHour().getValueAsString();
