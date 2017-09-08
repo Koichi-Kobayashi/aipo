@@ -78,3 +78,9 @@ UPDATE `eip_t_acl_role` SET `acl_type` = 44 WHERE feature_id IN (SELECT feature_
 -- 20170706
 ALTER TABLE `eip_t_message_read` ADD INDEX (`room_id`, `message_id`, `user_id`, `is_read`);
 -- 20170706
+
+--20170906
+ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime_flag` varchar(1) DEFAULT 'F';
+ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime` integer DEFAULT 0;
+UPDATE `eip_t_ext_timecard_system` SET `considered_overtime` = 0;
+--20170906
