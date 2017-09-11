@@ -359,7 +359,11 @@ public class ReportSelectData extends
       select.append(" t0.report_name, ");
       select.append(" t0.start_date, ");
       select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0, eip_t_report_map t1 ");
+      body.append(" FROM eip_t_report t0 ");
+      if (isMySQL) {
+        body.append(" FORCE INDEX (eip_t_report_index2) ");
+      }
+      body.append(" ,FROM eip_t_report_map t1 ");
       if (isMySQL) {
         body.append(" FORCE INDEX (eip_t_report_map_index2) ");
       }
@@ -382,6 +386,14 @@ public class ReportSelectData extends
       select.append(" t0.report_name, ");
       select.append(" t0.start_date, ");
       select.append(" t0.update_date ");
+      body.append(" FROM eip_t_report t0 ");
+      if (isMySQL) {
+        body.append(" FORCE INDEX (eip_t_report_index2) ");
+      }
+      body.append(" ,FROM eip_t_report_map t1 ");
+      if (isMySQL) {
+        body.append(" FORCE INDEX (eip_t_report_map_index1) ");
+      }
       body.append(" FROM eip_t_report t0 ");
       body.append(" WHERE ");
       body.append(" t0.user_id = #bind($login_user_id) AND ");
