@@ -363,7 +363,7 @@ public class ReportSelectData extends
       if (isMySQL) {
         body.append(" FORCE INDEX (eip_t_report_index2) ");
       }
-      body.append(" ,FROM eip_t_report_map t1 ");
+      body.append(" ,eip_t_report_map t1 ");
       if (isMySQL) {
         body.append(" FORCE INDEX (eip_t_report_map_index2) ");
       }
@@ -375,7 +375,6 @@ public class ReportSelectData extends
 
     } else if (SUBMENU_CREATED.equals(currentSubMenu)) {
       // 送信
-
       select.append("SELECT ");
       select.append(" t0.create_date, ");
       select.append(" t0.end_date, ");
@@ -386,14 +385,6 @@ public class ReportSelectData extends
       select.append(" t0.report_name, ");
       select.append(" t0.start_date, ");
       select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_index2) ");
-      }
-      body.append(" ,FROM eip_t_report_map t1 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_map_index1) ");
-      }
       body.append(" FROM eip_t_report t0 ");
       body.append(" WHERE ");
       body.append(" t0.user_id = #bind($login_user_id) AND ");
@@ -411,8 +402,14 @@ public class ReportSelectData extends
       select.append(" t0.report_name, ");
       select.append(" t0.start_date, ");
       select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0, ");
-      body.append(" eip_t_report_map t1 ");
+      body.append(" FROM eip_t_report t0 ");
+      if (isMySQL) {
+        body.append(" FORCE INDEX (eip_t_report_index2) ");
+      }
+      body.append(" ,eip_t_report_map t1 ");
+      if (isMySQL) {
+        body.append(" FORCE INDEX (eip_t_report_map_index1) ");
+      }
       body.append(" WHERE ");
       body.append("  t1.user_id = #bind($login_user_id) AND ");
       body.append("  t0.report_id = t1.report_id AND ");
