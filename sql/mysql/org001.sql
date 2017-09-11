@@ -1516,4 +1516,6 @@ ALTER TABLE `eip_t_report_map` ADD INDEX eip_t_report_map_index1(`user_id`,`repo
 
 ALTER TABLE `eip_t_report_map` ADD INDEX eip_t_report_map_index2(`user_id`,`report_id`,`status`);
 
-ALTER TABLE `eip_t_report` ADD INDEX eip_t_report_index1(`user_id`,`update_date`);
+ALTER TABLE `eip_t_report` ADD INDEX eip_t_report_index1(`user_id`,`parent_id`,`update_date`);
+
+ALTER TABLE `eip_t_report` ADD INDEX eip_t_report_index2(`parent_id`,`update_date`);

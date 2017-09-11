@@ -1325,7 +1325,8 @@ CREATE TABLE EIP_T_REPORT
     UPDATE_DATE TIMESTAMP,
     PRIMARY KEY(REPORT_ID)
 );
-CREATE INDEX eip_t_report_index1 ON eip_t_report (USER_ID,UPDATE_DATE);
+CREATE INDEX eip_t_report_index1 ON eip_t_report (USER_ID,PARENT_ID,UPDATE_DATE);
+CREATE INDEX eip_t_report_index2 ON eip_t_report (PARENT_ID,UPDATE_DATE);
 
 -----------------------------------------------------------------------------
 -- EIP_T_REPORT_FILE
