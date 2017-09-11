@@ -1201,6 +1201,8 @@ CREATE TABLE activity (
 )
 ;
 
+CREATE INDEX activity_index1 ON activity (PRIORITY);
+
 CREATE TABLE oauth_token (
     ACCESS_TOKEN varchar(255) NULL,
     ID INTEGER NOT NULL,

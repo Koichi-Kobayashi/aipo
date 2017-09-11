@@ -93,4 +93,5 @@ CREATE INDEX eip_t_report_map_index1 ON eip_t_report_map (USER_ID,REPORT_ID);
 CREATE INDEX eip_t_report_map_index2 ON eip_t_report_map (USER_ID,REPORT_ID,STATUS);
 CREATE INDEX eip_t_report_index1 ON eip_t_report (USER_ID,PARENT_ID,UPDATE_DATE);
 CREATE INDEX eip_t_report_index2 ON eip_t_report (PARENT_ID,UPDATE_DATE);
+CREATE INDEX activity_index1 ON activity (PRIORITY);
 -- 20170904
