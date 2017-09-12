@@ -558,6 +558,18 @@ aipo.message.reloadUserList = function(group_name) {
     aipo.message.messageUserListPane.viewPage(screen);
 }
 
+aipo.message.SelectorAll = function(){
+	var SelectorAll = dojo.byId("SelectorAll");
+	var messageUserSearchForm = dojo.byId("messageUserSearchForm");
+	//if(SelectorAll.selectorall.value=="selectroom"){
+
+//	}
+	//if(SelectorAll.selectorall.value=="allroom"){
+
+	//}
+}
+
+
 aipo.message.searchUserList = function() {
     var messageUserGroupSelect = dojo.byId("messageUserGroupSelect");
     var messageUserSearchForm = dojo.byId("messageUserSearchForm");
