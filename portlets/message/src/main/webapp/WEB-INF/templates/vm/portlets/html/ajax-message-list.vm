@@ -25,7 +25,10 @@
 #set($currentMessageId = "")
 #set($currentDateKey = "")
 #set($indicator_id = "indicator-list-$!{portlet.ID}" )
-#foreach ($record in $result.List)
+#set($listEnd = $result.List.size() - 1)
+#foreach ($number in [$listEnd..0])
+###foreach ($record in $result.List)
+#set($record = $result.List.get($number))
 ##if("$currentDate" != "" && "$!record.CreateDateLine.toString()" != "$currentDate")
 ##<div id="messageLine$!record.MessageId" class="date_line messageLine$!currentDateKey"><span>$!currentDate</span></div>
 ##end
