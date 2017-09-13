@@ -87,9 +87,6 @@
 
 
 
-
-
-
 <form id="SelectorAll">
 	<div class="customizeMenuIcon filterTip menubarOpenButton">
 		<select id ="selector" name = "selectorall" onchange="aipo.message.SelectorAll()" class ="customizeMenuIcon filterTip menubarOpenButton">
