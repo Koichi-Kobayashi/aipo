@@ -471,7 +471,7 @@ CREATE TABLE `eip_t_ext_timecard_system` (
   `resttime_start_minute` int(11) DEFAULT NULL,
   `resttime_end_hour` int(11) DEFAULT NULL,
   `resttime_end_minute` int(11) DEFAULT NULL,
-  `resttime_type` varchar(1) DEFAULT 'I',
+  `resttime_type` varchar(1) DEFAULT 'P',
   `change_hour` int(11) DEFAULT NULL,
   `outgoing_add_flag` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   `overtime_type` varchar(8) DEFAULT 'O',
