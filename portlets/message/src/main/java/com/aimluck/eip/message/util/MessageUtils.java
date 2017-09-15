@@ -495,17 +495,22 @@ public class MessageUtils {
     return list;
   }
 
+  public static ResultList<EipTMessageRoom> getRoomList(int selectedroom,
+      int userId, String keyword) {
+    return getRoomList(selectedroom, userId, keyword, -1, -1);
+  }
+
   public static ResultList<EipTMessageRoom> getRoomList(int userId,
       String keyword) {
-    return getRoomList(userId, keyword, -1, -1);
+    return getRoomList(0, userId, keyword, -1, -1);
   }
 
   public static ResultList<EipTMessageRoom> getRoomList(int userId) {
-    return getRoomList(userId, null, -1, -1);
+    return getRoomList(0, userId, null, -1, -1);
   }
 
-  protected static ResultList<EipTMessageRoom> getRoomList(int userId,
-      String keyword, int page, int limit) {
+  protected static ResultList<EipTMessageRoom> getRoomList(int selectedroom,
+      int userId, String keyword, int page, int limit) {
     StringBuilder select = new StringBuilder();
 
     boolean isMySQL = Database.isJdbcMySQL();
@@ -528,13 +533,17 @@ public class MessageUtils {
     select.append(" last_update_date, ");
     select
       .append(" (select count(*) from eip_t_message_read t3 where t3.room_id = t2.room_id and t3.user_id = #bind($user_id) and t3.is_read ='F') as unread ");
-
     StringBuilder count = new StringBuilder();
     count.append("select count(t2.room_id) AS c ");
 
     StringBuilder body = new StringBuilder();
     body
       .append("  from eip_t_message_room_member t1, eip_t_message_room t2, turbine_user t4 where t1.user_id = #bind($user_id) and t1.room_id = t2.room_id and t1.target_user_id = t4.user_id ");
+
+    // if (selectedroom != 0) {
+    // body.append("and(t2.roomid = #bind(selectedroom))");
+    // }
+    // 編集中↑
     if (isSearch) {
       if (isMySQL) {
         body
@@ -553,6 +562,7 @@ public class MessageUtils {
       Database
         .sql(EipTMessageRoom.class, count.toString() + body.toString())
         .param("user_id", Integer.valueOf(userId));
+    countQuery.param("selectedroom", "%" + selectedroom + "%");
     if (isSearch) {
       countQuery.param("keyword", "%" + keyword + "%");
       countQuery.param("alias", ALOrgUtilsService.getAlias());
@@ -589,6 +599,7 @@ public class MessageUtils {
         select.toString() + body.toString() + last.toString()).param(
         "user_id",
         Integer.valueOf(userId));
+    query.param("selectedroom", "%" + selectedroom + "%");
     if (isSearch) {
       query.param("keyword", "%" + keyword + "%");
       query.param("alias", ALOrgUtilsService.getAlias());

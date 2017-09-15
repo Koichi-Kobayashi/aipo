@@ -560,28 +560,14 @@ aipo.message.reloadUserList = function(group_name) {
 
 aipo.message.SelectorAll = function(){
 	var SelectorAll = dojo.byId("SelectorAll");
-	var messageUserSearchForm = dojo.byId("messageUserSearchForm");
-	var url = aipo.message.jslink +"?template=MessageSearchListScreen";
+	var screen = aipo.message.jslink +"?template=MessageSearchListScreen";
 	aipo.message.messageRightPane.setParam("k", aipo.message.currentMessageSearchKeyword);
 	if(SelectorAll.selectorall.value=="selectroom"){
-		//違った　aipo.message.tmpRoomId = aipo.message.currentRoomId;
-		url +="&r=" + aipo.message.currentRoomId;
+		aipo.message.messageRightPane.setParam("tr", aipo.message.currentRoomId);
 	}
-	if(SelectorAll.selectorall.value=="allroom"){
-
-	}
-	//aipo.message.moreMessageLock = false;
-    aipo.message.messageRightPane.viewPage(url);
-
-
-
+	aipo.message.messageRightPane.viewPage(screen);
 	//ルーム別検索<プルダウン
 }
-
-//編集中
-
-
-
 
 aipo.message.searchUserList = function() {
     var messageUserGroupSelect = dojo.byId("messageUserGroupSelect");
