@@ -1001,7 +1001,10 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       if (edit_mode.equals("punchin")) {
         // 出勤
         timecard.setClockInTime(cal.getTime());
-        timecard.setType(EipTExtTimecard.TYPE_WORK);
+        // 未選択状態のときはtypeをPに変更してそれ以外のときはいじらない
+        if ("D".equals(timecard.getType())) {
+          timecard.setType(EipTExtTimecard.TYPE_WORK);
+        }
       } else if (edit_mode.equals("punchout")) {
         // 退勤
         timecard.setClockOutTime(cal.getTime());
