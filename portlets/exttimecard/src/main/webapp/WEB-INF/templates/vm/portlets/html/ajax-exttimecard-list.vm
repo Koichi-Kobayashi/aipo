@@ -227,7 +227,7 @@ $l10n.EXTTIMECARD_REMARKS：$!{rd.Remarks}
 ##種類の項目埋める
 ##出勤、午前午後休のやつは種類名出す
  #if($!{rd.IsTypeP} || $!{rd.IsTypeM} || $!{rd.IsTypeN})
-  <td class='$holidayClass' nowrap='nowrap'>
+  <td nowrap='nowrap'>
   #if($!{rd.IsTypeP})
       $l10n.EXTTIMECARD_PUNCH_IN
   #elseif($!{rd.IsTypeM})
@@ -238,7 +238,7 @@ $l10n.EXTTIMECARD_REMARKS：$!{rd.Remarks}
   </td>
  ##未選択その他は空文字入れとく
  #else
-  #ALtdcellAtt(" " " class='$holidayClass'")
+  #ALtdcellAtt(" " " ")
  #end
 
   #if($rdlist.IsNotNullClockInTime)
