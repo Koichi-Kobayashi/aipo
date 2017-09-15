@@ -115,7 +115,7 @@
 
 		#set($outcomes = $rdlist.OutgoingComeback)
 		#set($listsize = $outcomes.size())
-		###set($saturday_sunday_holiday = $rdlist.IsSaturdayOrSundayOrHoliday)
+		#set($saturday_sunday_holiday = $rdlist.IsSaturdayOrSundayOrHoliday)
 		#set($beforeafter = $rdlist.BeforeAfter)
 		#set($entityid = "")
 		#if($isrd)
@@ -150,28 +150,30 @@
 		<a href="javascript:void(0);" onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template","ExtTimecardSystemDetailScreen").addQueryData("entityid",$result.TimecardSystem.SystemId))');">$!utils.escapeXML($result.TimecardSystem.SystemName)</a>
 		#ALtdcellfooter()
 
+##未来の項目
+#if($beforeafter > 0)
 
-  #if($!{rd.IsTypeA} || $!{rd.IsTypeH} || $!{rd.IsTypeM} || $!{rd.IsTypeN} || $!{rd.IsTypeC} || $!{rd.IsTypeE} || $!{rd.IsTypeP}|| ${rd.IsTypeP})
-    #ALtdcellheaderAtt("class='center mb_hide $holidayClass' nowrap='nowrap'")
+　##未選択以外の項目の時
+　##種類の列に項目名追加
+  #if($!{rd.IsTypeA} || $!{rd.IsTypeH} || $!{rd.IsTypeC} || $!{rd.IsTypeE} || $!{rd.IsTypeP} ||$!{rd.IsTypeM} ||$!{rd.IsTypeN})
+    <td class='$holidayClass' nowrap='nowrap'>
     #if($!{rd.IsTypeA})
 $l10n.EXTTIMECARD_ABSENT_DAY
     #elseif($!{rd.IsTypeH})
 $l10n.EXTTIMECARD_PAID_HOLIDAY
-    #elseif($!{rd.IsTypeM})
-$l10n.EXTTIMECARD_MORNING_OFF
-    #elseif($!{rd.IsTypeN})
-$l10n.EXTTIMECARD_AFTERNOON_OFF
     #elseif($!{rd.IsTypeC})
 $l10n.EXTTIMECARD_COMPENSATORY_HOLIDAY
     #elseif($!{rd.IsTypeE})
 $l10n.EXTTIMECARD_OTHER
     #elseif($!{rd.IsTypeP})
 $l10n.EXTTIMECARD_PUNCH_IN
-	#else
-$l10n.EXTTIMECARD_PUNCH_IN
+    #elseif($!{rd.IsTypeM})
+$l10n.EXTTIMECARD_MORNING_OFF
+    #elseif($!{rd.IsTypeN})
+$l10n.EXTTIMECARD_AFTERNOON_OFF
     #end
-    #ALtdcellfooter()
-
+    </td>
+    ##備考欄除く10項目に空文字入れとく
     #ALtdcellAtt(" " " class='$holidayClass'")
     #ALtdcellAtt(" " " class='$holidayClass'")
     #ALtdcellAtt(" " " class='$holidayClass'")
@@ -183,7 +185,22 @@ $l10n.EXTTIMECARD_PUNCH_IN
     #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
     #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
 
+  #else
+  ##未選択のとき備考欄除く11項目に空文字入れとく
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+  #end
 
+　##備考欄を埋める
   <td class='$holidayClass mb_hide'>
   #if($!{rd.ReasonFlg})
 $l10n.EXTTIMECARD_REASON：$!{rd.Reason}
@@ -196,10 +213,12 @@ $l10n.EXTTIMECARD_REMARKS：$!{rd.Remarks}
   #end
   </td>
 
+##今日以前の項目のとき
 #else
 
+##ボタンを表示しない項目について
 #if($!{rd.IsTypeA} || $!{rd.IsTypeH} || $!{rd.IsTypeC} || $!{rd.IsTypeE})
-  <td class='center' nowrap='nowrap' colspan='10'>
+  <td class='$holidayClass' nowrap='nowrap'>
   #if($!{rd.IsTypeA})
       $l10n.EXTTIMECARD_ABSENT_DAY
   #elseif($!{rd.IsTypeH})
@@ -210,7 +229,18 @@ $l10n.EXTTIMECARD_REMARKS：$!{rd.Remarks}
       $l10n.EXTTIMECARD_OTHER
   #end
   </td>
-  <td class='mb_hide'>
+  ##それ以降の項目に空文字入れとく
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+    #ALtdcellAtt(" " " class='$holidayClass mb_hide'")
+  <td class='$holidayClass mb_hide'>
   #if($!{rd.ReasonFlg})
 $l10n.EXTTIMECARD_REASON：$!{rd.Reason}
     #if($!{rd.RemarksFlg})
@@ -222,15 +252,33 @@ $l10n.EXTTIMECARD_REMARKS：$!{rd.Remarks}
   #end
   </td>
 
+##ボタンを表示する項目について
 #else
+##種類の項目埋める
+##出勤、午前午後休のやつは種類名出す
+ #if($!{rd.IsTypeP} || $!{rd.IsTypeM} || $!{rd.IsTypeN})
+  <td class='$holidayClass' nowrap='nowrap'>
+  #if($!{rd.IsTypeP})
+      $l10n.EXTTIMECARD_PUNCH_IN
+  #elseif($!{rd.IsTypeM})
+      $l10n.EXTTIMECARD_MORNING_OFF
+  #elseif($!{rd.IsTypeN})
+      $l10n.EXTTIMECARD_AFTERNOON_OFF
+  #end
+  </td>
+ ##未選択その他は空文字入れとく
+ #else
+  #ALtdcellAtt(" " " class='$holidayClass'")
+ #end
 
+  ##以降ボタン部分の処理
   #if($rdlist.IsNotNullClockInTime)
         #ALtdcellAtt("$!{rd.ClockInTimeHourMinuteText}" "class='center $holidayClass' nowrap='nowrap'")
   #else
     ###if($saturday_sunday_holiday == 0)
       #if($!result.TargetUserId == $!result.UserId)
         #if($class == "today")
-          <td class='center' nowrap='nowrap'><input type="button" value="$l10n.EXTTIMECARD_PUNCH_IN" class="auiButtonAction" onclick="aipo.exttimecard.addHiddenValue(dojo.byId('form$!portlet.ID'), 'mode', 'punchin');aipo.exttimecard.addHiddenValue(dojo.byId('form$!portlet.ID'), 'punchin', '$l10n.EXTTIMECARD_PUNCH_IN');dojo.byId('form$!portlet.ID').onsubmit();" /></td>
+          <td class='center $holidayClass' nowrap='nowrap'><input type="button" value="$l10n.EXTTIMECARD_PUNCH_IN" class="auiButtonAction" onclick="aipo.exttimecard.addHiddenValue(dojo.byId('form$!portlet.ID'), 'mode', 'punchin');aipo.exttimecard.addHiddenValue(dojo.byId('form$!portlet.ID'), 'punchin', '$l10n.EXTTIMECARD_PUNCH_IN');dojo.byId('form$!portlet.ID').onsubmit();" /></td>
         #else
           #ALtdcellAtt("#AUIajaxbuttonLinkCallbackBoldInput($l10n.EXTTIMECARD_NOT_INPUT $!jslink.getPortletById($!portlet.ID).addQueryData('template','ExtTimecardFormScreen').addQueryData('eventSubmit_doExtTimecard_form','1').addQueryData('entityid', $entityid).addQueryData('date', $rdlist.Date) $!portlet.ID 'aipo.exttimecard.onLoadExtTimecardDialog')" "class='center $holidayClass' nowrap='nowrap'")
         #end
@@ -348,13 +396,7 @@ $l10n.EXTTIMECARD_REMARKS：$!{rd.Remarks}
 
 				<td class='mb_hide $holidayClass'>
 				#if($!{rd.ReasonFlg})
-				 #if($!{rd.IsTypeM})
-                    $l10n.EXTTIMECARD_REASON：$!{rd.Reason}（$l10n.EXTTIMECARD_MORNING_OFF）
-                 #elseif($!{rd.IsTypeN})
-                    $l10n.EXTTIMECARD_REASON：$!{rd.Reason}（$l10n.EXTTIMECARD_AFTERNOON_OFF）
-                 #else
 					$l10n.EXTTIMECARD_REASON：$!{rd.Reason}
-				 #end
 					#if($!{rd.RemarksFlg})
 						、
 					#end
