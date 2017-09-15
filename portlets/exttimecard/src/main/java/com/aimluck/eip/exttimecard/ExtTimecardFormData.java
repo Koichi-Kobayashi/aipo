@@ -402,7 +402,19 @@ public class ExtTimecardFormData extends ALAbstractFormData {
           out_flag = false;
         }
 
+        /** 午前午後休で勤怠時間がまったく入力されてないなら勤怠時間は無視する */
         if (getIsPast()
+          && ("M".equals(type.getValue()) || "N".equals(type.getValue()))) {
+          if ((clock_in_time.getHour() == "-1")
+            && (clock_in_time.getMinute() == "-1")
+            && (clock_out_time.getHour() == "-1")
+            && (clock_out_time.getMinute() == "-1")) {
+            clock_in_time = null;
+            clock_out_time = null;
+          }
+        }
+
+        else if (getIsPast()
           && ("P".equals(type.getValue()) || "M".equals(type.getValue()) || "N"
             .equals(type.getValue()))) {
           if (!clock_in_time.isNotNullValue()
