@@ -35,10 +35,20 @@ $!result.Detail.Title
 #ALtdcaption($l10n.GADGETS_SCHEDULE_MAP_URL)
 #set($map_flg = $!result.enabledMapsFlag.toString())
 #if($map_flg == "T")
-#ALtdcell($l10n.SCHEDULE_VALID)
+#ALtditem($l10n.SCHEDULE_VALID)
 #else
-#ALtdcell($l10n.SCHEDULE_INVALID)
+#ALtditem($l10n.SCHEDULE_INVALID)
 #end
+
+#ALtdcaption($l10n.GADGETS_SCHEDULE_DUPLICATION)
+#set($duplication = $!result.duplication.toString())
+#if($duplication == "T")
+#ALtditem($l10n.SCHEDULE_WARNING)
+#else
+#ALtditem($l10n.SCHEDULE_UNABLE_REGISTER)
+#end
+
+
 #ALtablefooter()
 
 #ALbuttonheader()

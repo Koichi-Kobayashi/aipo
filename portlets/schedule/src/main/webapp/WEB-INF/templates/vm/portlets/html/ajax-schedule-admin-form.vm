@@ -36,16 +36,24 @@
 #ALtditemheader()
 $!result.Detail.Title
 #ALtditemfooter()
+
 #ALtdcaption($l10n.GADGETS_APP_DESCRIPTION)
 #ALtditem($!result.Detail.Description)
 
 #ALtdcaption($l10n.SCHEDULE_UPDATE_MAPS)
-
 #ALtditemheader()
   <p><input class="mt0" name="enabled_maps" type="radio" value="F" id="enabled_maps_off" #if ($!{result.enabledMapsFlag.toString()}  == "F")checked="checked"#end>
   <label for="enabled_maps_off">&nbsp;$l10n.SCHEDULE_DO_INVALID</label></p>
   <p><input class="mt0" name="enabled_maps" type="radio" value="T" id="enabled_maps_on" #if ($!{result.enabledMapsFlag.toString()}  == "T")checked="checked"#end>
   <label for="enabled_maps_on">&nbsp;$l10n.SCHEDULE_DO_VALID</label></p>
+#ALtditemfooter()
+
+#ALtdcaption($l10n.SCHEDULE_UPDATE_DUPLICATION)
+#ALtditemheader()
+  <p><input class="mt0" name="duplication_schedule" type="radio" value="F" id="duplication_schedule_on" #if ($!{result.duplication.toString()}  == "F")checked="checked"#end>
+  <label for="duplication_schedule_on">&nbsp;$l10n.SCHEDULE_WARNING</label></p>
+  <p><input class="mt0" name="duplication_schedule" type="radio" value="T" id="duplication_schedule_off" #if ($!{result.duplication.toString()}  == "T")checked="checked"#end>
+  <label for="duplication_schedule_off">&nbsp;$l10n.SCHEDULE_UNABLE_REGISTER</label></p>
 #ALtditemfooter()
 
 #ALtablefooter()
