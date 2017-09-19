@@ -80,7 +80,7 @@ ALTER TABLE `eip_t_message_read` ADD INDEX (`room_id`, `message_id`, `user_id`, 
 -- 20170706
 
 --20170906
-ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime_flag` varchar(1) DEFAULT 'F';
-ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime` integer DEFAULT 0;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime_flag` varchar(1) DEFAULT 'F' AFTER `change_hour`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime` int(11) DEFAULT 0 AFTER `considered_overtime_flag`;
 UPDATE `eip_t_ext_timecard_system` SET `considered_overtime` = 0;
 --20170906

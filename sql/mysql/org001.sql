@@ -469,7 +469,7 @@ CREATE TABLE `eip_t_ext_timecard_system` (
   `resttime_out` int(11) DEFAULT NULL,
   `change_hour` int(11) DEFAULT NULL,
   `considered_overtime_flag` varchar(1) DEFAULT 'F',
-  `considered_overtime` integer DEFAULT 0,
+  `considered_overtime` int(11) DEFAULT 0,
   `outgoing_add_flag` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   `overtime_type` varchar(8) DEFAULT 'O',
   `holiday_of_week` varchar(32) DEFAULT 'A',
