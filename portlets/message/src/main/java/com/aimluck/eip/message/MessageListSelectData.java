@@ -58,6 +58,8 @@ public class MessageListSelectData extends
 
   private int cursor = 0;
 
+  private int selectedroomId = 0;
+
   private boolean latest = false;
 
   private int targetUserId;
@@ -96,6 +98,7 @@ public class MessageListSelectData extends
   @Override
   protected ResultList<EipTMessage> selectList(RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
+    selectedroomId = rundata.getParameters().getInt("tr");
     if (targetUserId > 0) {
       return new ResultList<EipTMessage>(
         new ArrayList<EipTMessage>(),
@@ -133,14 +136,13 @@ public class MessageListSelectData extends
       roomIds.add(room.getRoomId());
     }
     if (jump) {
-      return MessageUtils.getMessageJumpList(room.getRoomId(), cursor);
+      return MessageUtils.getMessageJumpList(
+        selectedroomId,
+        room.getRoomId(),
+        cursor);
     } else {
-      return MessageUtils.getMessageList(
-        roomIds,
-        keyword.getValue(),
-        cursor,
-        MESSAGE_LIMIT,
-        latest);
+      return MessageUtils.getMessageList(selectedroomId, roomIds, keyword
+        .getValue(), cursor, MESSAGE_LIMIT, latest);
     }
   }
 

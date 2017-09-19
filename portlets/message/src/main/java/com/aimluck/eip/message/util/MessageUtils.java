@@ -291,12 +291,13 @@ public class MessageUtils {
     return new ResultList<EipTMessage>(list, -1, -1, list.size());
   }
 
-  public static ResultList<EipTMessage> getMessageJumpList(Integer roomId,
-      int cursor) {
+  public static ResultList<EipTMessage> getMessageJumpList(int selectedroomId,
+      Integer roomId, int cursor) {
     List<Integer> roomList = new ArrayList<Integer>();
     roomList.add(roomId);
     ResultList<EipTMessage> resultListTop =
       getMessageList(
+        selectedroomId,
         roomList,
         null,
         cursor,
@@ -306,6 +307,7 @@ public class MessageUtils {
         true);
     ResultList<EipTMessage> resultListBottom =
       getMessageList(
+        selectedroomId,
         roomList,
         null,
         cursor,
@@ -318,9 +320,11 @@ public class MessageUtils {
       .size());
   }
 
-  public static ResultList<EipTMessage> getMessageList(List<Integer> roomList,
-      String keyword, int cursor, int limit, boolean isLatest) {
+  public static ResultList<EipTMessage> getMessageList(int selectedroomId,
+      List<Integer> roomList, String keyword, int cursor, int limit,
+      boolean isLatest) {
     return getMessageList(
+      selectedroomId,
       roomList,
       keyword,
       cursor,
@@ -333,6 +337,20 @@ public class MessageUtils {
   public static ResultList<EipTMessage> getMessageList(List<Integer> roomList,
       String keyword, int cursor, int limit, boolean isLatest,
       boolean isReverse, boolean isEquals) {
+    return getMessageList(
+      0,
+      roomList,
+      keyword,
+      cursor,
+      limit,
+      isLatest,
+      isReverse,
+      isEquals);
+  }
+
+  public static ResultList<EipTMessage> getMessageList(int selectedroomId,
+      List<Integer> roomList, String keyword, int cursor, int limit,
+      boolean isLatest, boolean isReverse, boolean isEquals) {
     StringBuilder select = new StringBuilder();
 
     boolean isSearch = (keyword != null && keyword.length() > 0);
@@ -382,6 +400,9 @@ public class MessageUtils {
         }
       }
     }
+    if (selectedroomId != 0) {
+      body.append("and (t1.room_id = #bind($selectedroomId))");
+    }
     if (isSearch) {
       body.append(" and t1.message like #bind($keyword) ");
     }
@@ -403,12 +424,14 @@ public class MessageUtils {
       Database.sql(EipTMessage.class, select.toString()
         + body.toString()
         + last.toString());
+    query.param("selectedroomId", selectedroomId);
     if (cursor > 0) {
       query.param("cursor", cursor);
     }
     if (isSearch) {
       query.param("keyword", "%" + keyword + "%");
     }
+    // 編集中3
 
     List<DataRow> fetchList = query.fetchListAsDataRow();
 
@@ -495,9 +518,14 @@ public class MessageUtils {
     return list;
   }
 
-  public static ResultList<EipTMessageRoom> getRoomList(int selectedroom,
+  public static ResultList<EipTMessageRoom> getRoomList(int selectedroomId,
       int userId, String keyword) {
-    return getRoomList(selectedroom, userId, keyword, -1, -1);
+    return getRoomList(selectedroomId, userId, keyword, -1, -1);
+  }
+
+  public static ResultList<EipTMessageRoom> getRoomList(int selectedroomId,
+      int userId) {
+    return getRoomList(selectedroomId, userId, null, -1, -1);
   }
 
   public static ResultList<EipTMessageRoom> getRoomList(int userId,
@@ -509,7 +537,7 @@ public class MessageUtils {
     return getRoomList(0, userId, null, -1, -1);
   }
 
-  protected static ResultList<EipTMessageRoom> getRoomList(int selectedroom,
+  protected static ResultList<EipTMessageRoom> getRoomList(int selectedroomId,
       int userId, String keyword, int page, int limit) {
     StringBuilder select = new StringBuilder();
 
@@ -539,11 +567,6 @@ public class MessageUtils {
     StringBuilder body = new StringBuilder();
     body
       .append("  from eip_t_message_room_member t1, eip_t_message_room t2, turbine_user t4 where t1.user_id = #bind($user_id) and t1.room_id = t2.room_id and t1.target_user_id = t4.user_id ");
-
-    // if (selectedroom != 0) {
-    // body.append("and(t2.roomid = #bind(selectedroom))");
-    // }
-    // 編集中↑
     if (isSearch) {
       if (isMySQL) {
         body
@@ -562,7 +585,6 @@ public class MessageUtils {
       Database
         .sql(EipTMessageRoom.class, count.toString() + body.toString())
         .param("user_id", Integer.valueOf(userId));
-    countQuery.param("selectedroom", "%" + selectedroom + "%");
     if (isSearch) {
       countQuery.param("keyword", "%" + keyword + "%");
       countQuery.param("alias", ALOrgUtilsService.getAlias());
@@ -599,7 +621,6 @@ public class MessageUtils {
         select.toString() + body.toString() + last.toString()).param(
         "user_id",
         Integer.valueOf(userId));
-    query.param("selectedroom", "%" + selectedroom + "%");
     if (isSearch) {
       query.param("keyword", "%" + keyword + "%");
       query.param("alias", ALOrgUtilsService.getAlias());
@@ -636,17 +657,27 @@ public class MessageUtils {
     }
   }
 
-  public static ResultList<TurbineUser> getUserList(String groupName) {
-    return getUserList(groupName, null, -1, -1);
+  public static ResultList<TurbineUser> getUserList(int selectedroomId,
+      String groupName) {
+    return getUserList(selectedroomId, groupName, null, -1, -1);
+  }
+
+  public static ResultList<TurbineUser> getUserList(int selectedroomId,
+      String groupName, String keyword) {
+    return getUserList(selectedroomId, groupName, keyword, -1, -1);
   }
 
   public static ResultList<TurbineUser> getUserList(String groupName,
       String keyword) {
-    return getUserList(groupName, keyword, -1, -1);
+    return getUserList(0, groupName, keyword, -1, -1);
   }
 
-  public static ResultList<TurbineUser> getUserList(String groupName,
-      String keyword, int page, int limit) {
+  public static ResultList<TurbineUser> getUserList(String groupName) {
+    return getUserList(0, groupName, null, -1, -1);
+  }
+
+  public static ResultList<TurbineUser> getUserList(int selectedroomId,
+      String groupName, String keyword, int page, int limit) {
 
     StringBuilder select = new StringBuilder();
 
@@ -654,7 +685,7 @@ public class MessageUtils {
     boolean isSearch = (keyword != null && keyword.length() > 0);
 
     String keywordKana = "";
-
+    // 編集中2
     select
       .append("select distinct t2.user_id, t2.login_name, t2.last_name, t2.first_name, t2.last_name_kana, t2.first_name_kana, t2.has_photo, t2.photo_modified, (t2.last_name_kana = '') ");
 
@@ -721,6 +752,7 @@ public class MessageUtils {
         "group_name",
         groupName);
     if (isSearch) {
+      query.param("selectedroomId", selectedroomId);
       query.param("keyword", "%" + keyword + "%");
       query.param("keywordKana", "%" + keywordKana + "%");
     }

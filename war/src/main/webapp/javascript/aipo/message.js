@@ -723,7 +723,6 @@ aipo.message.selectTab = function(tab) {
 
     }
 }
-
 //Messageの右側のRoomの列からRoomを選択されたときに呼ばれています。
 aipo.message.inputHistory = {};
 aipo.message.selectRoom = function(room_id, scroll) {
@@ -738,7 +737,6 @@ aipo.message.selectRoom = function(room_id, scroll) {
     var messageRoomAvatar = dojo.byId("messageRoomAvatar");
     var messageRoomName = dojo.byId("messageRoomName");
     var messageSearchForm = dojo.byId("messageSearchForm");
-
     if (messageForm && messageRoom) {
         if(aipo.message.isMobile) {
             dojo.removeClass(document.body, "messageRoomList");
@@ -798,7 +796,9 @@ aipo.message.selectRoom = function(room_id, scroll) {
 			var max = pane.scrollHeight - pane.clientHeight;
 		    aipo.message.scrollTo(pane, max < messageRoom.offsetTop ? max : messageRoom.offsetTop, 100);
 		}
-
+		   if(aipo.message.currentMessageSearchKeyword){
+		    	aipo.message.SelectorAll();
+		    }
         aipo.message.fixMessageWindow();
         aipo.message.reloadRoomMemberList();
         aipo.message.reloadRoomSettings();

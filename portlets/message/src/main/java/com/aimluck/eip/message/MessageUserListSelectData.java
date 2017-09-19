@@ -50,6 +50,8 @@ public class MessageUserListSelectData extends
 
   private String target_group_name;
 
+  private int selectedroomId = 0;
+
   private List<ALEipGroup> myGroupList = null;
 
   private int userId;
@@ -60,7 +62,9 @@ public class MessageUserListSelectData extends
   public void init(ALAction action, RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
     super.init(action, rundata, context);
-
+    if (rundata.getParameters().getInt("tr") != 0) {
+      selectedroomId = rundata.getParameters().getInt("tr");
+    }
     myGroupList = ALEipUtils.getMyGroups(rundata);
 
     userId = ALEipUtils.getUserId(rundata);
@@ -84,9 +88,9 @@ public class MessageUserListSelectData extends
       throws ALPageNotFoundException, ALDBErrorException {
     setupLists(rundata, context);
 
-    return MessageUtils.getUserList("all".equals(target_group_name)
-      ? "LoginUser"
-      : target_group_name, keyword.getValue());
+    return MessageUtils.getUserList(selectedroomId, "all"
+      .equals(target_group_name) ? "LoginUser" : target_group_name, keyword
+      .getValue());
   }
 
   /**
