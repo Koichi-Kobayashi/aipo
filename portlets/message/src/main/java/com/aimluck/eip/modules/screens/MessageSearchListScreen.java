@@ -68,6 +68,8 @@ public class MessageSearchListScreen extends ALVelocityScreen {
 
       if (selectedroom != 0) {
         context.put("selectedornot", 1);
+      } else {
+        context.put("selectedornot", 0);
       }
       if (cursor == null || cursor.intValue() == 0) {
         MessageRoomListSelectData roomList = new MessageRoomListSelectData();

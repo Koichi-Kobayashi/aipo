@@ -19,7 +19,7 @@
 #if(!$isMore)
 <div class="index">$l10n.MESSAGE_SEARCH_RESULT1$!{result.Keyword}$l10n.MESSAGE_SEARCH_RESULT2<a class="floatRight" href="javascript: void(0)" onclick="aipo.message.clearSearchMessageList();return false;"><i class="icon-remove"></i></a></div>
 #end
-#if($userList.size() == 0 && $roomList.size() == 0 && $result.List.size() == 0)
+#if($selectedornot != 1 && $userList.size() == 0 && $roomList.size() == 0 && $result.List.size() == 0)
 <div class="emptyMessage">$l10n.MESSAGE_SEARCH_EMPTY_MESSAGE</div>
 #else
 #if(!$isMore)

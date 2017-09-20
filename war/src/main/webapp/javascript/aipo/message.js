@@ -429,6 +429,7 @@ aipo.message.searchMessageList = function(form) {
     }
 }
 
+
 aipo.message.openRightBlock = function(){
     var messageSideBlock = dojo.byId("messageSideBlock");
     var messageMainBlock = dojo.byId("messageMainBlock");
@@ -723,7 +724,6 @@ aipo.message.selectTab = function(tab) {
 
     }
 }
-//編集中
 //Messageの右側のRoomの列からRoomを選択されたときに呼ばれています。
 aipo.message.inputHistory = {};
 aipo.message.selectRoom = function(room_id, scroll) {
