@@ -406,20 +406,14 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         } else {
           out_flag = false;
         }
+
+        boolean notime_flag = false;
+
         if (getIsPast()
           && ("M".equals(type.getValue()) || "N".equals(type.getValue()))) {
-          if (clock_in_time.getHour().equals("")
-            && clock_in_time.getMinute().equals("")
-            && clock_out_time.getHour().equals("")
-            && clock_out_time.getMinute().equals("")) {
-            if (reason.getValue().equals("")) {
-              msgList.add(
-                ALLocalizationUtils.getl10nFormat(
-                  "EXTTIMECARD_ALERT_TYPE_CLOCKINTIME",
-                  reason.getFieldName()));
-            }
-          } else if (!clock_in_time.getHour().equals("")
-            && !clock_in_time.getMinute().equals("")) {
+          if (!clock_in_time.isNotNullValue()
+            && !clock_out_time.isNotNullValue()) {
+            notime_flag = true;
             if (reason.getValue().equals("")) {
               msgList.add(
                 ALLocalizationUtils.getl10nFormat(
@@ -427,13 +421,10 @@ public class ExtTimecardFormData extends ALAbstractFormData {
                   reason.getFieldName()));
             }
           } else {
-            msgList.add(
-              ALLocalizationUtils.getl10nFormat(
-                "EXTTIMECARD_ALERT_TYPE_CLOCKINTIME",
-                clock_in_time.getFieldName()));
+            notime_flag = false;
           }
-
-        } else if (getIsPast() && "P".equals(type.getValue())) {
+        }
+        if (getIsPast() && !notime_flag) {
           if (!clock_in_time.isNotNullValue()
             || (!clock_out_time.isNotNullValue() && out_flag)
             || current_clock_out_time_hour == -1
