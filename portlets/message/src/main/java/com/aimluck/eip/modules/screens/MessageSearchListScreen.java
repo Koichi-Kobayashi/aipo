@@ -60,13 +60,13 @@ public class MessageSearchListScreen extends ALVelocityScreen {
       } catch (Throwable ignore) {
         // ignore
       }
-      int targetroom = 0;
+      int selectedroom = 0;
       try {
-        targetroom = rundata.getParameters().getInt("tr");
+        selectedroom = rundata.getParameters().getInt("sr");
       } catch (Throwable ignore) {
       }
 
-      if (targetroom != 0) {
+      if (selectedroom != 0) {
         context.put("selectedornot", 1);
       }
       if (cursor == null || cursor.intValue() == 0) {

@@ -43,8 +43,6 @@ public class MessageRoomListSelectData extends
 
   private int userId;
 
-  private int selectedroomId = 0;
-
   private int totalUnreadCount = 0;
 
   private ALStringField keyword = null;
@@ -53,9 +51,6 @@ public class MessageRoomListSelectData extends
   public void init(ALAction action, RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
     super.init(action, rundata, context);
-    if (rundata.getParameters().getInt("tr") != 0) {
-      selectedroomId = rundata.getParameters().getInt("tr");
-    }
     userId = ALEipUtils.getUserId(rundata);
   }
 
@@ -74,7 +69,7 @@ public class MessageRoomListSelectData extends
   @Override
   protected ResultList<EipTMessageRoom> selectList(RunData rundata,
       Context context) throws ALPageNotFoundException, ALDBErrorException {
-    return MessageUtils.getRoomList(selectedroomId, userId, keyword.getValue());
+    return MessageUtils.getRoomList(userId, keyword.getValue());
   }
 
   /**

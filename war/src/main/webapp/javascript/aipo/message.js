@@ -301,7 +301,6 @@ aipo.message.latestMessageList = function() {
         }
     });
 }
-
 aipo.message.moreMessageRightList = function() {
     var screen = aipo.message.jslink + "?template=MessageSearchListScreen";
     var cursor = aipo.message.getLastMessageRightId();
@@ -562,8 +561,9 @@ aipo.message.SelectorAll = function(){
 	var SelectorAll = dojo.byId("SelectorAll");
 	var screen = aipo.message.jslink +"?template=MessageSearchListScreen";
 	aipo.message.messageRightPane.setParam("k", aipo.message.currentMessageSearchKeyword);
+	aipo.message.moreMessageLock = true;
 	if(SelectorAll.selectorall.value=="selectroom"){
-		aipo.message.messageRightPane.setParam("tr", aipo.message.currentRoomId);
+		aipo.message.messageRightPane.setParam("sr", aipo.message.currentRoomId);
 	}
 	aipo.message.messageRightPane.viewPage(screen);
 	//ルーム別検索<プルダウン
@@ -723,6 +723,7 @@ aipo.message.selectTab = function(tab) {
 
     }
 }
+//編集中
 //Messageの右側のRoomの列からRoomを選択されたときに呼ばれています。
 aipo.message.inputHistory = {};
 aipo.message.selectRoom = function(room_id, scroll) {
@@ -796,9 +797,7 @@ aipo.message.selectRoom = function(room_id, scroll) {
 			var max = pane.scrollHeight - pane.clientHeight;
 		    aipo.message.scrollTo(pane, max < messageRoom.offsetTop ? max : messageRoom.offsetTop, 100);
 		}
-		   if(aipo.message.currentMessageSearchKeyword){
-		    	aipo.message.SelectorAll();
-		    }
+
         aipo.message.fixMessageWindow();
         aipo.message.reloadRoomMemberList();
         aipo.message.reloadRoomSettings();
@@ -808,6 +807,9 @@ aipo.message.selectRoom = function(room_id, scroll) {
         } else if (dojo.hasClass("messageUserTab", "active")) {
         	aipo.message.saveCookieIsLastRoomOrUser("User");
         }
+       if(aipo.message.currentMessageSearchKeyword){
+	    	aipo.message.SelectorAll();
+	    }
         //cookieへ保存する名前とIDを引数に取ってと保存する。
         aipo.message.saveCookieTargetId("lastRoomId",aipo.message.currentRoomId);
     }

@@ -98,7 +98,10 @@ public class MessageListSelectData extends
   @Override
   protected ResultList<EipTMessage> selectList(RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
-    selectedroomId = rundata.getParameters().getInt("tr");
+    try {
+      selectedroomId = rundata.getParameters().getInt("sr");
+    } catch (Throwable ignore) {
+    }
     if (targetUserId > 0) {
       return new ResultList<EipTMessage>(
         new ArrayList<EipTMessage>(),

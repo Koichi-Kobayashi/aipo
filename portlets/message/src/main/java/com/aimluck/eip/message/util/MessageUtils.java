@@ -216,8 +216,8 @@ public class MessageUtils {
     return false;
   }
 
-  public static ResultList<EipTMessage> getMessageList(int roomId, int cursor,
-      int limit, boolean isLatest) {
+  public static ResultList<EipTMessage> getMessageList(int selectedroomId,
+      int roomId, int cursor, int limit, boolean isLatest) {
     StringBuilder select = new StringBuilder();
 
     select.append("select");
@@ -289,6 +289,11 @@ public class MessageUtils {
     }
 
     return new ResultList<EipTMessage>(list, -1, -1, list.size());
+  }
+
+  public static ResultList<EipTMessage> getMessageJumpList(Integer roomId,
+      int cursor) {
+    return getMessageJumpList(0, roomId, cursor);
   }
 
   public static ResultList<EipTMessage> getMessageJumpList(int selectedroomId,
@@ -431,7 +436,6 @@ public class MessageUtils {
     if (isSearch) {
       query.param("keyword", "%" + keyword + "%");
     }
-    // 編集中3
 
     List<DataRow> fetchList = query.fetchListAsDataRow();
 
@@ -464,10 +468,23 @@ public class MessageUtils {
   }
 
   public static EipTMessage getLastMessage(int roomId) {
+    return getLastMessage(0, roomId);
+  }
+
+  // 編集中、(こちらのクラスのみ修正、送信側未修正。修正前は上記のように変数はint roomIdのみ）
+  public static EipTMessage getLastMessage(int selectedroomId, int roomId) {
     List<Integer> tmpRoomIdList = new ArrayList<Integer>();
     tmpRoomIdList.add(roomId);
     ResultList<EipTMessage> lastMessage =
-      MessageUtils.getMessageList(tmpRoomIdList, null, 0, 1, true, false, true);
+      MessageUtils.getMessageList(
+        selectedroomId,
+        tmpRoomIdList,
+        null,
+        0,
+        1,
+        true,
+        false,
+        true);
 
     if (lastMessage.size() == 0) {
       return null;
@@ -667,15 +684,6 @@ public class MessageUtils {
     return getUserList(selectedroomId, groupName, keyword, -1, -1);
   }
 
-  public static ResultList<TurbineUser> getUserList(String groupName,
-      String keyword) {
-    return getUserList(0, groupName, keyword, -1, -1);
-  }
-
-  public static ResultList<TurbineUser> getUserList(String groupName) {
-    return getUserList(0, groupName, null, -1, -1);
-  }
-
   public static ResultList<TurbineUser> getUserList(int selectedroomId,
       String groupName, String keyword, int page, int limit) {
 
@@ -685,7 +693,7 @@ public class MessageUtils {
     boolean isSearch = (keyword != null && keyword.length() > 0);
 
     String keywordKana = "";
-    // 編集中2
+
     select
       .append("select distinct t2.user_id, t2.login_name, t2.last_name, t2.first_name, t2.last_name_kana, t2.first_name_kana, t2.has_photo, t2.photo_modified, (t2.last_name_kana = '') ");
 
