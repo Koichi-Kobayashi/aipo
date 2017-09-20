@@ -78,11 +78,7 @@
 #ALtditemfooter()
 
 <tr id="clock_time_box" #if ($!result.Type.toString() != "P" && $!result.Type.toString() != "M" && $!result.Type.toString() != "N" && $!result.Type.toString() != "D") style="display:none" #end>
-##if($!result.Type.toString() != "M" && $!result.Type.toString() != "N")
-<td class="caption">#ALrequired($!result.getFieldName('clock_in_time'))</td>
-##else
-##<td class="caption">$!result.getFieldName('clock_in_time')</td>
-##end
+<td class="caption"><span #if($!result.Type.toString() == "P")class="required"#end id="required_time">$!result.getFieldName('clock_in_time')</span></td>
 #ALtditemheader()
 <select name="clock_in_time_hour" size="1" >
 <option value="-1">--</option>
