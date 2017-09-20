@@ -1528,6 +1528,7 @@ aipo.message.scrollTo = function(element, to, duration) {
 }
 
 aipo.message.insertTransactionId = function(targetUserId){
+	aipo.message.moreMessageLock = false;
 	function guid() {
 		  function s4() {
 		    return Math.floor((1 + Math.random()) * 0x10000)

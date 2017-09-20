@@ -471,7 +471,6 @@ public class MessageUtils {
     return getLastMessage(0, roomId);
   }
 
-  // 編集中、(こちらのクラスのみ修正、送信側未修正。修正前は上記のように変数はint roomIdのみ）
   public static EipTMessage getLastMessage(int selectedroomId, int roomId) {
     List<Integer> tmpRoomIdList = new ArrayList<Integer>();
     tmpRoomIdList.add(roomId);
