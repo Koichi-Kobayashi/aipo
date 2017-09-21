@@ -354,10 +354,7 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         && !"outgoing".equals(edit_mode)
         && !"comeback".equals(edit_mode)) {
         // time has changed or not at work
-        if (isModify()
-          || (!"P".equals(type.getValue())
-            && !"M".equals(type.getValue())
-            && !"N".equals(type.getValue()))) {
+        if (isModify() || !"".equals(type.getValue())) {
           // Plans for the future is not checked
           if (isNotFuture()) {
             reason.setNotNull(true);
@@ -411,19 +408,17 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
         if (getIsPast()
           && ("M".equals(type.getValue()) || "N".equals(type.getValue()))) {
-          if (!clock_in_time.isNotNullValue()
-            && !clock_out_time.isNotNullValue()) {
+
+          if (clock_in_time.getHour().equals("")
+            && clock_in_time.getMinute().equals("")
+            && clock_out_time.getHour().equals("")
+            && clock_out_time.getMinute().equals("")) {
             notime_flag = true;
-            if (reason.getValue().equals("")) {
-              msgList.add(
-                ALLocalizationUtils.getl10nFormat(
-                  "EXTTIMECARD_ALERT_TYPE_CLOCKINTIME",
-                  reason.getFieldName()));
-            }
           } else {
             notime_flag = false;
           }
         }
+
         if (getIsPast() && !notime_flag) {
           if (!clock_in_time.isNotNullValue()
             || (!clock_out_time.isNotNullValue() && out_flag)
@@ -937,11 +932,9 @@ public class ExtTimecardFormData extends ALAbstractFormData {
             /** 午前午後休で勤怠時間が入力されてないなら勤怠時間は無視する */
           } else if ("M".equals(type.getValue())
             || "N".equals(type.getValue())) {
-            if (!clock_in_time.getHour().equals("")
-              && !clock_in_time.getMinute().equals("")) {
+            if (clock_in_time.isNotNullValue()) {
               timecard.setClockInTime(clock_in_time.getValue());
-              if (!clock_out_time.getHour().equals("")
-                && !clock_out_time.getMinute().equals("")) {
+              if (clock_out_time.isNotNullValue()) {
                 timecard.setClockOutTime(clock_out_time.getValue());
               } else {
                 // 初期化
@@ -1103,11 +1096,9 @@ public class ExtTimecardFormData extends ALAbstractFormData {
             /** 午前午後休で勤怠時間が入力されてないなら勤怠時間は無視する */
           } else if ("M".equals(type.getValue())
             || "N".equals(type.getValue())) {
-            if (!clock_in_time.getHour().equals("")
-              && !clock_in_time.getMinute().equals("")) {
+            if (clock_in_time.isNotNullValue()) {
               timecard.setClockInTime(clock_in_time.getValue());
-              if (!clock_out_time.getHour().equals("")
-                && !clock_out_time.getMinute().equals("")) {
+              if (clock_out_time.isNotNullValue()) {
                 timecard.setClockOutTime(clock_out_time.getValue());
               } else {
                 // 初期化
