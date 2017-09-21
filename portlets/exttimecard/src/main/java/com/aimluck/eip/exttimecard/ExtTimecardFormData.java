@@ -409,10 +409,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         if (getIsPast()
           && ("M".equals(type.getValue()) || "N".equals(type.getValue()))) {
 
-          if (clock_in_time.getHour().equals("")
-            && clock_in_time.getMinute().equals("")
-            && clock_out_time.getHour().equals("")
-            && clock_out_time.getMinute().equals("")) {
+          if ((clock_in_time.getTime().length() == 0)
+            && (clock_out_time.getTime().length() == 0)) {
             notime_flag = true;
           } else {
             notime_flag = false;
