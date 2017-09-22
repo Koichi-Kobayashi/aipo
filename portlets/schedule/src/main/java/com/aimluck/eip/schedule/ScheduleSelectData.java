@@ -88,8 +88,11 @@ public class ScheduleSelectData extends
   /** <code>type</code> マップ種別（ユーザ or 設備） */
   private String type;
 
-  /** <code</code> マップ有効性（有効 or 無効） */
+  /** <code></code> マップ有効性（有効 or 無効） */
   private String enabledMapsFlag;
+
+  /** <code></code> 設備重複登録の可否　（警告　or 不可) */
+  private String duplication;
 
   /** <code>loginuserid</code> ログインユーザーID */
   private int loginuserid;
@@ -417,7 +420,7 @@ public class ScheduleSelectData extends
         // 設備
         ALEipUser facilityuser = new ALEipUser();
         facilityuser.initField();
-        facilityuser.setUserId(userid);
+        facilityuser.setFacilityId(userid);
         facilityuser.setName("");
         facilityuser.setAliasName("", getFacilityName(facilities, userid));
         rd.setUser(facilityuser);

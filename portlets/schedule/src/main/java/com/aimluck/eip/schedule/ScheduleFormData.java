@@ -793,6 +793,7 @@ public class ScheduleFormData extends ALAbstractFormData {
     place.limitMaxLength(50);
     // 内容
     note.limitMaxLength(1000);
+
   }
 
   /**

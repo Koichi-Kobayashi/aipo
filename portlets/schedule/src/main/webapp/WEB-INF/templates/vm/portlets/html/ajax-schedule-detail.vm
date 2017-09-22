@@ -24,8 +24,8 @@
 #if (${client}!= "IPHONE")
 #if($!{result.Detail.Type} == "U")
 	#ALdialogheaderPrintSchedule($l10n.SCHEDULE_SCHEDULE_DETAIL "$!portlet.ID" "ScheduleDetailScreenPrint" "$!{result.getViewDate().toString()}" "$!{result.Detail.User.UserId.toString()}" "$entityid")
-#else
-	#ALdialogheaderPrintSchedule($l10n.SCHEDULE_SCHEDULE_DETAIL "$!portlet.ID" "ScheduleDetailScreenPrint" "$!{result.getViewDate().toString()}" "$!{result.FacilityId.toString()}" "$entityid")
+#elseif($!{result.Detail.Type} == "F")
+	#ALdialogheaderPrintSchedule($l10n.SCHEDULE_SCHEDULE_DETAIL "$!portlet.ID" "ScheduleDetailScreenPrint" "$!{result.getViewDate().toString()}" "$!{result.Detail.User.Facility.toString()}" "$entityid")
 #end
 #else
 	#ALdialogheaderDetailSmartPhone("$l10n.SCHEDULE_SCHEDULE_DETAIL")

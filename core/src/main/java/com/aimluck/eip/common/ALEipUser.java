@@ -33,6 +33,8 @@ public class ALEipUser implements ALData {
   /** ID */
   private ALNumberField user_id;
 
+  private ALNumberField facility_id;
+
   /** 名前 */
   private ALStringField name;
 
@@ -57,6 +59,7 @@ public class ALEipUser implements ALData {
   @Override
   public void initField() {
     user_id = new ALNumberField();
+    facility_id = new ALNumberField();
     name = new ALStringField();
     alias_name = new ALStringField();
     hasPhoto = false;
@@ -115,11 +118,19 @@ public class ALEipUser implements ALData {
     return user_id;
   }
 
+  public ALNumberField getFacilityId() {
+    return facility_id;
+  }
+
   /**
    * @param field
    */
   public void setUserId(int number) {
     user_id.setValue(number);
+  }
+
+  public void setFacilityId(int number) {
+    facility_id.setValue(number);
   }
 
   /**
