@@ -89,4 +89,5 @@ UPDATE `eip_t_ext_timecard_system` SET `resttime_start_hour` =12;
 UPDATE `eip_t_ext_timecard_system` SET `resttime_start_minute` =0;
 UPDATE `eip_t_ext_timecard_system` SET `resttime_end_hour` =13;
 UPDATE `eip_t_ext_timecard_system` SET `resttime_end_minute` =0;
+UPDATE `eip_t_ext_timecard_system` SET `resttime_type` ='I';
 -- 20170825
