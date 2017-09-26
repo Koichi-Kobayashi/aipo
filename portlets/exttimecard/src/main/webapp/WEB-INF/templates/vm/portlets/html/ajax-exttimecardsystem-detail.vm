@@ -63,6 +63,7 @@ ${result.Detail.StartDay}$l10n.EXTTIMECARD_DAY
 $l10n.EXTTIMECARD_OVERTIME_TYPE_O
 #end
 #ALtditemfooter()
+#if($!result.isNewRule())
 #ALtdcaption($l10n.EXTTIMECARD_CONSIDERED_OVERTIME)
 #ALtditemheader()
 #if($result.Detail.ConsideredOvertimeFlag.toString() == 'T')
@@ -71,6 +72,7 @@ $l10n.EXTTIMECARD_CONSIDERED_OVERTIME_MONTH1$!result.Detail.ConsideredOvertime.t
 $l10n.EXTTIMECARD_CONSIDERED_OVERTIME_NOTHING
 #end
 #ALtditemfooter()
+#end
 #ALtdcaption($l10n.EXTTIMECARD_HOLIDAY)
 #ALtditemheader()
 #if($!result.Detail.DefaultHolidayFlag.toString() == "A") $l10n.EXTTIMECARD_HOLIDAY_SETTING_DEFAULT_HOLIDAY
