@@ -80,10 +80,10 @@ ALTER TABLE `eip_t_message_read` ADD INDEX (`room_id`, `message_id`, `user_id`, 
 -- 20170706
 
 -- 20170825
-ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_start_hour` int(11) DEFAULT NULL AFTER `resttime_out`;
-ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_start_minute` int(11) DEFAULT NULL AFTER `resttime_start_hour`;
-ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_end_hour` int(11) DEFAULT NULL AFTER `resttime_start_minute`;
-ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_end_minute` int(11) DEFAULT NULL AFTER `resttime_end_hour`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_start_hour` int(11) DEFAULT 12 AFTER `resttime_out`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_start_minute` int(11) DEFAULT 0 AFTER `resttime_start_hour`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_end_hour` int(11) DEFAULT 13 AFTER `resttime_start_minute`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_end_minute` int(11) DEFAULT 0 AFTER `resttime_end_hour`;
 ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_type` varchar(1) DEFAULT 'P' AFTER `resttime_end_minute`;
 UPDATE `eip_t_ext_timecard_system` SET `resttime_start_hour` =12;
 UPDATE `eip_t_ext_timecard_system` SET `resttime_start_minute` =0;
