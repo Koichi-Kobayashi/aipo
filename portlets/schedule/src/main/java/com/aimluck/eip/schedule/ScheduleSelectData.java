@@ -420,7 +420,7 @@ public class ScheduleSelectData extends
         // 設備
         ALEipUser facilityuser = new ALEipUser();
         facilityuser.initField();
-        facilityuser.setFacilityId(userid);
+        facilityuser.setUserId(userid);
         facilityuser.setName("");
         facilityuser.setAliasName("", getFacilityName(facilities, userid));
         rd.setUser(facilityuser);
