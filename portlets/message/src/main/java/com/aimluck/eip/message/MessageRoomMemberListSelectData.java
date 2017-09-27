@@ -181,6 +181,10 @@ public class MessageRoomMemberListSelectData extends
     return room.getRoomId();
   }
 
+  public String getRoomName() {
+    return room.getName();
+  }
+
   public int getUserId() {
     return userId;
   }

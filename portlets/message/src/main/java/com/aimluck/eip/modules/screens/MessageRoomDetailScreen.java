@@ -21,10 +21,10 @@ package com.aimluck.eip.modules.screens;
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
 import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.turbine.util.RunData;
-import org.apache.turbine.util.StringUtils;
 import org.apache.velocity.context.Context;
 
-import com.aimluck.eip.message.MessageUserListSelectData;
+import com.aimluck.eip.cayenne.om.portlet.EipTMessageRoom;
+import com.aimluck.eip.message.MessageRoomMemberListSelectData;
 import com.aimluck.eip.message.util.MessageUtils;
 import com.aimluck.eip.util.ALEipUtils;
 
@@ -45,30 +45,39 @@ public class MessageRoomDetailScreen extends ALVelocityScreen {
   protected void doOutput(RunData rundata, Context context) throws Exception {
 
     try {
-      String keyword = null;
-      Integer userId = null;
-      try {
-        // keyword = rundata.getParameters().getString("k");
-      } catch (Throwable ignore) {
-        // ignore
-      }
-      try {
-        userId = rundata.getParameters().getInteger("u");
-      } catch (Throwable ignore) {
-        // ignore
-      }
-      context.put("currentUser", userId);
 
-      MessageUserListSelectData listData = new MessageUserListSelectData();
+      Integer roomId = null;
+      boolean isNewRoom = false;
+      EipTMessageRoom room = null;
+
+      int userId = ALEipUtils.getUserId(rundata);
+
+      try {
+        roomId = rundata.getParameters().getInteger("r");
+      } catch (Throwable ignore) {
+        // ignore
+      }
+      if (roomId == null) {
+        return;
+      }
+
+      room = MessageUtils.getRoom(roomId);
+      if (room == null) {
+        return;
+      }
+
+      if (!isNewRoom) {
+        if (!MessageUtils.isJoinRoom(room, userId)) {
+          return;
+        }
+      }
+      MessageRoomMemberListSelectData listData =
+        new MessageRoomMemberListSelectData();
+
+      listData.setRoom(room);
+
       listData.initField();
-      if (!StringUtils.isEmpty(keyword)) {
-        listData.setKeyword(keyword);
-        context.put("isSearch", true);
-      } else {
-        context.put("isSearch", false);
-      }
       listData.doViewList(this, rundata, context);
-
       String layout_template = "portlets/html/ajax-message-room-detail.vm";
       setTemplate(rundata, context, layout_template);
     } catch (Exception ex) {
