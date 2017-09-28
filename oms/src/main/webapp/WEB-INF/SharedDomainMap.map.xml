@@ -83,6 +83,13 @@
 		<db-attribute name="ORDER_NO" type="INTEGER" isMandatory="true"/>
 		<db-attribute name="UPDATE_DATE" type="TIMESTAMP" isMandatory="true" length="8"/>
 	</db-entity>
+	<db-entity name="eip_m_holiday">
+		<db-attribute name="CREATE_DATE" type="DATE"/>
+		<db-attribute name="HOLIDAY_DATE" type="DATE" isMandatory="true"/>
+		<db-attribute name="HOLIDAY_ID" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true"/>
+		<db-attribute name="HOLIDAY_NAME" type="VARCHAR" isMandatory="true" length="99"/>
+		<db-attribute name="UPDATE_DATE" type="TIMESTAMP"/>
+	</db-entity>
 	<db-entity name="eip_m_mail_account">
 		<db-attribute name="ACCOUNT_ID" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="4"/>
 		<db-attribute name="ACCOUNT_NAME" type="VARCHAR" isMandatory="true" length="200"/>
@@ -907,6 +914,12 @@
 		<obj-attribute name="gpdbKubunId" type="java.lang.Integer" db-attribute-path="GPDB_KUBUN_ID"/>
 		<obj-attribute name="gpdbKubunValue" type="java.lang.String" db-attribute-path="GPDB_KUBUN_VALUE"/>
 		<obj-attribute name="orderNo" type="java.lang.Integer" db-attribute-path="ORDER_NO"/>
+		<obj-attribute name="updateDate" type="java.util.Date" db-attribute-path="UPDATE_DATE"/>
+	</obj-entity>
+	<obj-entity name="EipMHoliday" className="com.aimluck.eip.cayenne.om.portlet.EipMHoliday" lock-type="optimistic" dbEntityName="eip_m_holiday">
+		<obj-attribute name="createDate" type="java.util.Date" db-attribute-path="CREATE_DATE"/>
+		<obj-attribute name="holidayDate" type="java.util.Date" db-attribute-path="HOLIDAY_DATE"/>
+		<obj-attribute name="holidayName" type="java.lang.String" db-attribute-path="HOLIDAY_NAME"/>
 		<obj-attribute name="updateDate" type="java.util.Date" db-attribute-path="UPDATE_DATE"/>
 	</obj-entity>
 	<obj-entity name="EipMMailAccount" className="com.aimluck.eip.cayenne.om.portlet.EipMMailAccount" dbEntityName="eip_m_mail_account">

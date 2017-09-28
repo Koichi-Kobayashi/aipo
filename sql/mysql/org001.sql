@@ -1396,6 +1396,15 @@ CREATE TABLE `eip_t_message_read` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE `eip_m_holiday` (
+    `holiday_id` integer NOT NULL,
+    `holiday_name` varchar (99) NOT NULL,
+    `holiday_date` date NOT NULL,
+    `create_date` date,
+    `update_date` timestamp,
+    PRIMARY KEY (`holiday_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 ALTER TABLE `oauth_consumer` ADD FOREIGN KEY (  `app_id` ) REFERENCES  `application` (`id`) ON DELETE CASCADE ;
 
 ALTER TABLE `activity_map` ADD FOREIGN KEY (  `activity_id` ) REFERENCES  `activity` (`id`) ON DELETE CASCADE ;

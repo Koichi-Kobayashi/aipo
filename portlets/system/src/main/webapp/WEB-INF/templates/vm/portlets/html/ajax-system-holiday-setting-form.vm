@@ -68,7 +68,33 @@
 #ALtditemheader()
 <input name="holiday" type="checkbox" value="1" id="holiday" #if ($!result.Holiday.toString() == "1") checked="checked" #end />
 <label for="holiday">$l10n.HOLIDAY_SETTING_HOLIDAY_MESSAGE</label>
+#ALtditemheader()
+
+#ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY)
+#ALtditemheader()
+<div class="auiSelectButton floatLeft">
+ <ul class="floatLeft">
+  <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
+  <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
+ </ul>
+  2017年
+</div>
+
+##<div class="floatRight">
+ <div class="mb5 floatRight">
+  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="startDate" initValue="$!{result.startDate.Year}/$!{result.startDate.Month}/$!{result.startDate.Day}" inputId="input_date" dateId="startDate" displayCheck="none"></div>
+ </div>
+ <div>
+   <td>
+    <input class="text floatRight" type="text" value="" cols="10">
+   </td>
+   <td>
+    <input class="button floatRight" type="button" value=" $l10n.HOLIDAY_SETTING_ADD">
+   </td>
+</div>
+##</div>
 #ALtditemfooter()
+
 #ALtablefooter()
 #ALbuttonheader()
 #ALsubmit($event_submit $action_str)

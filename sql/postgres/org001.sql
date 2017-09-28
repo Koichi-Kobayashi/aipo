@@ -1901,6 +1901,20 @@ create index eip_t_message_read_index2 ON eip_t_message_read(ROOM_ID,MESSAGE_ID,
 create index eip_t_message_read_index3 ON eip_t_message_read(ROOM_ID,MESSAGE_ID,USER_ID,IS_READ);
 
 -----------------------------------------------------------------------------
+-- EIP_M_HOLIDAY
+-----------------------------------------------------------------------------
+
+CREATE TABLE EIP_M_HOLIDAY
+(
+    HOLIDAY_ID INTEGER NOT NULL,
+    HOLIDAY_NAME VARCHAR (99) NOT NULL,
+    HOLIDAY_DATE DATE NOT NULL,
+    CREATE_DATE DATE,
+    UPDATE_DATE TIMESTAMP,
+    PRIMARY KEY (HOLIDAY_ID)
+);
+
+-----------------------------------------------------------------------------
 -- CREATE SEQUENCE
 -----------------------------------------------------------------------------
 
@@ -2012,7 +2026,7 @@ CREATE SEQUENCE pk_eip_t_message INCREMENT 20;
 CREATE SEQUENCE pk_eip_t_message_room_member INCREMENT 20;
 CREATE SEQUENCE pk_eip_t_message_file INCREMENT 20;
 CREATE SEQUENCE pk_eip_t_message_read INCREMENT 20;
-
+CREATE SEQUENCE pk_eip_m_holiday INCREMENT 20;
 -----------------------------------------------------------------------------
 -- ALTER SEQUENCE
 -----------------------------------------------------------------------------
@@ -2109,7 +2123,7 @@ ALTER SEQUENCE pk_eip_t_message OWNED BY EIP_T_MESSAGE.MESSAGE_ID;
 ALTER SEQUENCE pk_eip_t_message_room_member OWNED BY EIP_T_MESSAGE_ROOM_MEMBER.ID;
 ALTER SEQUENCE pk_eip_t_message_file OWNED BY EIP_T_MESSAGE_FILE.FILE_ID;
 ALTER SEQUENCE pk_eip_t_message_read OWNED BY EIP_T_MESSAGE_READ.ID;
-
+ALTER SEQUENCE pk_eip_m_holiday OWNED BY EIP_M_HOLIDAY.HOLIDAY_ID;
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -- Default Data Insert

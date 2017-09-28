@@ -78,3 +78,14 @@ UPDATE `eip_t_acl_role` SET `acl_type` = 44 WHERE feature_id IN (SELECT feature_
 -- 20170706
 ALTER TABLE `eip_t_message_read` ADD INDEX (`room_id`, `message_id`, `user_id`, `is_read`);
 -- 20170706
+
+-- 20170928
+CREATE TABLE `eip_m_holiday` (
+    `holiday_id` integer NOT NULL,
+    `holiday_name` varchar (99) NOT NULL,
+    `holiday_date` date NOT NULL,
+    `create_date` date,
+    `update_date` timestamp,
+    PRIMARY KEY (`holiday_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- 20170928
