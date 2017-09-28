@@ -91,9 +91,6 @@ public class ScheduleSelectData extends
   /** <code></code> マップ有効性（有効 or 無効） */
   private String enabledMapsFlag;
 
-  /** <code></code> 設備重複登録の可否　（警告　or 不可) */
-  private String duplication;
-
   /** <code>loginuserid</code> ログインユーザーID */
   private int loginuserid;
 
