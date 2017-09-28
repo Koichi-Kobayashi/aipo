@@ -914,8 +914,6 @@ public class ExtTimecardSummaryListSelectData extends
       int work_day = 0, overtime_day = 0, off_day = 0;
       /** 就業、残業、休出日数 */
       float work_hour = 0, overtime_hour = 0, off_hour = 0;
-      /** みなし外残業時間 */
-      float considered_overtime_outside_hour = 0;
       /** 就業、残業、休出時間 */
       int late_coming_day = 0, early_leaving_day = 0, absent_day = 0;
       /** 遅刻、早退、欠勤 */
@@ -978,29 +976,13 @@ public class ExtTimecardSummaryListSelectData extends
         }
       }
 
-      /** みなし外残業時間の計算 */
-      if (isNewRule()
-        && "T".equals(timecard_system.getConsideredOvertimeFlag())) {
-        float considered_overtime = timecard_system.getConsideredOvertime();
-        considered_overtime_outside_hour = overtime_hour - considered_overtime;
-        if (considered_overtime_outside_hour < 0) {
-          considered_overtime_outside_hour = 0;
-        }
-      } else {
-        considered_overtime_outside_hour = -1;
-      }
-
       /** ユーザーごとの合計をSummaryResultDataに代入する */
       work_hour = ExtTimecardUtils.roundHour(work_hour);
       overtime_hour = ExtTimecardUtils.roundHour(overtime_hour);
-      considered_overtime_outside_hour =
-        ExtTimecardUtils.roundHour(considered_overtime_outside_hour);
       off_hour = ExtTimecardUtils.roundHour(off_hour);
 
       summary_rd.setWorkDayHour(work_day, work_hour);
       summary_rd.setOvertimeDayHour(overtime_day, overtime_hour);
-      summary_rd.setConsideredOvertimeOutsideHour(
-        considered_overtime_outside_hour);
       summary_rd.setOffDayHour(off_day, off_hour);
       summary_rd.setLateComingDay(late_coming_day);
       summary_rd.setEarlyLeavingDay(early_leaving_day);
@@ -1036,7 +1018,8 @@ public class ExtTimecardSummaryListSelectData extends
       /** 就業、残業、休出日数 */
       float total_work_hour = 0, work_hour = 0, overtime_hour = 0, off_hour = 0;
       /** みなし外残業時間 */
-      float considered_overtime_outside_hour = 0;
+      float considered_overtime_outside_hour = 0,
+          considered_overtime_within_statutory_outside_hour = 0;
       /** 就業、残業、休出時間 */
       int late_coming_day = 0, early_leaving_day = 0, absent_day = 0;
       /** 遅刻、早退、欠勤 */
@@ -1230,11 +1213,17 @@ public class ExtTimecardSummaryListSelectData extends
         && "T".equals(timecard_system.getConsideredOvertimeFlag())) {
         float considered_overtime = timecard_system.getConsideredOvertime();
         considered_overtime_outside_hour = overtime_hour - considered_overtime;
+        considered_overtime_within_statutory_outside_hour =
+          overtime_within_statutory_working_hour - considered_overtime;
         if (considered_overtime_outside_hour < 0) {
           considered_overtime_outside_hour = 0;
         }
+        if (considered_overtime_within_statutory_outside_hour < 0) {
+          considered_overtime_within_statutory_outside_hour = 0;
+        }
       } else {
         considered_overtime_outside_hour = -1;
+        considered_overtime_within_statutory_outside_hour = -1;
       }
 
       /** ユーザーごとの合計をSummaryResultDataに代入する */
@@ -1243,6 +1232,9 @@ public class ExtTimecardSummaryListSelectData extends
       overtime_hour = ExtTimecardUtils.roundHour(overtime_hour);
       considered_overtime_outside_hour =
         ExtTimecardUtils.roundHour(considered_overtime_outside_hour);
+      considered_overtime_within_statutory_outside_hour =
+        ExtTimecardUtils.roundHour(
+          considered_overtime_within_statutory_outside_hour);
       off_hour = ExtTimecardUtils.roundHour(off_hour);
       midnight_work_hour = ExtTimecardUtils.roundHour(midnight_work_hour);
       overtime_within_statutory_working_hour =
@@ -1288,6 +1280,8 @@ public class ExtTimecardSummaryListSelectData extends
       summary_rd.setOvertimeDayHour(overtime_day, overtime_hour);
       summary_rd.setConsideredOvertimeOutsideHour(
         considered_overtime_outside_hour);
+      summary_rd.setConsideredOvertimeWithinStatutoryWorkingOutsideHour(
+        considered_overtime_within_statutory_outside_hour);
       summary_rd.setOffDayHour(off_day, off_hour);
       summary_rd.setOfficialOffDay(official_off_day);
       summary_rd.setStatutoryOffDay(statutory_off_day);
