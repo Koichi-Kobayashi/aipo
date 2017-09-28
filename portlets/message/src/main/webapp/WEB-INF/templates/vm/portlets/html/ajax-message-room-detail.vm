@@ -23,11 +23,15 @@
 <span class="name">${result.RoomName}</span>
 </div>
 <div id="messageRoomSetting">
+
+#if (${result.isOwner()})
 <a href="javascript:void(0)" class="setting toggle" title="ルーム設定" onclick="popupToggle(this,'roomSetting');"><i class="icon-cog"></i></a>
 <div class="menubar" id="roomSetting" style="display: none; right: 0px; top: 20px;">
 <ul>
 <li><a href="javascript:void(0);" onclick="">ルーム設定</a></li>
+#end
 <li class="last"><a href="javascript:void(0);" onclick="">通知設定</a></li>
+
 </ul>
 </div>
 </div>
@@ -35,8 +39,10 @@
 <div class="roomDisc"></div>
 <ul class="user">
 <li class="index">参加ユーザー<span>${result.List.size()}人</span>
+#if (${result.isOwner()})
 ##<a class="floatRight setting toggle" href="javascript:void(0)" title="ユーザー設定" onclick=""><i class="icon-cog"></i></a>
 <a class="floatRight plus" href="javascript:void(0)"  title="ユーザーを追加"><i class="icon-plus"></i></a>
+#end
 </li>
 <li id="messageRightUser***" class="messageRightUser">
 <a href="javascript:void(0)" onclick="aipo.message.openDirect()">
@@ -45,10 +51,15 @@
 <span class="name">田村 涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子</span>
 </a>
 </li>
+#foreach ($record in $result.List)
 <li id="messageRightUser***" class="messageRightUser">
-<a href="javascript:void(0)" onclick="aipo.message.openDirect()">
+<a href="javascript:void(0)" onclick="aipo.message.openDirect(${record.userId})">
 <span class="avatar"><img src="themes/default/images/common/icon_user100.png" alt="田村 涼子" class="avatar_s"></span>
-<span class="name">${result.List.get(1)}</span>
+#if ($record.isOwner())
+<span class="admin">管理者</span>
+#end
+<span class="name">${record.firstName} ${record.lastName}</span>
 </a>
 </li>
+#end
 </ul>
