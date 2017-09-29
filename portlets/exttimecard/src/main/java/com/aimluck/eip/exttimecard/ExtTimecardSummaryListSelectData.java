@@ -1209,18 +1209,33 @@ public class ExtTimecardSummaryListSelectData extends
       no_input = cal.getActualMaximum(Calendar.DAY_OF_MONTH) - userlist.size();
 
       /** みなし外残業時間の計算 */
+      // みなし残業の適用対象
+      // 法定内残業時間 および 残業時間（法定内残業時間から優先的に適用）
+      // 深夜残業時間、所定休日および法定休日の勤務時間及び残業については適用しない
       if (isNewRule()
         && "T".equals(timecard_system.getConsideredOvertimeFlag())) {
         float considered_overtime = timecard_system.getConsideredOvertime();
-        considered_overtime_outside_hour = overtime_hour - considered_overtime;
+        float considered_overtime_within_statutory_outside_diff_hour = 0;
+        // 法定内残業から優先的に適用
         considered_overtime_within_statutory_outside_hour =
           overtime_within_statutory_working_hour - considered_overtime;
-        if (considered_overtime_outside_hour < 0) {
-          considered_overtime_outside_hour = 0;
-        }
         if (considered_overtime_within_statutory_outside_hour < 0) {
+          // みなし残業 > 法定内残業時間のケース
+          considered_overtime_within_statutory_outside_diff_hour =
+            -considered_overtime_within_statutory_outside_hour;
           considered_overtime_within_statutory_outside_hour = 0;
         }
+        // 残業時間（深夜残業時間除く）
+        considered_overtime_outside_hour =
+          (overtime_hour - midnight_overtime_hour)
+            - considered_overtime_within_statutory_outside_diff_hour;
+        if (considered_overtime_outside_hour < 0) {
+          // みなし残業 > 残業時間（深夜残業時間除く） + 法定内残業時間のケース
+          considered_overtime_outside_hour = 0;
+        }
+        // 深夜残業時間適用
+        considered_overtime_outside_hour =
+          considered_overtime_outside_hour + midnight_overtime_hour;
       } else {
         considered_overtime_outside_hour = -1;
         considered_overtime_within_statutory_outside_hour = -1;

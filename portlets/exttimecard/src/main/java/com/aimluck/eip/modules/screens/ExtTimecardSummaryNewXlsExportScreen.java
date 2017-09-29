@@ -199,6 +199,9 @@ public class ExtTimecardSummaryNewXlsExportScreen extends ALXlsScreen {
       String total_work_hour = tclistrd.getTotalWorkHour().getValueAsString();
       // 所定内労働時間
       String work_hour = tclistrd.getWorkHour().getValueAsString();
+      // みなし残業の適用対象
+      // 法定内残業時間 および 残業時間（法定内残業時間から優先的に適用）
+      // 深夜残業時間、所定休日および法定休日の勤務時間及び残業については適用しない
       // 法定内残業時間
       // みなし外残業時間を見て-1ならみなし残業設定なしで通常の残業時間、それ以外だったらみなし外残業時間を残業時間として返す
       String tmp1 =
