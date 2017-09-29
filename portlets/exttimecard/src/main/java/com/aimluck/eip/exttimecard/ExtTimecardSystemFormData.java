@@ -629,7 +629,9 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
           resttime_end_minute.setValue(
             String.valueOf(record.getResttimeEndMinute()));
           if (isNewRule) {
-            resttime_type.setValue(record.getResttimeType());
+            // 通常の勤務形態にかかわらず、新規の場合は時刻で設定をデフォルトにする
+            resttime_type.setValue(
+              ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS);
           } else {
             resttime_type.setValue(
               ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_INTERVALS);
