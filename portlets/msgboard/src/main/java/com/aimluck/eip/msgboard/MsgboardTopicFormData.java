@@ -598,7 +598,6 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
           Database.get(EipTMsgboardCategory.class, Integer
             .valueOf((int) category_id.getValue()));
       }
-
       // 新規オブジェクトモデル
       EipTMsgboardTopic topic =
         MsgboardUtils.getEipTMsgboardParentTopic(rundata, context, false);
@@ -612,6 +611,9 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       topic.setUpdateUserId(Integer.valueOf(uid));
       // 更新日
       topic.setUpdateDate(Calendar.getInstance().getTime());
+
+      // コメントのカテゴリ変更
+      changeCommentCategoryId(rundata, context, topic);
 
       // ファイルをデータベースに登録する．
       if (!MsgboardUtils.insertFileDataDelegate(
@@ -680,6 +682,36 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       return false;
     }
     return true;
+  }
+
+  // コメントの処理
+  void changeCommentCategoryId(RunData rundata, Context context,
+      EipTMsgboardTopic str) {
+    try {
+      // 親トピック
+      int topicIdTopic = str.getTopicId();
+      EipTMsgboardCategory categoryIdTopic = str.getEipTMsgboardCategory();
+
+      // コメント
+      List<EipTMsgboardTopic> comment = new ArrayList<EipTMsgboardTopic>();
+      comment.add(MsgboardUtils.getEipTMsgboardParentTopic(
+        rundata,
+        context,
+        false));
+      for (int i = 0; i < comment.size(); i++) {
+        int parentIdComment = comment.get(i).getParentId();
+        EipTMsgboardCategory categoryIdComment =
+          comment.get(i).getEipTMsgboardCategory();
+
+        if ((topicIdTopic == parentIdComment)
+          && (!categoryIdTopic.equals(categoryIdComment))) {
+          comment.get(i).setEipTMsgboardCategory(categoryIdTopic);
+        }
+      }
+    } catch (Exception ex) {
+      Database.rollback();
+      logger.error("changeCommentCategoryId", ex);
+    }
   }
 
   /**
