@@ -687,29 +687,28 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
   // コメントの処理
   void changeCommentCategoryId(RunData rundata, Context context,
       EipTMsgboardTopic str) {
+
     try {
-      // 親トピック
-      int topicIdTopic = str.getTopicId();
+
       EipTMsgboardCategory categoryIdTopic = str.getEipTMsgboardCategory();
 
-      // コメント
-      List<EipTMsgboardTopic> comment = new ArrayList<EipTMsgboardTopic>();
-      comment.add(MsgboardUtils.getEipTMsgboardParentTopic(
-        rundata,
-        context,
-        false));
-      for (int i = 0; i < comment.size(); i++) {
-        int parentIdComment = comment.get(i).getParentId();
-        EipTMsgboardCategory categoryIdComment =
-          comment.get(i).getEipTMsgboardCategory();
+      // コメントを取得
+      SelectQuery<EipTMsgboardTopic> topicQuery =
+        Database.query(EipTMsgboardTopic.class);
+      Expression topicExp =
+        ExpressionFactory.matchExp(EipTMsgboardTopic.PARENT_ID_PROPERTY, str
+          .getTopicId());
+      topicQuery.setQualifier(topicExp);
 
-        if ((topicIdTopic == parentIdComment)
-          && (!categoryIdTopic.equals(categoryIdComment))) {
-          comment.get(i).setEipTMsgboardCategory(categoryIdTopic);
-        }
+      List<EipTMsgboardTopic> commentList = topicQuery.fetchList();
+      commentList.add(str);
+
+      // カテゴリの変更
+      for (EipTMsgboardTopic comment : commentList) {
+        comment.setEipTMsgboardCategory(categoryIdTopic);
       }
+
     } catch (Exception ex) {
-      Database.rollback();
       logger.error("changeCommentCategoryId", ex);
     }
   }
