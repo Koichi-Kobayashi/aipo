@@ -102,12 +102,10 @@ public class MessageRoomMemberListSelectData extends
     query.setQualifier(exp);
 
     List<TurbineUser> memberList =
-      query
-        .orderAscending(
-          TurbineUser.EIP_MUSER_POSITION_PROPERTY
-            + "."
-            + EipMUserPosition.POSITION_PROPERTY)
-        .fetchList();
+      query.orderAscending(
+        TurbineUser.EIP_MUSER_POSITION_PROPERTY
+          + "."
+          + EipMUserPosition.POSITION_PROPERTY).fetchList();
 
     return new ResultList<TurbineUser>(memberList);
   }
@@ -141,8 +139,8 @@ public class MessageRoomMemberListSelectData extends
     rd.setLastName(model.getLastName());
     rd.setFirstNameKana(model.getFirstNameKana());
     rd.setLastNameKana(model.getLastNameKana());
-    rd.setHasPhoto(
-      "T".equals(model.getHasPhoto()) || "N".equals(model.getHasPhoto()));
+    rd.setHasPhoto("T".equals(model.getHasPhoto())
+      || "N".equals(model.getHasPhoto()));
     Date photoModified = model.getPhotoModified();
     if (photoModified != null) {
       rd.setPhotoModified(photoModified.getTime());
@@ -191,7 +189,8 @@ public class MessageRoomMemberListSelectData extends
   }
 
   public Boolean isOwner() {
-    return room.getCreateUserId().equals(userId);
+    MessageUserResultData rd = new MessageUserResultData();
+    return rd.isOwner();
   }
 
   public int getUserId() {
