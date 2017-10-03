@@ -18,6 +18,7 @@
  */
 package com.aimluck.eip.system;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
@@ -25,13 +26,17 @@ import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
+import com.aimluck.commons.field.ALDateTimeField;
 import com.aimluck.commons.field.ALStringField;
+import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALAbstractFormData;
 import com.aimluck.eip.common.ALDBErrorException;
 import com.aimluck.eip.common.ALPageNotFoundException;
 import com.aimluck.eip.modules.actions.common.ALAction;
+import com.aimluck.eip.orm.Database;
 import com.aimluck.eip.services.config.ALConfigHandler;
 import com.aimluck.eip.services.config.ALConfigService;
+import com.aimluck.eip.system.util.SystemUtils;
 import com.aimluck.eip.util.ALLocalizationUtils;
 
 /**
@@ -60,6 +65,12 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   private ALStringField statutoryHoliday;
 
   private ALStringField holiday;
+
+  /** 個別の休日の日付 */
+  private ALDateTimeField p_holiday;
+
+  /** 個別の休日の名前 */
+  private ALStringField p_holiday_name;
 
   @Override
   public void init(ALAction action, RunData rundata, Context context)
@@ -92,6 +103,14 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     holiday = new ALStringField();
     holiday
       .setFieldName(ALLocalizationUtils.getl10n("HOLIDAY_SETTING_HOLIDAY"));
+    // 個別の休日の日付
+    p_holiday = new ALDateTimeField(SystemUtils.DATE_FORMAT);
+    p_holiday.setFieldName(ALLocalizationUtils
+      .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
+    // 個別の休日の名前
+    p_holiday_name = new ALStringField();
+    p_holiday_name.setFieldName(ALLocalizationUtils
+      .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
 
   }
 
@@ -111,6 +130,10 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       statutoryHoliday.setValue(String.valueOf(holidayOfWeek.charAt(7)));
       holiday.setValue(holidayOfWeek.charAt(8) != '0' ? "1" : null);
 
+      EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata, context);
+      p_holiday.setValue(p_holiday_data.getHolidayDate());
+      p_holiday_name.setValue(p_holiday_data.getHolidayName());
+
     } catch (Exception ex) {
       logger.error("SystemHolidaySettingFormData", ex);
       return false;
@@ -118,9 +141,49 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     return true;
   }
 
+  /**
+   * リクエストをデータベースに格納します。 <BR>
+   *
+   * @param rundata
+   * @param context
+   * @param msgList
+   * @return TRUE 成功 FALSE 失敗
+   */
+  @Override
+  protected boolean insertFormData(RunData rundata, Context context,
+      List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
+    EipMHoliday p_holiday_data = null;
+    try {
+
+      // 個別の休日の日付
+      p_holiday_data.setHolidayDate(p_holiday.getValue());
+      // 個別の休日の名前
+      p_holiday_data.setHolidayName(p_holiday_name.getValue());
+      // 作成日
+      p_holiday_data.setCreateDate(Calendar.getInstance().getTime());
+      // 更新日
+      p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
+
+    } catch (Exception ex) {
+      Database.rollback();
+      logger.error("system", ex);
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * データベースに格納されているリクエストを更新します。 <BR>
+   *
+   * @param rundata
+   * @param context
+   * @param msgList
+   * @return TRUE 成功 FALSE 失敗
+   */
   @Override
   protected boolean updateFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
+    EipMHoliday p_holiday_data = null;
     try {
       String value = statutoryHoliday.getValue();
       if ("1".equals(value)) {
@@ -156,6 +219,16 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       b.append("1".equals(holiday.getValue()) ? "1" : "0");
       ALConfigService.put(ALConfigHandler.Property.HOLIDAY_OF_WEEK, b
         .toString());
+
+      // 個別の休日の日付
+      p_holiday_data.setHolidayDate(p_holiday.getValue());
+      // 個別の休日の名前
+      p_holiday_data.setHolidayName(p_holiday_name.getValue());
+      // 作成日
+      p_holiday_data.setCreateDate(Calendar.getInstance().getTime());
+      // 更新日
+      p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
+
     } catch (Exception ex) {
       logger.error("SystemHolidaySettingFormData", ex);
       return false;
@@ -170,15 +243,23 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   }
 
   @Override
-  protected boolean insertFormData(RunData rundata, Context context,
-      List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
-    return false;
-  }
-
-  @Override
   protected boolean setFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     boolean res = super.setFormData(rundata, context, msgList);
+
+    if (res) {
+      try {
+        if ("".equals(p_holiday.toString())) {
+          Calendar cal = Calendar.getInstance();
+          p_holiday.setValue(cal.getTime());
+        } else {
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(p_holiday.getValue());
+        }
+      } catch (Exception ex) {
+        logger.error("system", ex);
+      }
+    }
 
     return res;
   }
@@ -186,11 +267,22 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   @Override
   protected void setValidator() throws ALPageNotFoundException,
       ALDBErrorException {
+    p_holiday.setNotNull(true);
+    p_holiday_name.setNotNull(true);
+    p_holiday_name.limitMaxLength(50);
   }
 
   @Override
   protected boolean validate(List<String> msgList)
       throws ALPageNotFoundException, ALDBErrorException {
+    // 個別の休日の日付
+    p_holiday.validate(msgList);
+    // 個別の日付の名前
+    p_holiday_name.validate(msgList);
+
+    // if ("".equals(p_holiday.toString())) {
+    // msgList.add(ALLocalizationUtils.getl10n("HOLIDAY_SETTING_SELECT_DATE"));
+    // }
 
     return (msgList.size() == 0);
   }
@@ -241,5 +333,13 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
 
   public ALStringField getHoliday() {
     return holiday;
+  }
+
+  public ALDateTimeField getPersonalHoliday() {
+    return p_holiday;
+  }
+
+  public ALStringField getPersonalHolidayName() {
+    return p_holiday_name;
   }
 }

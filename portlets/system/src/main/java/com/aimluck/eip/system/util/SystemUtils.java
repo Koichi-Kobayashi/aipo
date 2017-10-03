@@ -30,10 +30,15 @@ import org.apache.jetspeed.services.security.UnknownUserException;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
+import com.aimluck.commons.field.ALDateTimeField;
 import com.aimluck.eip.cayenne.om.account.EipMCompany;
+import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALBaseUser;
+import com.aimluck.eip.common.ALDBErrorException;
 import com.aimluck.eip.common.ALEipConstants;
+import com.aimluck.eip.common.ALPageNotFoundException;
 import com.aimluck.eip.orm.Database;
+import com.aimluck.eip.orm.query.SelectQuery;
 import com.aimluck.eip.services.config.ALConfigHandler.Property;
 import com.aimluck.eip.services.config.ALConfigService;
 import com.aimluck.eip.util.ALEipUtils;
@@ -47,7 +52,7 @@ public class SystemUtils {
   /** logger */
   private static final JetspeedLogger logger = JetspeedLogFactoryService
     .getLogger(SystemUtils.class.getName());
-	
+
   public static final String COMPANY_PORTLET_NAME = "Company";
 
   /** Webアプリケーションサーバのポート番号 */
@@ -57,8 +62,10 @@ public class SystemUtils {
 
   public static final String SYSTEM_PORTLET_NAME = "System";
 
+  public static final String DATE_FORMAT = ALDateTimeField.DEFAULT_DATE_FORMAT;
 
-
+  public static final String DATE_TIME_FORMAT =
+    ALDateTimeField.DEFAULT_DATE_TIME_FORMAT;
 
   /**
    * セッション中のエンティティIDで示されるユーザ情報を取得する。 論理削除されたユーザを取得した場合はnullを返す。
@@ -91,6 +98,7 @@ public class SystemUtils {
       return null;
     }
   }
+
   /**
    *
    * @param rundata
@@ -172,4 +180,35 @@ public class SystemUtils {
 
     return url.toString();
   }
+
+  public static EipMHoliday getEipMHoliday(RunData rundata, Context context)
+      throws ALDBErrorException {
+
+    String id = ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID);
+    try {
+      if (id == null || Integer.valueOf(id) == null) { // Request
+        // IDが空の場合
+        logger.debug("Empty ID...");
+        return null;
+      }
+      SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+      Expression exp1 =
+        ExpressionFactory.matchDbExp(EipMHoliday.HOLIDAY_ID_PK_COLUMN, id);
+      query.setQualifier(exp1);
+
+      List<EipMHoliday> list = query.fetchList();
+      if (list == null || list.size() == 0) {
+        logger.debug("Not found ID...");
+        throw new ALPageNotFoundException();
+      }
+      return list.get(0);
+    } catch (ALPageNotFoundException ex) {
+      ALEipUtils.redirectPageNotFound(rundata);
+      return null;
+    } catch (Exception ex) {
+      logger.debug("Empty ID...");
+      throw new ALDBErrorException();
+    }
+  }
+
 }
