@@ -34,6 +34,7 @@ import com.aimluck.eip.cayenne.om.portlet.EipTMessageRoomMember;
 import com.aimluck.eip.cayenne.om.security.TurbineUser;
 import com.aimluck.eip.common.ALAbstractSelectData;
 import com.aimluck.eip.common.ALDBErrorException;
+import com.aimluck.eip.common.ALEipUser;
 import com.aimluck.eip.common.ALPageNotFoundException;
 import com.aimluck.eip.message.util.MessageUtils;
 import com.aimluck.eip.modules.actions.common.ALAction;
@@ -145,7 +146,8 @@ public class MessageRoomMemberListSelectData extends
     if (photoModified != null) {
       rd.setPhotoModified(photoModified.getTime());
     }
-    if (model.getUserId().equals(room.getCreateUserId())) {
+    ALEipUser user = new ALEipUser();
+    if ("A".equals(user.getAuthority())) {
       rd.setOwner(true);
     }
 
