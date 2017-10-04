@@ -111,7 +111,53 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     p_holiday_name = new ALStringField();
     p_holiday_name.setFieldName(ALLocalizationUtils
       .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
+    p_holiday_name.setTrim(true);
 
+  }
+
+  @Override
+  protected boolean setFormData(RunData rundata, Context context,
+      List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
+    boolean res = super.setFormData(rundata, context, msgList);
+
+    if (res) {
+      try {
+        if ("".equals(p_holiday.toString())) {
+          Calendar cal = Calendar.getInstance();
+          p_holiday.setValue(cal.getTime());
+        } else {
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(p_holiday.getValue());
+        }
+      } catch (Exception ex) {
+        logger.error("system", ex);
+      }
+    }
+
+    return res;
+  }
+
+  @Override
+  protected void setValidator() throws ALPageNotFoundException,
+      ALDBErrorException {
+    p_holiday.setNotNull(true);
+    p_holiday_name.setNotNull(true);
+    p_holiday_name.limitMaxLength(50);
+  }
+
+  @Override
+  protected boolean validate(List<String> msgList)
+      throws ALPageNotFoundException, ALDBErrorException {
+    // 個別の休日の日付
+    p_holiday.validate(msgList);
+    // 個別の日付の名前
+    p_holiday_name.validate(msgList);
+
+    // if ("".equals(p_holiday.toString())) {
+    // msgList.add(ALLocalizationUtils.getl10n("HOLIDAY_SETTING_SELECT_DATE"));
+    // }
+
+    return (msgList.size() == 0);
   }
 
   @Override
@@ -154,7 +200,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     EipMHoliday p_holiday_data = null;
     try {
-
       // 個別の休日の日付
       p_holiday_data.setHolidayDate(p_holiday.getValue());
       // 個別の休日の名前
@@ -240,51 +285,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   protected boolean deleteFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     return false;
-  }
-
-  @Override
-  protected boolean setFormData(RunData rundata, Context context,
-      List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
-    boolean res = super.setFormData(rundata, context, msgList);
-
-    if (res) {
-      try {
-        if ("".equals(p_holiday.toString())) {
-          Calendar cal = Calendar.getInstance();
-          p_holiday.setValue(cal.getTime());
-        } else {
-          Calendar cal = Calendar.getInstance();
-          cal.setTime(p_holiday.getValue());
-        }
-      } catch (Exception ex) {
-        logger.error("system", ex);
-      }
-    }
-
-    return res;
-  }
-
-  @Override
-  protected void setValidator() throws ALPageNotFoundException,
-      ALDBErrorException {
-    p_holiday.setNotNull(true);
-    p_holiday_name.setNotNull(true);
-    p_holiday_name.limitMaxLength(50);
-  }
-
-  @Override
-  protected boolean validate(List<String> msgList)
-      throws ALPageNotFoundException, ALDBErrorException {
-    // 個別の休日の日付
-    p_holiday.validate(msgList);
-    // 個別の日付の名前
-    p_holiday_name.validate(msgList);
-
-    // if ("".equals(p_holiday.toString())) {
-    // msgList.add(ALLocalizationUtils.getl10n("HOLIDAY_SETTING_SELECT_DATE"));
-    // }
-
-    return (msgList.size() == 0);
   }
 
   /**
