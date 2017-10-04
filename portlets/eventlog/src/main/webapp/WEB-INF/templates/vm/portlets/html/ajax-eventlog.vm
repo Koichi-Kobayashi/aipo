@@ -18,6 +18,7 @@
  *#
 ## ---------------------------------------------------------------------------
 #set ($baselink = "$!jslink.getPortletById($!portlet.ID).addQueryData('template','EventlogScreen')")
+#set ($screen = "EventlogScreen")
 ## ---------------------------------------------------------------------------
 
 #if(${client}=="IPHONE")
@@ -62,23 +63,32 @@
 </select>
 </div>
 
+#AUISummaryDiv()
+<form class="auiForm floatLeft" action="#" method="post" style="margin-right:1em;" onsubmit="return false;">
+<select onchange="aipo.viewPage(this.options[this.selectedIndex].value, '$!portlet.ID')" style="width:180px;">
+<option value="$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template", $screen).addQueryData("filter","1").addQueryData("filtertype","status"))">$l10n.EVENTLOG_LOGIN</option>
+<option value="$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template", $screen).addQueryData("filter","0").addQueryData("filtertype","status"))">$l10n.EVENTLOG_UPDATE</option>
+</select>
+#ALformfooter()
+<div class="floatLeft ml10" style="padding-top: 0.4em;">#ALajaxIndicator("${indicator_id}" "$!{portlet.ID}" "")</div>
+#AUISummaryDivfooter()
+
 #if($result.List.size() == 0)
 #AUIEmptyMessage("icon-eye-open" "$l10n.EVENTLOG_NO_YOU_SELECT")
 #ALformfooter()
 #else
+
 #AUISummaryDiv()
 <div class="floatLeft">
 #AUIajaxbuttonCheckboxDelete("$l10n.COMMON_DELETE" "$!jslink.getPortletById($!portlet.ID).addQueryData('template','EventlogFormJSONScreen').addQueryData('mode','multi_delete')" "$!indicator_id" "$!portlet.ID" "aipo.eventlog.onReceiveMessage")
 #set($dlLink = $!utils.escapeXML($jslink.getTemplate('EventlogCsvExportScreen').addQueryData('start_day',$!{result.StartDate}).addQueryData('end_day',$!{result.EndDate}) ))
-
 #set($title = "$l10n.EVENTLOG_DOWNLOAD")
 <a class="auiButton" title="$title" href="javascript:void(0);" onclick="aipo.eventlog.downloadCvn(${result.isOverSize()},${result.MaxSize},'$dlLink');" >$title</a>
-
 ##AUIajaxbuttonAllDelete($l10n.EVENTLOG_ALL_DELETE "$!jslink.getPortletById($!portlet.ID).addQueryData('template','EventlogFormJSONScreen').addQueryData('mode','all_delete')" "$!indicator_id" "$!portlet.ID" "aipo.eventlog.onReceiveMessage")
-
 </div>
 #AUIajaxpageview('EventlogScreen' $result)
 #AUISummaryDivfooter()
+
 <table class="auiRowTable auiMbTable wide">
 <colgroup style="width:20px;">
 </colgroup><colgroup style="">
@@ -97,8 +107,10 @@
 #ALtdheadAtt("#ALajaxsort('event_type' $l10n.EVENTLOG_OPERATION $result 'EventlogScreen')" 'class="center mb_hide"')
 #ALtdheadAtt("#ALajaxsort('ip_addr' $l10n.EVENTLOG_IP $result 'EventlogScreen')" 'class="mb_hide"')
 </tr>
+
 #foreach ($record in $result.List)
 <tr>
+
 #if($!{client}=="IPHONE")
 #ALtdcellAtt("<input name='check$!record.EventlogId' type='checkbox' value='$!record.EventlogId'/>" "class='center auiMTCheck'")
 #ALtdcellheaderAtt('nowrap="nowrap" class="auiMTCaption"')
@@ -108,6 +120,7 @@
 #ALtdcell("<div>$!record.PortletName</div>")
 #ALtdcell("<div>$!record.EventName</div>")
 #ALtdcellAtt("<div>$!record.IpAddr</div>" 'class="mb_hide"')
+
 #else
 #ALtdcellAtt("<input name='check$!record.EventlogId' type='checkbox' value='$!record.EventlogId'/>" 'class="center"')
 #ALtditemheaderAtt("nowrap='nowrap'")
@@ -117,6 +130,7 @@
 #ALtdcell("<div>$!record.PortletName</div>")
 #ALtdcell("<div>$!record.EventName</div>")
 #ALtdcell("<div>$!record.IpAddr</div>")
+
 #end
 </tr>
 #end
