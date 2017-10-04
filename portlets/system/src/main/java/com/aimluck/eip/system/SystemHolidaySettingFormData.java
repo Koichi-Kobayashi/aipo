@@ -111,7 +111,7 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     // 個別の休日の名前
     p_holiday_name = new ALStringField();
     p_holiday_name.setFieldName(ALLocalizationUtils
-      .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
+      .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME"));
     p_holiday_name.setTrim(true);
 
   }
@@ -154,10 +154,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     // 個別の日付の名前
     p_holiday_name.validate(msgList);
 
-    // if ("".equals(p_holiday.toString())) {
-    // msgList.add(ALLocalizationUtils.getl10n("HOLIDAY_SETTING_SELECT_DATE"));
-    // }
-
     return (msgList.size() == 0);
   }
 
@@ -190,7 +186,7 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   }
 
   /**
-   * リクエストをデータベースに格納します。 <BR>
+   * 個別の休日をデータベースに格納します。 <BR>
    *
    * @param rundata
    * @param context
@@ -221,7 +217,7 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   }
 
   /**
-   * データベースに格納されているリクエストを更新します。 <BR>
+   * データベースに格納されている個別の休日を更新します。 <BR>
    *
    * @param rundata
    * @param context

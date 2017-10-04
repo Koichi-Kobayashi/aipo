@@ -41,17 +41,46 @@ public class SystemHolidaySettingFormJSONScreen extends ALJSONScreen {
   protected String getJSONString(RunData rundata, Context context)
       throws Exception {
     String result = new JSONArray().toString();
-
+    String mode = this.getMode();
     try {
-      SystemHolidaySettingFormData formData =
-        new SystemHolidaySettingFormData();
-      formData.initField();
-      if (formData.doUpdate(this, rundata, context)) {
-      } else {
-        JSONArray json =
-          JSONArray.fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
-        result = json.toString();
+      // SystemHolidaySettingFormData formData =
+      // new SystemHolidaySettingFormData();
+      // formData.initField();
+      // // formData.doInsert(this, rundata, context);
+      // if (formData.doUpdate(this, rundata, context)) {
+      // } else {
+      // JSONArray json =
+      // JSONArray.fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
+      // result = json.toString();
+      // }
+
+      if (ALEipConstants.MODE_INSERT.equals(mode)) {
+        //
+        SystemHolidaySettingFormData formData =
+          new SystemHolidaySettingFormData();
+        formData.initField();
+        if (formData.doInsert(this, rundata, context)) {
+        } else {
+          JSONArray json =
+            JSONArray
+              .fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
+          result = json.toString();
+        }
+
+      } else if (ALEipConstants.MODE_UPDATE.equals(mode)) {
+
+        SystemHolidaySettingFormData formData =
+          new SystemHolidaySettingFormData();
+        formData.initField();
+        if (formData.doUpdate(this, rundata, context)) {
+        } else {
+          JSONArray json =
+            JSONArray
+              .fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
+          result = json.toString();
+        }
       }
+
     } catch (Exception e) {
       logger.error("[SystemHolidaySettingFormJSONScreen]", e);
     }
