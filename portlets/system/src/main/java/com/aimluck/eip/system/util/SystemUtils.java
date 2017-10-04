@@ -30,11 +30,9 @@ import org.apache.jetspeed.services.security.UnknownUserException;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
-import com.aimluck.commons.field.ALDateTimeField;
 import com.aimluck.eip.cayenne.om.account.EipMCompany;
 import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALBaseUser;
-import com.aimluck.eip.common.ALDBErrorException;
 import com.aimluck.eip.common.ALEipConstants;
 import com.aimluck.eip.common.ALPageNotFoundException;
 import com.aimluck.eip.orm.Database;
@@ -61,11 +59,6 @@ public class SystemUtils {
     80);
 
   public static final String SYSTEM_PORTLET_NAME = "System";
-
-  public static final String DATE_FORMAT = ALDateTimeField.DEFAULT_DATE_FORMAT;
-
-  public static final String DATE_TIME_FORMAT =
-    ALDateTimeField.DEFAULT_DATE_TIME_FORMAT;
 
   /**
    * セッション中のエンティティIDで示されるユーザ情報を取得する。 論理削除されたユーザを取得した場合はnullを返す。
@@ -182,18 +175,21 @@ public class SystemUtils {
   }
 
   public static EipMHoliday getEipMHoliday(RunData rundata, Context context)
-      throws ALDBErrorException {
+      throws ALPageNotFoundException {
 
-    String id = ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID);
+    String holiday_id =
+      ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID);
     try {
-      if (id == null || Integer.valueOf(id) == null) { // Request
+      if (holiday_id == null || Integer.valueOf(holiday_id) == null) {
         // IDが空の場合
         logger.debug("Empty ID...");
         return null;
       }
       SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
       Expression exp1 =
-        ExpressionFactory.matchDbExp(EipMHoliday.HOLIDAY_ID_PK_COLUMN, id);
+        ExpressionFactory.matchDbExp(
+          EipMHoliday.HOLIDAY_ID_PK_COLUMN,
+          holiday_id);
       query.setQualifier(exp1);
 
       List<EipMHoliday> list = query.fetchList();
@@ -207,7 +203,7 @@ public class SystemUtils {
       return null;
     } catch (Exception ex) {
       logger.debug("Empty ID...");
-      throw new ALDBErrorException();
+      throw new ALPageNotFoundException();
     }
   }
 

@@ -81,14 +81,14 @@
 </div>
 <div class="floatRight">
  <div class="mb5 floatRight">
-  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="startDate" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.Month}/$!{result.HolidayDate.Day}" inputId="input_date" dateId="startDate" displayCheck="none"></div>
+  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="holidayDate" initValue="$!{result.holidayDate.Year}/$!{result.holidayDate.Month}/$!{result.holidayDate.Day}" inputId="input_holidaydate" dateId="holidayDate" displayCheck="none"></div>
  </div>
  <div>
    <td>
     <input class="text floatRight" type="text" value="" cols="10">
    </td>
    <td>
-    <input class="button floatRight" type="button" value=" $l10n.HOLIDAY_SETTING_ADD">
+    <input class="button floatRight" type="button" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
    </td>
 </div>
 </div>

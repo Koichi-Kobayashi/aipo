@@ -37,7 +37,6 @@ import com.aimluck.eip.modules.actions.common.ALAction;
 import com.aimluck.eip.orm.Database;
 import com.aimluck.eip.services.config.ALConfigHandler;
 import com.aimluck.eip.services.config.ALConfigService;
-import com.aimluck.eip.system.util.SystemUtils;
 import com.aimluck.eip.util.ALLocalizationUtils;
 
 /**
@@ -111,8 +110,8 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     p_holiday.setValue(new Date());
     // 個別の休日の名前
     p_holiday_name = new ALStringField();
-    // p_holiday_name.setFieldName(ALLocalizationUtils
-    // .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
+    p_holiday_name.setFieldName(ALLocalizationUtils
+      .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
     p_holiday_name.setTrim(true);
 
   }
@@ -122,19 +121,19 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     boolean res = super.setFormData(rundata, context, msgList);
 
-    // if (res) {
-    // try {
-    // if ("".equals(p_holiday.toString())) {
-    // Calendar cal = Calendar.getInstance();
-    // p_holiday.setValue(cal.getTime());
-    // } else {
-    // Calendar cal = Calendar.getInstance();
-    // cal.setTime(p_holiday.getValue());
-    // }
-    // } catch (Exception ex) {
-    // logger.error("system", ex);
-    // }
-    // }
+    if (res) {
+      try {
+        if ("".equals(p_holiday.toString())) {
+          Calendar cal = Calendar.getInstance();
+          p_holiday.setValue(cal.getTime());
+        } else {
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(p_holiday.getValue().getDate());
+        }
+      } catch (Exception ex) {
+        logger.error("system", ex);
+      }
+    }
 
     return res;
   }
@@ -178,9 +177,10 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       statutoryHoliday.setValue(String.valueOf(holidayOfWeek.charAt(7)));
       holiday.setValue(holidayOfWeek.charAt(8) != '0' ? "1" : null);
 
-      EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata, context);
-      p_holiday.setValue(p_holiday_data.getHolidayDate());
-      p_holiday_name.setValue(p_holiday_data.getHolidayName());
+      // EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata,
+      // context);
+      // p_holiday.setValue(p_holiday_data.getHolidayDate());
+      // p_holiday_name.setValue(p_holiday_data.getHolidayName());
 
     } catch (Exception ex) {
       logger.error("SystemHolidaySettingFormData", ex);
