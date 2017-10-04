@@ -79,10 +79,9 @@
  </ul>
   2017年
 </div>
-
-##<div class="floatRight">
+<div class="floatRight">
  <div class="mb5 floatRight">
-  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="startDate" initValue="$!{result.startDate.Year}/$!{result.startDate.Month}/$!{result.startDate.Day}" inputId="input_date" dateId="startDate" displayCheck="none"></div>
+  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="startDate" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.Month}/$!{result.HolidayDate.Day}" inputId="input_date" dateId="startDate" displayCheck="none"></div>
  </div>
  <div>
    <td>
@@ -92,7 +91,7 @@
     <input class="button floatRight" type="button" value=" $l10n.HOLIDAY_SETTING_ADD">
    </td>
 </div>
-##</div>
+</div>
 #ALtditemfooter()
 
 #ALtablefooter()

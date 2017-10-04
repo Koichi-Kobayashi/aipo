@@ -8,7 +8,7 @@ public class EipMHoliday extends _EipMHoliday {
 
   public static final String HOLIDAY_NAME_PROPERTY = "holidayName";
 
-  public Integer getFacilityId() {
+  public Integer getHolidayId() {
     if (getObjectId() != null && !getObjectId().isTemporary()) {
       Object obj = getObjectId().getIdSnapshot().get(HOLIDAY_ID_PK_COLUMN);
       if (obj instanceof Long) {
@@ -22,9 +22,9 @@ public class EipMHoliday extends _EipMHoliday {
     }
   }
 
-  public void setFacilityId(String id) {
-    setObjectId(
-      new ObjectId("EipMHoliday", HOLIDAY_ID_PK_COLUMN, Integer.valueOf(id)));
+  public void setHolidayId(String id) {
+    setObjectId(new ObjectId("EipMHoliday", HOLIDAY_ID_PK_COLUMN, Integer
+      .valueOf(id)));
   }
 
 }

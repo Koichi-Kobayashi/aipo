@@ -25,6 +25,7 @@ import org.apache.velocity.context.Context;
 
 import com.aimluck.eip.common.ALEipConstants;
 import com.aimluck.eip.system.SystemHolidaySettingFormData;
+import com.aimluck.eip.system.SystemHolidaySettingSelectData;
 import com.aimluck.eip.system.util.SystemUtils;
 import com.aimluck.eip.util.ALEipUtils;
 
@@ -50,8 +51,11 @@ public class SystemHolidaySettingFormScreen extends ALVelocityScreen {
 
       SystemHolidaySettingFormData formData =
         new SystemHolidaySettingFormData();
+      SystemHolidaySettingSelectData resultdata =
+        new SystemHolidaySettingSelectData();
       formData.initField();
       formData.doViewForm(this, rundata, context);
+      resultdata.doViewList(this, rundata, context);
       setTemplate(
         rundata,
         context,
