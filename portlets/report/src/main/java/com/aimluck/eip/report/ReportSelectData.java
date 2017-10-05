@@ -136,10 +136,6 @@ public class ReportSelectData extends
 
   private boolean isAdmin;
 
-  private String current_sort_type;
-
-  private String current_sort;
-
   /**
    *
    * @param action
@@ -492,7 +488,6 @@ public class ReportSelectData extends
     // /////
     // Attributes map = getColumnMap();
     String sort = ALEipUtils.getTemp(rundata, context, LIST_SORT_STR);
-    String sort_type = ALEipUtils.getTemp(rundata, context, LIST_SORT_TYPE_STR);
     last
       .append(" t0." + sort + " " + buildSQLForListViewSort(rundata, context));
 
