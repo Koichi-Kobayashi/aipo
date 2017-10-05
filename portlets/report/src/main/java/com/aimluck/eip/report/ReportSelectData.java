@@ -484,7 +484,23 @@ public class ReportSelectData extends
 
     offset = limit * (page - 1);
     StringBuilder last = new StringBuilder();
-    last.append(" ORDER BY t0.update_date desc ");
+    last.append(" ORDER BY ");
+    // /////
+    // Attributes map = getColumnMap();
+    String sort = ALEipUtils.getTemp(rundata, context, LIST_SORT_STR);
+    String sort_type = ALEipUtils.getTemp(rundata, context, LIST_SORT_TYPE_STR);
+
+    last.append(" t0." + sort);
+
+    if (sort_type != null
+      && ALEipConstants.LIST_SORT_TYPE_DESC.equals(sort_type)) {
+      last.append(" desc ");
+    } else {
+      last.append(" asc ");
+      sort_type = ALEipConstants.LIST_SORT_TYPE_ASC;
+    }
+    // /////
+
     last.append(" LIMIT ");
     last.append(limit);
     last.append(" OFFSET ");
