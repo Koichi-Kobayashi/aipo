@@ -402,6 +402,22 @@ public abstract class ALAbstractSelectData<M1, M2> implements ALData {
     return query;
   }
 
+  protected String buildSQLForListViewSort(RunData rundata, Context context) {
+    String sort = ALEipUtils.getTemp(rundata, context, LIST_SORT_STR);
+    String sort_type = ALEipUtils.getTemp(rundata, context, LIST_SORT_TYPE_STR);
+    String return_sort_type = null;
+
+    if (sort_type != null
+      && ALEipConstants.LIST_SORT_TYPE_DESC.equals(sort_type)) {
+      return_sort_type = ALEipConstants.LIST_SORT_TYPE_DESC;
+    } else {
+      return_sort_type = ALEipConstants.LIST_SORT_TYPE_ASC;
+    }
+    current_sort = sort;
+    current_sort_type = sort_type;
+    return return_sort_type;
+  }
+
   /**
    * フィルタ用の <code>SelectQuery</code> を構築します。
    *

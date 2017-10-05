@@ -136,6 +136,10 @@ public class ReportSelectData extends
 
   private boolean isAdmin;
 
+  private String current_sort_type;
+
+  private String current_sort;
+
   /**
    *
    * @param action
@@ -489,16 +493,9 @@ public class ReportSelectData extends
     // Attributes map = getColumnMap();
     String sort = ALEipUtils.getTemp(rundata, context, LIST_SORT_STR);
     String sort_type = ALEipUtils.getTemp(rundata, context, LIST_SORT_TYPE_STR);
+    last
+      .append(" t0." + sort + " " + buildSQLForListViewSort(rundata, context));
 
-    last.append(" t0." + sort);
-
-    if (sort_type != null
-      && ALEipConstants.LIST_SORT_TYPE_DESC.equals(sort_type)) {
-      last.append(" desc ");
-    } else {
-      last.append(" asc ");
-      sort_type = ALEipConstants.LIST_SORT_TYPE_ASC;
-    }
     // /////
 
     last.append(" LIMIT ");
