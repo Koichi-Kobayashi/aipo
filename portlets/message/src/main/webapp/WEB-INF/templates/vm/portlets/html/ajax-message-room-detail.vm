@@ -44,21 +44,14 @@
 <a class="floatRight plus" href="javascript:void(0)"  title="ユーザーを追加"><i class="icon-plus"></i></a>
 #end
 </li>
-<li id="messageRightUser***" class="messageRightUser">
-<a href="javascript:void(0)" onclick="aipo.message.openDirect()">
-<span class="avatar"><img src="themes/default/images/common/icon_user100.png" alt="田村 涼子" class="avatar_s"></span>
-<span class="admin">管理者</span>
-<span class="name">田村 涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子涼子</span>
-</a>
-</li>
 #foreach ($record in $result.List)
-<li id="messageRightUser***" class="messageRightUser">
-<a href="javascript:void(0)" onclick="aipo.message.openDirect(${record.userId})">
-<span class="avatar"><img src="themes/default/images/common/icon_user100.png" alt="田村 涼子" class="avatar_s"></span>
+<li id="messageRightUser_${record.userId}" class="messageRightUser">
+<a href="javascript:void(0)" onclick="aipo.message.popupProfile(${record.UserId.Value},arguments[0])">
+<span class="avatar"><img #if($!record.isHasPhoto())src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!record.UserId).addQueryData("t", "$!record.PhotoModified"))"#else src="themes/default/images/common/icon_user100.png"#end title="$!record.LastName $!record.FirstName" width="24" height="24" class="avatar_s"></span>
 #if ($record.isOwner())
 <span class="admin">管理者</span>
 #end
-<span class="name">${record.firstName} ${record.lastName}</span>
+<span class="name">${record.lastName} ${record.firstName}</span>
 </a>
 </li>
 #end
