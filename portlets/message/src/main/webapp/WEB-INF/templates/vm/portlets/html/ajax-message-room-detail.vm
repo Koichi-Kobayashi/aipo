@@ -17,31 +17,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *#
 
+#set($messagePortletId = $!globalPortlets.get('Message').getId())
+#set($indicator_id = "indicator-dlg-")
+
+#ALajaxIndicator("$indicator_id" "$!portlet.ID" "")
+
 <div class="roomDetail">
 <div class="clearfix">
 <span class="avatar"><img src="themes/default/images/common/icon_group100.png" class="avatar_l"></span>
 <span class="name">${result.RoomName}</span>
 </div>
+
 <div id="messageRoomSetting">
-
-#if (${result.isOwner()})
-<a href="javascript:void(0)" class="setting toggle" title="ルーム設定" onclick="popupToggle(this,'roomSetting');"><i class="icon-cog"></i></a>
-<div class="menubar" id="roomSetting" style="display: none; right: 0px; top: 20px;">
-<ul>
-<li><a href="javascript:void(0);" onclick="">ルーム設定</a></li>
+<a href="javascript:void(0)" id="menubar_button_$!{messagePortletId}" class="customizeMenuIcon menubarOpenButton" title="$l10n.MESSAGE_ROOM_SETTING" onclick="aipo.customize.showMenu('$messagePortletId');"><span class="auiWFicon"><i class="icon-cog"></i></span></a>
+<div class="menubar body-child" id="menubar_$!{messagePortletId}" style="display: none; right: 0px; top: 20px; z-index: 9999">
+<ul id="roomMemberAdmin">
+#if(${result.isOwner()})
+  <li>
+  <a href="javascript:void(0)" onclick="aimluck.io.openDialog(this, '$!jslink.getPortletById($messagePortletId).addQueryData('template','MessageRoomFormScreen')&entityid=' + aipo.message.currentRoomId, '$messagePortletId', aipo.message.onLoadMessageRoomDialog);">$l10n.MESSAGE_ROOM_SETTING</a>
+  </li>
 #end
-<li class="last"><a href="javascript:void(0);" onclick="">通知設定</a></li>
-
+<li>
+  <a href="javascript:void(0)" onclick="aimluck.io.openDialog(this, '$!jslink.getPortletById($messagePortletId).addQueryData('template','MessageRoomNotificationFormScreen')&entityid=' + aipo.message.currentRoomId, '$messagePortletId', aipo.message.onLoadMessageRoomDialog);">$l10n.MESSAGE_NOTIFICATION_SETTING</a>
+</li>
+<form style="display:inline" name="deleteForm_$!{portlet.ID}_$!{record.MessageId}" id="deleteForm_$!{portlet.ID}_$!{record.MessageId}" action="$!jslink.getPortletById($!portlet.ID).addQueryData('template','MessageFormJSONScreen')" method="post">
+<input type="hidden" name="_name" value="$l10n.MESSAGE_ROOM" />
+<input type="hidden" name="secid" value="$secid" />
+#if(${result.isOwner()})
+  <li>
+  <a href="javascript:void(0)" onclick="aimluck.io.ajaxMessageRoomDeleteSubmission(dojo.byId('deleteForm_$!{portlet.ID}_$!{record.MessageId}'),'$!jslink.getPortletById($!portlet.ID).addQueryData('template','MessageRoomFormJSONScreen').addQueryData('mode', 'delete')&entityid=' + aipo.message.currentRoomId, '$indicator_id', '$messagePortletId', aipo.message.onReceiveMessageRoomDelete);">$l10n.COMMON_DELETE</a>
+  </li>
+#end
+</form>
 </ul>
 </div>
 </div>
 </div>
+
+
+##if (${result.isOwner()})
+##<a href="javascript:void(0)" class="customizeMenuIcon menubarOpenButton" id="menubar_button_$!{messagePortletId}" title="$l10n.MESSAGE_ROOM_SETTING" onclick="aipo.customize.showMenu('$messagePortletId');"><span class="auiWFicon"><i class="icon-cog"></i></span></a>
+##<div class="menubar" id="roomSetting" style="display: none; right: 0px; top: 20px;">
+##<ul>
+##<li><a href="javascript:void(0)" onclick="aimluck.io.openDialog(this, '$!jslink.getPortletById($messagePortletId).addQueryData('template','MessageRoomFormScreen')&entityid=' + aipo.message.currentRoomId, '$messagePortletId', aipo.message.onLoadMessageRoomDialog);">$l10n.MESSAGE_ROOM_SETTING</a></li>
+##end
+##<li class="last"><a href="javascript:void(0);" onclick="">通知設定</a></li>
+##</ul>
+##</div>
+##</div>
+##</div>
+
 <div class="roomDisc"></div>
 <ul class="user">
 <li class="index">参加ユーザー<span>${result.List.size()}人</span>
 #if (${result.isOwner()})
 ##<a class="floatRight setting toggle" href="javascript:void(0)" title="ユーザー設定" onclick=""><i class="icon-cog"></i></a>
-<a class="floatRight plus" href="javascript:void(0)"  title="ユーザーを追加"><i class="icon-plus"></i></a>
+<a class="floatRight plus" href="javascript:void(0)"  title="ユーザーを追加" onclick="aimluck.io.openDialog(this, '$!jslink.getPortletById($messagePortletId).addQueryData('template','MessageRoomFormScreen')&entityid=' + aipo.message.currentRoomId, '$messagePortletId', aipo.message.onLoadMessageRoomDialog);"><i class="icon-plus"></i></a>
 #end
 </li>
 #foreach ($record in $result.List)
@@ -56,3 +87,5 @@
 </li>
 #end
 </ul>
+
+<img src="images/common/dot.gif" width="1" height="1" onload="if(aipo && aipo.customize){aipo.customize.addAutoHideMenuTrigger();aipo.customize.positionInitialize();}" style="display:none" />
