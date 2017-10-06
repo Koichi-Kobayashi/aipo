@@ -22,9 +22,11 @@
 #if  ($mode=="new_form")
 #set ($action_str = $l10n.SYSTEM_ADD)
 #set ($event_submit = "eventSubmit_doSystem_report_setting_insert")
+#set ($holiday_submit = "eventSubmit_doPersonalHoliday_insert")
 #else
 #set ($action_str = $l10n.SYSTEM_UPDATE)
 #set ($event_submit = "eventSubmit_doSystem_report_setting_update")
+#set ($holiday_submit = "eventSubmit_doPersonalHoliday_update")
 #end
 ## ---------------------------------------------------------------------------
 #ALdialogheaderCloseJS($subtitle "aipo.system.hideDialog()")
@@ -72,26 +74,23 @@
 
 #ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY)
 #ALtditemheader()
-<div class="auiSelectButton floatLeft">
- <ul class="floatLeft">
+<td>
+ <ul class="auiSelectButton floatLeft">
   <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
   <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
  </ul>
-  2017年
-</div>
-<div class="floatRight">
- <div class="mb5 floatRight">
-  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="holidayDate" initValue="$!{result.holidayDate.Year}/$!{result.holidayDate.Month}/$!{result.holidayDate.Day}" inputId="input_holidaydate" dateId="holidayDate" displayCheck="none"></div>
- </div>
- #ALtditemfooter()
-
-#ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME)
+ </td>
+ <div class="count"><strong>$!{result.PersonalHoliday.Year}年</strong></div>
+ <td class="auiSetDate">
+  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.PersonalHoliday.Year}/$!{result.PersonalHoliday.Month}/$!{result.PersonalHoliday.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
+ </td>
 <td>
-#ALtextfieldw100('todo_name' $!result.holidayName() 50 'active')
+#ALtextfield('p_holiday_name' $!result.PersonalHolidayName 20 50 'active')
 </td>
 <td>
-<input class="button floatRight" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
+<input name="$holiday_submit" class="button" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
 </td>
+#ALtditemfooter()
 
 #ALtablefooter()
 #ALbuttonheader()

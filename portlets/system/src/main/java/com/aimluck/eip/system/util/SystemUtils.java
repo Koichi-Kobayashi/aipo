@@ -183,8 +183,9 @@ public class SystemUtils {
       if (holiday_id == null || Integer.valueOf(holiday_id) == null) {
         // IDが空の場合
         logger.debug("Empty ID...");
-        return null;
+        throw new ALPageNotFoundException();
       }
+
       SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
       Expression exp1 =
         ExpressionFactory.matchDbExp(
