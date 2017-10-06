@@ -36,6 +36,7 @@
 #ALajaxIndicator("$!indicator_id" "$!portlet.ID" "")
 #ALajaxscreenformheader("systemForm" $jslink $portlet "SystemHolidaySettingFormJSONScreen" "aimluck.io.submit(this, '$!indicator_id', '$!portlet.ID',aipo.system.onReceiveMessage)")
 #ALtableheaderWide()
+<tr>
 #ALtdcaption("#ALrequired($l10n.HOLIDAY_SETTING_WEEK_OF_DAY)")
 #ALtditemheader()
 <input name="week1" type="checkbox" value="1" id="week1" #if ($!result.Week1.toString() == "1") checked="checked" #end />
@@ -53,6 +54,7 @@
 <input name="week7" type="checkbox" value="1" id="week7" #if ($!result.Week7.toString() == "1") checked="checked" #end />
 <label for="week7">$l10n.HOLIDAY_SETTING_WEEK7</label>
 #ALtditemfooter()
+<tr>
 #ALtdcaption("#ALrequired($l10n.HOLIDAY_SETTING_STATUTORY_HOLIDAY)")
 #ALtditemheader()
 <select name="statutoryHoliday">
@@ -66,21 +68,23 @@
 	<option value="7" #if ($!result.StatutoryHoliday.toString() == "7") selected="selected"#end>$l10n.HOLIDAY_SETTING_WEEK7</option>
 </select>
 #ALtditemfooter()
+<tr>
 #ALtdcaption("#ALrequired($l10n.HOLIDAY_SETTING_HOLIDAY)")
 #ALtditemheader()
 <input name="holiday" type="checkbox" value="1" id="holiday" #if ($!result.Holiday.toString() == "1") checked="checked" #end />
 <label for="holiday">$l10n.HOLIDAY_SETTING_HOLIDAY_MESSAGE</label>
-#ALtditemheader()
+#ALtditemfooter()
 
+<tr>
 #ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY)
 #ALtditemheader()
-<td>
- <ul class="auiSelectButton floatLeft">
+<div>
+ <ul class="auiSelectButton">
   <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
   <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
  </ul>
- </td>
  <div class="count"><strong>$!{result.PersonalHoliday.Year}年</strong></div>
+ </div>
  <td class="auiSetDate">
   <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.PersonalHoliday.Year}/$!{result.PersonalHoliday.Month}/$!{result.PersonalHoliday.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
  </td>
