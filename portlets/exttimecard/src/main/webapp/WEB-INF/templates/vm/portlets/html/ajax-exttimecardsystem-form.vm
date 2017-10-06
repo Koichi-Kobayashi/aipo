@@ -159,6 +159,20 @@ $l10n.EXTTIMECARD_OVERTIME_TYPE_O
   </p>
 </div>
 #ALtditemfooter()
+#if($!result.isNewRule())
+#ALtdcaption($l10n.EXTTIMECARD_ADMIN_HALFDAY_OFF)
+#ALtditemheader()
+<p>$l10n.EXTTIMECARD_ADMIN_MORNING_OFF_MESSAGE1
+<input class="text" name="morning_off" value="$!result.MorningOff.toString()" type="text" size="3" maxlength="3">
+$l10n.EXTTIMECARD_ADMIN_HALFDAY_OFF_MESSAGE1</p>
+<p>$l10n.EXTTIMECARD_ADMIN_AFTERNOON_OFF_MESSAGE1
+<input class="text" name="afternoon_off" value="$!result.AfternoonOff.toString()" type="text" size="3" maxlength="3">
+$l10n.EXTTIMECARD_ADMIN_HALFDAY_OFF_MESSAGE1</p>
+#ALtditemfooter()
+#else
+<input type="hidden" name="morning_off" value="$!result.MorningOff.toString()" />
+<input type="hidden" name="afternoon_off" value="$!result.AfternoonOff.toString()" />
+#end
 #ALtablefooter()
 #ALbuttonheader()
 #ALsubmit($event_submit $action_str)

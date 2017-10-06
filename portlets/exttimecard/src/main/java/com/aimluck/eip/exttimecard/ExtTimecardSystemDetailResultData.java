@@ -87,6 +87,10 @@ public class ExtTimecardSystemDetailResultData extends
 
   private boolean hasHoliday;
 
+  private ALNumberField morning_off;
+
+  private ALNumberField afternoon_off;
+
   /**
    *
    *
@@ -120,6 +124,8 @@ public class ExtTimecardSystemDetailResultData extends
     week7 = new ALStringField();
     statutoryHoliday = new ALStringField();
     holiday = new ALStringField();
+    morning_off = new ALNumberField();
+    afternoon_off = new ALNumberField();
   }
 
   public String getUserId() {
@@ -381,6 +387,36 @@ public class ExtTimecardSystemDetailResultData extends
    */
   public void setHasHoliday(boolean hasHoliday) {
     this.hasHoliday = hasHoliday;
+  }
+
+  /**
+   * @return morning_off
+   */
+  public ALNumberField getMorningOff() {
+    return morning_off;
+  }
+
+  /**
+   * @param morning_off
+   *          セットする morning_off
+   */
+  public void setMorningOff(int i) {
+    morning_off.setValue(i);
+  }
+
+  /**
+   * @return afternoon_off
+   */
+  public ALNumberField getAfternoonOff() {
+    return afternoon_off;
+  }
+
+  /**
+   * @param afternoon_off
+   *          セットする afternoon_off
+   */
+  public void setAfternoonOff(int i) {
+    afternoon_off.setValue(i);
   }
 
 }
