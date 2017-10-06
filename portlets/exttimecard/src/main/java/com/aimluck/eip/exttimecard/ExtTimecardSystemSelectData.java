@@ -134,6 +134,14 @@ public class ExtTimecardSystemSelectData extends
       rd.setRestTimeOut(record.getResttimeOut());
       rd.setConsideredOvertime(record.getConsideredOvertime());
       rd.setConsideredOvertimeFlag(record.getConsideredOvertimeFlag());
+      rd.setResttimeType(record.getResttimeType());
+      if (ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+        record.getResttimeType())) {
+        rd.setResttimeStartHour(record.getResttimeStartHour());
+        rd.setResttimeStartMinute(record.getResttimeStartMinute());
+        rd.setResttimeEndHour(record.getResttimeEndHour());
+        rd.setResttimeEndMinute(record.getResttimeEndMinute());
+      }
       rd.setChangeHour(record.getChangeHour());
       rd.setOutgoingAddFlag(record.getOutgoingAddFlag());
       if (isNewRule()) {
@@ -194,6 +202,14 @@ public class ExtTimecardSystemSelectData extends
       rd.setRestTimeOut(record.getResttimeOut());
       rd.setConsideredOvertime(record.getConsideredOvertime());
       rd.setConsideredOvertimeFlag(record.getConsideredOvertimeFlag());
+      rd.setResttimeType(record.getResttimeType());
+      if (ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+        record.getResttimeType())) {
+        rd.setResttimeStartHour(record.getResttimeStartHour());
+        rd.setResttimeStartMinute(record.getResttimeStartMinute());
+        rd.setResttimeEndHour(record.getResttimeEndHour());
+        rd.setResttimeEndMinute(record.getResttimeEndMinute());
+      }
       rd.setChangeHour(record.getChangeHour());
       rd.setOutgoingAddFlag(record.getOutgoingAddFlag());
       rd.setCreateDate(record.getCreateDate().toString());

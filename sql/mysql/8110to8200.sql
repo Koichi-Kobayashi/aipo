@@ -79,8 +79,17 @@ UPDATE `eip_t_acl_role` SET `acl_type` = 44 WHERE feature_id IN (SELECT feature_
 ALTER TABLE `eip_t_message_read` ADD INDEX (`room_id`, `message_id`, `user_id`, `is_read`);
 -- 20170706
 
---20170906
-ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime_flag` varchar(1) DEFAULT 'F' AFTER `change_hour`;
+-- 20170825
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_start_hour` int(11) DEFAULT 12 AFTER `resttime_out`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_start_minute` int(11) DEFAULT 0 AFTER `resttime_start_hour`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_end_hour` int(11) DEFAULT 13 AFTER `resttime_start_minute`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_end_minute` int(11) DEFAULT 0 AFTER `resttime_end_hour`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `resttime_type` varchar(1) DEFAULT 'I' AFTER `resttime_end_minute`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime_flag` varchar(1) DEFAULT 'F' AFTER `resttime_type`;
 ALTER TABLE `eip_t_ext_timecard_system` ADD `considered_overtime` int(11) DEFAULT 0 AFTER `considered_overtime_flag`;
+UPDATE `eip_t_ext_timecard_system` SET `resttime_start_hour` =12;
+UPDATE `eip_t_ext_timecard_system` SET `resttime_start_minute` =0;
+UPDATE `eip_t_ext_timecard_system` SET `resttime_end_hour` =13;
+UPDATE `eip_t_ext_timecard_system` SET `resttime_end_minute` =0;
 UPDATE `eip_t_ext_timecard_system` SET `considered_overtime` = 0;
---20170906
+-- 20170825
