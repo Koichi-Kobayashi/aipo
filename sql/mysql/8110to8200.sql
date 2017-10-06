@@ -78,3 +78,8 @@ UPDATE `eip_t_acl_role` SET `acl_type` = 44 WHERE feature_id IN (SELECT feature_
 -- 20170706
 ALTER TABLE `eip_t_message_read` ADD INDEX (`room_id`, `message_id`, `user_id`, `is_read`);
 -- 20170706
+
+-- 20171006
+ALTER TABLE `eip_t_ext_timecard_system` ADD `morning_off` int(11) DEFAULT 240 AFTER `holiday_of_week`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `afternoon_off` int(11) DEFAULT 240 AFTER `morning_off`;
+-- 20171006

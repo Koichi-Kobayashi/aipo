@@ -471,12 +471,14 @@ CREATE TABLE `eip_t_ext_timecard_system` (
   `outgoing_add_flag` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   `overtime_type` varchar(8) DEFAULT 'O',
   `holiday_of_week` varchar(32) DEFAULT 'A',
+  `morning_off` int(11) DEFAULT 240,
+  `afternoon_off` int(11) DEFAULT 240,
   `create_date` date DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   PRIMARY KEY (`system_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `eip_t_ext_timecard_system` VALUES (1,0,'通常',9,0,18,0,1,360,60,360,60,4,'T','L480','A',now(),now());
+INSERT INTO `eip_t_ext_timecard_system` VALUES (1,0,'通常',9,0,18,0,1,360,60,360,60,4,'T','L480','A',240,240,now(),now());
 
 CREATE TABLE `eip_t_ext_timecard_system_map` (
   `system_map_id` int(11) NOT NULL AUTO_INCREMENT,
