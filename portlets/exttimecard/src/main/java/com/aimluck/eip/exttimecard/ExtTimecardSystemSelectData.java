@@ -42,8 +42,9 @@ public class ExtTimecardSystemSelectData extends
     ALAbstractSelectData<EipTExtTimecardSystem, EipTExtTimecardSystem> {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ExtTimecardSystemSelectData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(
+      ExtTimecardSystemSelectData.class.getName());
 
   /** システムの総数 */
   private int systemSum;
@@ -101,7 +102,8 @@ public class ExtTimecardSystemSelectData extends
    * @return
    */
   @Override
-  protected EipTExtTimecardSystem selectDetail(RunData rundata, Context context) {
+  protected EipTExtTimecardSystem selectDetail(RunData rundata,
+      Context context) {
     // ポートレット名を取得します。
     VelocityPortlet portlet = ALEipUtils.getPortlet(rundata, context);
     setPortletName(portlet.getPortletConfig().getName());
@@ -130,9 +132,11 @@ public class ExtTimecardSystemSelectData extends
       rd.setRestTimeIn(record.getResttimeIn());
       rd.setWorkTimeOut(record.getWorktimeOut());
       rd.setRestTimeOut(record.getResttimeOut());
+      rd.setConsideredOvertime(record.getConsideredOvertime());
+      rd.setConsideredOvertimeFlag(record.getConsideredOvertimeFlag());
       rd.setResttimeType(record.getResttimeType());
-      if (ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(record
-        .getResttimeType())) {
+      if (ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+        record.getResttimeType())) {
         rd.setResttimeStartHour(record.getResttimeStartHour());
         rd.setResttimeStartMinute(record.getResttimeStartMinute());
         rd.setResttimeEndHour(record.getResttimeEndHour());
@@ -141,16 +145,16 @@ public class ExtTimecardSystemSelectData extends
       rd.setChangeHour(record.getChangeHour());
       rd.setOutgoingAddFlag(record.getOutgoingAddFlag());
       if (isNewRule()) {
-        rd.setOvertimeTypeMinuteByDay(ExtTimecardUtils
-          .getOvertimeMinuteByDay(record.getOvertimeType()));
-        rd.setOvertimeTypeHourByWeek(ExtTimecardUtils
-          .getOvertimeHourByWeek(record.getOvertimeType()));
-        rd.setOvertypeWeek(ExtTimecardUtils.isOvertimeHourByWeek(record
-          .getOvertimeType()));
+        rd.setOvertimeTypeMinuteByDay(
+          ExtTimecardUtils.getOvertimeMinuteByDay(record.getOvertimeType()));
+        rd.setOvertimeTypeHourByWeek(
+          ExtTimecardUtils.getOvertimeHourByWeek(record.getOvertimeType()));
+        rd.setOvertypeWeek(
+          ExtTimecardUtils.isOvertimeHourByWeek(record.getOvertimeType()));
       }
 
-      rd.setDefaultHolidayFlag(String.valueOf(record.getHolidayOfWeek().charAt(
-        0)));
+      rd.setDefaultHolidayFlag(
+        String.valueOf(record.getHolidayOfWeek().charAt(0)));
       if (!"A".equals(rd.getDefaultHolidayFlag().toString())) {
         rd.setWeek1(record.getHolidayOfWeek().charAt(1) != '0' ? "1" : null);
         rd.setWeek2(record.getHolidayOfWeek().charAt(2) != '0' ? "1" : null);
@@ -159,10 +163,10 @@ public class ExtTimecardSystemSelectData extends
         rd.setWeek5(record.getHolidayOfWeek().charAt(5) != '0' ? "1" : null);
         rd.setWeek6(record.getHolidayOfWeek().charAt(6) != '0' ? "1" : null);
         rd.setWeek7(record.getHolidayOfWeek().charAt(7) != '0' ? "1" : null);
-        rd
-          .setHasHoliday(record.getHolidayOfWeek().substring(1, 8).indexOf("1") != -1);
-        rd.setStatutoryHoliday(String.valueOf(record.getHolidayOfWeek().charAt(
-          8)));
+        rd.setHasHoliday(
+          record.getHolidayOfWeek().substring(1, 8).indexOf("1") != -1);
+        rd.setStatutoryHoliday(
+          String.valueOf(record.getHolidayOfWeek().charAt(8)));
         rd.setHoliday(record.getHolidayOfWeek().charAt(9) != '0' ? "1" : null);
       }
 
@@ -196,9 +200,11 @@ public class ExtTimecardSystemSelectData extends
       rd.setWorkTimeOut(record.getWorktimeOut());
       rd.setRestTimeIn(record.getResttimeIn());
       rd.setRestTimeOut(record.getResttimeOut());
+      rd.setConsideredOvertime(record.getConsideredOvertime());
+      rd.setConsideredOvertimeFlag(record.getConsideredOvertimeFlag());
       rd.setResttimeType(record.getResttimeType());
-      if (ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(record
-        .getResttimeType())) {
+      if (ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+        record.getResttimeType())) {
         rd.setResttimeStartHour(record.getResttimeStartHour());
         rd.setResttimeStartMinute(record.getResttimeStartMinute());
         rd.setResttimeEndHour(record.getResttimeEndHour());
@@ -209,16 +215,16 @@ public class ExtTimecardSystemSelectData extends
       rd.setCreateDate(record.getCreateDate().toString());
       rd.setUpdateDate(record.getUpdateDate().toString());
       if (isNewRule()) {
-        rd.setOvertimeTypeMinuteByDay(ExtTimecardUtils
-          .getOvertimeMinuteByDay(record.getOvertimeType()));
-        rd.setOvertimeTypeHourByWeek(ExtTimecardUtils
-          .getOvertimeHourByWeek(record.getOvertimeType()));
-        rd.setOvertypeWeek(ExtTimecardUtils.isOvertimeHourByWeek(record
-          .getOvertimeType()));
+        rd.setOvertimeTypeMinuteByDay(
+          ExtTimecardUtils.getOvertimeMinuteByDay(record.getOvertimeType()));
+        rd.setOvertimeTypeHourByWeek(
+          ExtTimecardUtils.getOvertimeHourByWeek(record.getOvertimeType()));
+        rd.setOvertypeWeek(
+          ExtTimecardUtils.isOvertimeHourByWeek(record.getOvertimeType()));
       }
 
-      rd.setDefaultHolidayFlag(String.valueOf(record.getHolidayOfWeek().charAt(
-        0)));
+      rd.setDefaultHolidayFlag(
+        String.valueOf(record.getHolidayOfWeek().charAt(0)));
       if (!"A".equals(rd.getDefaultHolidayFlag().toString())) {
         rd.setWeek1(record.getHolidayOfWeek().charAt(1) != '0' ? "1" : null);
         rd.setWeek2(record.getHolidayOfWeek().charAt(2) != '0' ? "1" : null);
@@ -227,10 +233,10 @@ public class ExtTimecardSystemSelectData extends
         rd.setWeek5(record.getHolidayOfWeek().charAt(5) != '0' ? "1" : null);
         rd.setWeek6(record.getHolidayOfWeek().charAt(6) != '0' ? "1" : null);
         rd.setWeek7(record.getHolidayOfWeek().charAt(7) != '0' ? "1" : null);
-        rd
-          .setHasHoliday(record.getHolidayOfWeek().substring(1, 8).indexOf("1") != -1);
-        rd.setStatutoryHoliday(String.valueOf(record.getHolidayOfWeek().charAt(
-          8)));
+        rd.setHasHoliday(
+          record.getHolidayOfWeek().substring(1, 8).indexOf("1") != -1);
+        rd.setStatutoryHoliday(
+          String.valueOf(record.getHolidayOfWeek().charAt(8)));
         rd.setHoliday(record.getHolidayOfWeek().charAt(9) != '0' ? "1" : null);
       }
 

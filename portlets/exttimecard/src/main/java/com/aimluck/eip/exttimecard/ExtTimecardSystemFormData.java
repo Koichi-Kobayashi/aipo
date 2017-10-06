@@ -129,6 +129,10 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
 
   private ALStringField holiday;
 
+  private ALStringField considered_overtime_flag;
+
+  private ALNumberField considered_overtime;
+
   @Override
   public void init(ALAction action, RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
@@ -245,7 +249,11 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
     holiday = new ALStringField();
     holiday.setFieldName(
       ALLocalizationUtils.getl10n("EXTTIMECARD_HOLIDAY_SETTING_HOLIDAY"));
-
+    considered_overtime_flag = new ALStringField();
+    considered_overtime = new ALNumberField();
+    considered_overtime.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_CONSIDERED_OVERTIME"));
+    considered_overtime.limitMinValue(0);
   }
 
   @Override
@@ -274,6 +282,12 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
       worktime_out.setValue(record.getWorktimeOut());
       resttime_out.setValue(record.getResttimeOut());
 
+      considered_overtime_flag.setValue(record.getConsideredOvertimeFlag());
+      if (isNewRule) {
+        considered_overtime.setValue(record.getConsideredOvertime());
+      } else {
+        considered_overtime.setValue("F");
+      }
       resttime_start_hour.setValue(
         String.valueOf(record.getResttimeStartHour()));
       resttime_start_minute.setValue(
@@ -359,6 +373,7 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
       record.setWorktimeOut((int) worktime_out.getValue());
       record.setResttimeOut((int) resttime_out.getValue());
       record.setChangeHour((int) change_hour.getValue());
+      record.setConsideredOvertime((int) considered_overtime.getValue());
       record.setResttimeStartHour((int) resttime_start_hour.getValue());
       record.setResttimeStartMinute((int) resttime_start_minute.getValue());
       record.setResttimeEndHour((int) resttime_end_hour.getValue());
@@ -372,6 +387,13 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
       }
       record.setResttimeType(tmp2);
       String tmp;
+      if ("T".equals(considered_overtime_flag.getValue())) {
+        tmp = "T";
+      } else {
+        tmp = "F";
+      }
+      record.setConsideredOvertimeFlag(tmp);
+
       if ("T".equals(outgoing_add_flag.getValue())) {
         tmp = "T";
       } else {
@@ -499,6 +521,7 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
       record.setWorktimeOut((int) worktime_out.getValue());
       record.setResttimeOut((int) resttime_out.getValue());
       record.setChangeHour((int) change_hour.getValue());
+      record.setConsideredOvertime((int) considered_overtime.getValue());
       record.setResttimeStartHour((int) resttime_start_hour.getValue());
       record.setResttimeStartMinute((int) resttime_start_minute.getValue());
       record.setResttimeEndHour((int) resttime_end_hour.getValue());
@@ -513,6 +536,13 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
       record.setResttimeType(tmp2);
 
       String tmp;
+      if ("T".equals(considered_overtime_flag.getValue())) {
+        tmp = "T";
+      } else {
+        tmp = "F";
+      }
+      record.setConsideredOvertimeFlag(tmp);
+
       if ("T".equals(outgoing_add_flag.getValue())) {
         tmp = "T";
       } else {
@@ -620,6 +650,8 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
           worktime_out.setValue(record.getWorktimeOut());
           resttime_out.setValue(record.getResttimeOut());
 
+          considered_overtime.setValue(record.getConsideredOvertime());
+          considered_overtime_flag.setValue(record.getConsideredOvertimeFlag());
           resttime_start_hour.setValue(
             String.valueOf(record.getResttimeStartHour()));
           resttime_start_minute.setValue(
@@ -714,6 +746,7 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
     resttime_end_minute.limitValue(0, 59);
     overtime_type_minute.limitValue(0, 1440);
     overtime_type_week_hour.limitValue(0, 168);
+    considered_overtime.limitValue(0, 100);
   }
 
   @Override
@@ -760,6 +793,11 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
     }
 
     system_name.validate(msgList);
+    worktime_in.validate(msgList);
+    resttime_in.validate(msgList);
+    worktime_out.validate(msgList);
+    resttime_out.validate(msgList);
+    considered_overtime.validate(msgList);
 
     if (isNewRule
       && ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
@@ -1024,6 +1062,14 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
 
   public ALStringField getHoliday() {
     return holiday;
+  }
+
+  public ALStringField getConsideredOvertimeFlag() {
+    return considered_overtime_flag;
+  }
+
+  public ALNumberField getConsideredOvertime() {
+    return considered_overtime;
   }
 
   public ALNumberField getResttimeStartHour() {

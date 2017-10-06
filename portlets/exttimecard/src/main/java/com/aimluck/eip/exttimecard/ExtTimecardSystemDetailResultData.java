@@ -96,6 +96,10 @@ public class ExtTimecardSystemDetailResultData extends
 
   private ALStringField holiday;
 
+  private ALStringField considered_overtime_flag;
+
+  private ALNumberField considered_overtime;
+
   private boolean hasHoliday;
 
   /**
@@ -136,6 +140,8 @@ public class ExtTimecardSystemDetailResultData extends
     week7 = new ALStringField();
     statutoryHoliday = new ALStringField();
     holiday = new ALStringField();
+    considered_overtime_flag = new ALStringField();
+    considered_overtime = new ALNumberField();
   }
 
   public String getUserId() {
@@ -400,8 +406,39 @@ public class ExtTimecardSystemDetailResultData extends
   }
 
   /**
-   * @return resttime_start_hour
+   * <<<<<<< HEAD
+   *
+   * @return considered_overtime_flag
    */
+  public ALStringField getConsideredOvertimeFlag() {
+    return considered_overtime_flag;
+  }
+
+  /**
+   * @param considered_overtime_flag
+   *          セットする considered_overtime_flag
+   */
+
+  public void setConsideredOvertimeFlag(String type) {
+    considered_overtime_flag.setValue(type);
+  }
+
+  /**
+   * @return considered_overtime
+   */
+  public ALNumberField getConsideredOvertime() {
+    return considered_overtime;
+  }
+
+  /**
+   * @param considered_overtime
+   *          セットする considered_overtime
+   */
+
+  public void setConsideredOvertime(int i) {
+    considered_overtime.setValue(i);
+  }
+
   public ALNumberField getResttimeStartHour() {
     return resttime_start_hour;
   }
@@ -475,8 +512,8 @@ public class ExtTimecardSystemDetailResultData extends
   }
 
   public boolean isResttimeTypePoints() {
-    return ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS
-      .equals(resttime_type.getValue());
+    return ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+      resttime_type.getValue());
   }
 
   public String getRestTimeSpan() {
