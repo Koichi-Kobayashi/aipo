@@ -295,9 +295,26 @@ public class ALSessionValidator extends TemplateSessionValidator {
       HttpServletRequest hreq = data.getRequest();
       HttpServletResponse hres = data.getResponse();
       if (!isLogin(loginuser, data)) {
+          try {
+              Enumeration<?> headerNames = hreq.getHeaderNames();
+              while (headerNames.hasMoreElements()) {
+                  String headerName = (String) headerNames.nextElement();
+                  if (!"cookie".equals(headerName)) {
+                      logger.error(
+                                   "ALSessionValidator.doPerform header:"
+                                   + headerName
+                                   + ":"
+                                   + hreq.getHeader(headerName));
+                  }
+              }
+          } catch (Exception ex) {
+              logger.error("ALSessionValidator.doPerform getHeaderNames", ex);
+          }
+
         String auth = hreq.getHeader("Authorization");
 
         if (auth == null) {
+            logger.error("ALSessionValidator.doPerform auth is null ");
           requireAuth(hres);
           return;
 
@@ -308,6 +325,7 @@ public class ALSessionValidator extends TemplateSessionValidator {
             int pos = decoded.indexOf(":");
             String username = decoded.substring(0, pos);
             String password = decoded.substring(pos + 1);
+              logger.error("ALSessionValidator.doPerform username:" + username);
 
             JetspeedUser juser = JetspeedSecurity.login(username, password);
             data.getUser().setTemp(
@@ -316,15 +334,18 @@ public class ALSessionValidator extends TemplateSessionValidator {
             if (juser != null && "F".equals(juser.getDisabled())) {
               JetspeedSecurity.saveUser(juser);
             } else {
+                logger.error("ALSessionValidator.doPerform juser is null ");
               requireAuth(hres);
               return;
             }
 
           } catch (RuntimeException ex) {
             // RuntimeException
+              logger.error("ALSessionValidator.doPerform RuntimeException", ex);
             requireAuth(hres);
             return;
           } catch (Exception ex) {
+              logger.error("ALSessionValidator.doPerform Exception", ex);
             requireAuth(hres);
             return;
 
@@ -632,8 +653,11 @@ public class ALSessionValidator extends TemplateSessionValidator {
 
       byte[] dec = Base64.decodeAsByteArray(encStr);
       ret = new String(dec);
+        logger.error("ALSessionValidator.decodeAuthHeader encStr:" + encStr);
 
     } catch (Exception ex) {
+        logger.error("ALSessionValidator.decodeAuthHeader Exception", ex);
+        logger.error("ALSessionValidator.decodeAuthHeader header:" + header);
       ret = "";
     }
 

@@ -43,8 +43,9 @@ import com.aimluck.eip.exttimecard.util.ExtTimecardUtils;
 public class ExtTimecardListResultData implements ALData {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ExtTimecardListResultData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(
+      ExtTimecardListResultData.class.getName());
 
   private ALDateField date = null;
 
@@ -247,9 +248,9 @@ public class ExtTimecardListResultData implements ALData {
     if (rd == null) {
       return 1;
     }
-    return Math.max(Math.max(rd.getAllOutgoingTime().size(), rd
-      .getAllComebackTime()
-      .size()), 1);
+    return Math.max(
+      Math.max(rd.getAllOutgoingTime().size(), rd.getAllComebackTime().size()),
+      1);
   }
 
   /**
@@ -301,18 +302,24 @@ public class ExtTimecardListResultData implements ALData {
         if (ExtTimecardUtils.isResttimePoints(timecard_system)
           && rd.getClockOutTime().getTime() != "") {
           float resttime =
-            ExtTimecardUtils.getResttime(rd.getClockInTime().getValue(), rd
-              .getClockOutTime()
-              .getValue(), timecard_system);
+            ExtTimecardUtils.getResttime(
+              rd.getClockInTime().getValue(),
+              rd.getClockOutTime().getValue(),
+              timecard_system);
           if (resttime != 0F) {
             time -= resttime;
           }
         } else {
           float worktimein = (timecard_system.getWorktimeIn() / 60f);
           float resttimein = (timecard_system.getResttimeIn() / 60f);
+          float tmpTime = time;
           if (worktimein != 0F) {
-            int resttimes = (int) (time / worktimein);
-            time -= resttimes * resttimein;
+            int resttimes = (int) (tmpTime / worktimein);
+            while (resttimes > 0) {
+              time -= resttimein;
+              tmpTime -= (worktimein + resttimein);
+              resttimes = (int) (tmpTime / worktimein);
+            }
           }
         }
         float overTime =
@@ -436,18 +443,24 @@ public class ExtTimecardListResultData implements ALData {
     /** 決まった時間ごとの休憩時間を取らせます。 */
     if (ExtTimecardUtils.isResttimePoints(timecard_system)) {
       float resttime =
-        ExtTimecardUtils.getResttime(rd.getClockInTime().getValue(), rd
-          .getClockOutTime()
-          .getValue(), timecard_system);
+        ExtTimecardUtils.getResttime(
+          rd.getClockInTime().getValue(),
+          rd.getClockOutTime().getValue(),
+          timecard_system);
       if (resttime != 0F) {
         time -= resttime;
       }
     } else {
       float worktimein = (timecard_system.getWorktimeIn() / 60f);
       float resttimein = (timecard_system.getResttimeIn() / 60f);
+      float tmpTime = time;
       if (worktimein != 0F) {
-        int resttimes = (int) (time / worktimein);
-        time -= resttimes * resttimein;
+        int resttimes = (int) (tmpTime / worktimein);
+        while (resttimes > 0) {
+          time -= resttimein;
+          tmpTime -= (worktimein + resttimein);
+          resttimes = (int) (tmpTime / worktimein);
+        }
       }
     }
     calculated_agreed_hours = time;
@@ -558,11 +571,8 @@ public class ExtTimecardListResultData implements ALData {
 
       float time = 0f;
       time +=
-        (rd.getClockOutTime().getValue().getTime() - rd
-          .getClockInTime()
-          .getValue()
-          .getTime())
-          / (1000.0 * 60.0 * 60.0);
+        (rd.getClockOutTime().getValue().getTime()
+          - rd.getClockInTime().getValue().getTime()) / (1000.0 * 60.0 * 60.0);
 
       // 就業時間だけなので、残業を引く
       float agreedHours = 0f;
@@ -621,18 +631,24 @@ public class ExtTimecardListResultData implements ALData {
         /** 決まった時間ごとの休憩時間を取らせます。 */
         if (ExtTimecardUtils.isResttimePoints(timecard_system)) {
           float resttime =
-            ExtTimecardUtils.getResttime(rd.getClockInTime().getValue(), rd
-              .getClockOutTime()
-              .getValue(), timecard_system);
+            ExtTimecardUtils.getResttime(
+              rd.getClockInTime().getValue(),
+              rd.getClockOutTime().getValue(),
+              timecard_system);
           if (resttime != 0F) {
             time -= resttime;
           }
         } else {
           float worktimein = (timecard_system.getWorktimeIn() / 60f);
           float resttimein = (timecard_system.getResttimeIn() / 60f);
+          float tmpTime = time;
           if (worktimein != 0F) {
-            int resttimes = (int) (time / worktimein);
-            time -= resttimes * resttimein;
+            int resttimes = (int) (tmpTime / worktimein);
+            while (resttimes > 0) {
+              time -= resttimein;
+              tmpTime -= (worktimein + resttimein);
+              resttimes = (int) (tmpTime / worktimein);
+            }
           }
         }
 
@@ -713,10 +729,8 @@ public class ExtTimecardListResultData implements ALData {
       } else {
         // 法定外残業
         time +=
-          (rd.getClockOutTime().getValue().getTime() - rd
-            .getClockInTime()
-            .getValue()
-            .getTime())
+          (rd.getClockOutTime().getValue().getTime()
+            - rd.getClockInTime().getValue().getTime())
             / (1000.0 * 60.0 * 60.0);
 
         /** 外出時間を就業時間に含めない場合 */
@@ -731,21 +745,26 @@ public class ExtTimecardListResultData implements ALData {
         /** 就業時間の中で決まった時間の休憩を取らせます。 */
         /** 決まった時間ごとの休憩時間を取らせます。 */
         /** 法定外残業は就業内の休憩の設定 */
-
         if (ExtTimecardUtils.isResttimePoints(timecard_system)) {
           float resttime =
-            ExtTimecardUtils.getResttime(rd.getClockInTime().getValue(), rd
-              .getClockOutTime()
-              .getValue(), timecard_system);
+            ExtTimecardUtils.getResttime(
+              rd.getClockInTime().getValue(),
+              rd.getClockOutTime().getValue(),
+              timecard_system);
           if (resttime != 0F) {
             time -= resttime;
           }
         } else {
           float worktimein = (timecard_system.getWorktimeOut() / 60f);
           float resttimein = (timecard_system.getResttimeOut() / 60f);
+          float tmpTime = time;
           if (worktimein != 0F) {
-            int resttimes = (int) (time / worktimein);
-            time -= resttimes * resttimein;
+            int resttimes = (int) (tmpTime / worktimein);
+            while (resttimes > 0) {
+              time -= resttimein;
+              tmpTime -= (worktimein + resttimein);
+              resttimes = (int) (tmpTime / worktimein);
+            }
           }
         }
         float overTime =
@@ -902,11 +921,8 @@ public class ExtTimecardListResultData implements ALData {
     } else {
       float time = 0f;
       time +=
-        (rd.getClockOutTime().getValue().getTime() - rd
-          .getClockInTime()
-          .getValue()
-          .getTime())
-          / (1000.0 * 60.0 * 60.0);
+        (rd.getClockOutTime().getValue().getTime()
+          - rd.getClockInTime().getValue().getTime()) / (1000.0 * 60.0 * 60.0);
       /** 外出時間を就業時間に含めない場合 */
       if ("F".equals(timecard_system.getOutgoingAddFlag())) {
         float outgoing_time =
@@ -915,6 +931,7 @@ public class ExtTimecardListResultData implements ALData {
           time -= outgoing_time;
         }
       }
+
       float total = getTotalWorkHour();
       if (time > total) {
         return time - total;
@@ -1741,11 +1758,8 @@ public class ExtTimecardListResultData implements ALData {
     }
     float time = 0f;
     time +=
-      (rd.getClockOutTime().getValue().getTime() - rd
-        .getClockInTime()
-        .getValue()
-        .getTime())
-        / (1000.0 * 60.0 * 60.0);
+      (rd.getClockOutTime().getValue().getTime()
+        - rd.getClockInTime().getValue().getTime()) / (1000.0 * 60.0 * 60.0);
 
     /** 外出時間を就業時間に含めない場合 */
     if ("F".equals(timecard_system.getOutgoingAddFlag())) {
@@ -1760,18 +1774,24 @@ public class ExtTimecardListResultData implements ALData {
     /** 決まった時間ごとの休憩時間を取らせます。 */
     if (ExtTimecardUtils.isResttimePoints(timecard_system)) {
       float resttime =
-        ExtTimecardUtils.getResttime(rd.getClockInTime().getValue(), rd
-          .getClockOutTime()
-          .getValue(), timecard_system);
+        ExtTimecardUtils.getResttime(
+          rd.getClockInTime().getValue(),
+          rd.getClockOutTime().getValue(),
+          timecard_system);
       if (resttime != 0F) {
         time -= resttime;
       }
     } else {
       float worktimein = (timecard_system.getWorktimeIn() / 60f);
       float resttimein = (timecard_system.getResttimeIn() / 60f);
+      float tmpTime = time;
       if (worktimein != 0F) {
-        int resttimes = (int) (time / worktimein);
-        time -= resttimes * resttimein;
+        int resttimes = (int) (tmpTime / worktimein);
+        while (resttimes > 0) {
+          time -= resttimein;
+          tmpTime -= (worktimein + resttimein);
+          resttimes = (int) (tmpTime / worktimein);
+        }
       }
     }
     float tmp1 = time - getAgreedHours();
