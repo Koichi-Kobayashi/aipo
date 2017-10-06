@@ -96,6 +96,12 @@ public class ExtTimecardUtils {
   public static final String EXTTIMECARD_SYSTEM_PORTLET_NAME =
     "ExtTimecardSystem";
 
+  /** 時間で管理 */
+  public static final String EXTTIMECARD_RESTTIME_TIME_INTERVALS = "I";
+
+  /** 時刻で管理 */
+  public static final String EXTTIMECARD_RESTTIME_TIME_POINTS = "P";
+
   /**
    * ExtTimecard オブジェクトモデルを取得します。 <BR>
    *
@@ -595,5 +601,39 @@ public class ExtTimecardUtils {
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);
     return cacheHoliday.charAt(cal.get(Calendar.DAY_OF_WEEK) - 1) != '0';
+  }
+
+  /**
+   * 時間帯指定による休憩時間の設定
+   *
+   * @param model
+   * @return
+   */
+  public static boolean isResttimePoints(EipTExtTimecardSystem model) {
+    return (isNewRule() && ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS
+      .equals(model.getResttimeType()));
+  }
+
+  public static float getResttime(Date start, Date end,
+      EipTExtTimecardSystem model) {
+    long startTime = start.getTime();
+    long endTime = end.getTime();
+
+    Calendar restStart = Calendar.getInstance();
+    restStart.setTime(start);
+    restStart.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
+    restStart.set(Calendar.MINUTE, model.getResttimeStartMinute());
+    long restStartTime = restStart.getTime().getTime();
+
+    Calendar restEnd = Calendar.getInstance();
+    restEnd.setTime(end);
+    restEnd.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
+    restEnd.set(Calendar.MINUTE, model.getResttimeEndMinute());
+    long restEndTime = restEnd.getTime().getTime();
+
+    if (startTime < restStartTime && restEndTime < endTime) {
+      return (restEndTime - restStartTime) / 1000f / 60f / 60f;
+    }
+    return 0;
   }
 }
