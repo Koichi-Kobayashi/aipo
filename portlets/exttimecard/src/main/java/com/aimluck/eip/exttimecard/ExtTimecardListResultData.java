@@ -300,7 +300,7 @@ public class ExtTimecardListResultData implements ALData {
         /** 就業時間の中で決まった時間の休憩を取らせます。 */
         /** 決まった時間ごとの休憩時間を取らせます。 */
         if (ExtTimecardUtils.isResttimePoints(timecard_system)
-          && rd.getClockOutTime().getTime() != "") {
+          && !"".equals(rd.getClockOutTime().getTime())) {
           float resttime =
             ExtTimecardUtils.getResttime(
               rd.getClockInTime().getValue(),

@@ -224,8 +224,8 @@ public class ExtTimecardResultData implements ALData {
             if (!outgoing_time.get(i).isNullHour()
               && !comeback_time.get(i).isNullHour()) {
               time -=
-                (comeback_time.get(i).getValue().getTime() - outgoing_time.get(
-                  i).getValue().getTime())
+                (comeback_time.get(i).getValue().getTime()
+                  - outgoing_time.get(i).getValue().getTime())
                   / (1000.0 * 60.0 * 60.0);
             }
           }
@@ -234,7 +234,7 @@ public class ExtTimecardResultData implements ALData {
         /** 就業時間の中で決まった時間の休憩を取らせます。 */
         /** 決まった時間ごとの休憩時間を取らせます。 */
         if (ExtTimecardUtils.isResttimePoints(timecard_system)
-          && getClockOutTime().getTime() != "") {
+          && !"".equals(getClockOutTime().getTime())) {
           float resttime =
             ExtTimecardUtils.getResttime(
               clock_in_time.getValue(),
@@ -252,8 +252,8 @@ public class ExtTimecardResultData implements ALData {
           }
         }
         float overTime =
-          ExtTimecardUtils.getOvertimeMinuteByDay(timecard_system
-            .getOvertimeType()) / 60f;
+          ExtTimecardUtils.getOvertimeMinuteByDay(
+            timecard_system.getOvertimeType()) / 60f;
         if (time >= overTime) {
           return true;
         } else {
