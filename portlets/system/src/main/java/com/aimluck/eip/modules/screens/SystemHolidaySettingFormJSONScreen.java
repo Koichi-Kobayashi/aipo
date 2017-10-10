@@ -41,7 +41,21 @@ public class SystemHolidaySettingFormJSONScreen extends ALJSONScreen {
   protected String getJSONString(RunData rundata, Context context)
       throws Exception {
     String result = new JSONArray().toString();
+    String mode = this.getMode();
     try {
+      // if (ALEipConstants.MODE_DELETE.equals(mode)) {
+      // SystemHolidaySettingFormData formData =
+      // new SystemHolidaySettingFormData();
+      // formData.initField();
+      // if (formData.doDelete(this, rundata, context)) {
+      // } else {
+      // JSONArray json =
+      // JSONArray
+      // .fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
+      // result = json.toString();
+      // }
+      //
+      // } else {
       SystemHolidaySettingFormData formData =
         new SystemHolidaySettingFormData();
       formData.initField();
@@ -51,6 +65,7 @@ public class SystemHolidaySettingFormJSONScreen extends ALJSONScreen {
           JSONArray.fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
         result = json.toString();
       }
+      // }
 
     } catch (Exception e) {
       logger.error("[SystemHolidaySettingFormJSONScreen]", e);

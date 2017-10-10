@@ -225,7 +225,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     try {
       // EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata,
       // context);
-      // EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
       String value = statutoryHoliday.getValue();
       if ("1".equals(value)) {
         week1.setValue("1");

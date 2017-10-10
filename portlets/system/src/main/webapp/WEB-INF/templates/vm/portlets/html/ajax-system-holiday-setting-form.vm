@@ -94,6 +94,68 @@
 </td>
 #ALtditemfooter()
 
+#*#AUIcontentsAreaHeader()
+#ALajaxlistformheaderAction('Holiday')
+#if($result.List.size() == 0)
+#AUIEmptyMessage("icon-list-ul" "$l10n.HOLIDAY_SETTING_NO_HOLIDAY")
+#else
+#AUISummaryDiv()
+#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
+#AUISummaryDivfooter()
+#AUIrowMTableWide()
+<tr>
+#ALtdhead("#ALajaxsort('p_holiday' $l10n.HOLIDAY_SETTING_DATE $result 'SystemHolidaySettingFormScreen')")
+#ALtdhead("#ALajaxsort('p_holiday_name' $l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME　$result 'SystemHolidaySettingFormScreen')")
+</tr>
+#AUItablefooter()
+#foreach ($record in $result.List)
+<tr>
+#ALtdcell("<div>$!record.HolidayName</div>" 'nowrap="nowrap"')
+#ALtdcellheaderAtt('class="auiMTCaption"')
+<div>
+<a href="javascript:void(0);" onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template","SystemHolidaySettingFormScreen").addQueryData("entityid",$record.HolidayId))');">$!record.HolidayName</a>
+</div>
+#ALtdcellfooter()
+#ALtdcell("<div>$!record.HolidayName</div>" 'nowrap="nowrap"')
+</tr>>
+#end
+#AUItablefooter()
+#AUISummaryDiv()
+#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
+#AUISummaryDivfooter()
+#end
+#ALformfooter()
+#AUIcontentsAreaFooter()*#
+
+#*#AUIcontentsAreaHeader()
+#ALajaxIndicator("${indicator_id}" "$!{portlet.ID}" "")
+<div id="listmessageDiv"></div>
+#if($result.List.size() == 0)
+#AUIEmptyMessage("icon-list-ul" "$l10n.HOLIDAY_SETTING_NO_HOLIDAY")
+#else
+#ALajaxlistformheaderAction('Holiday')
+<div class="auiSummaryMeta clearfix">
+#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
+</div>
+#AUIrowMTableWide()
+<tr>
+#ALtdhead("#ALajaxsort('p_holiday' $l10n.HOLIDAY_SETTING_DATE $result 'SystemHolidaySettingFormScreen')")
+#ALtdhead("#ALajaxsort('p_holiday_name' $l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME　$result 'SystemHolidaySettingFormScreen')")
+</tr>
+#foreach ($record in $result.List)
+<tr>
+#ALtdcell("<div>$!record.HolidayDate</div>" 'nowrap="nowrap"')
+#ALtdcell("<div>$!record.HolidayName</div>" 'nowrap="nowrap"')
+</tr>
+#end
+#AUItablefooter()
+<div class="auiSummaryMeta clearfix">
+#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
+</div>
+#end
+#ALformfooter()
+#AUIcontentsAreaFooter()*#
+
 #ALtablefooter()
 #ALbuttonheader()
 #ALsubmit($event_submit $action_str)

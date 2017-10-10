@@ -30,7 +30,9 @@ import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALAbstractSelectData;
 import com.aimluck.eip.common.ALDBErrorException;
 import com.aimluck.eip.common.ALPageNotFoundException;
+import com.aimluck.eip.orm.Database;
 import com.aimluck.eip.orm.query.ResultList;
+import com.aimluck.eip.orm.query.SelectQuery;
 
 /**
  *
@@ -43,6 +45,8 @@ public class SystemHolidaySettingSelectData extends
     .getLogger(SystemHolidaySettingSelectData.class.getName());
 
   /**
+   * ResultData に値を格納して返します。
+   *
    * @param record
    * @return
    */
@@ -82,9 +86,20 @@ public class SystemHolidaySettingSelectData extends
    * @throws ALDBErrorException
    */
   @Override
-  protected ResultList selectList(RunData rundata, Context context)
+  protected ResultList<EipMHoliday> selectList(RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
-    return null;
+    try {
+      SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+      buildSelectQueryForFilter(query, rundata, context);
+      buildSelectQueryForListView(query);
+      buildSelectQueryForListViewSort(query, rundata, context);
+
+      ResultList<EipMHoliday> list = query.getResultList();
+      return list;
+    } catch (Exception ex) {
+      logger.error("system", ex);
+      return null;
+    }
   }
 
   /**
