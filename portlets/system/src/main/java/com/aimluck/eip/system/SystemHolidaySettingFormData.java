@@ -283,15 +283,16 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   protected boolean deleteFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     // // オブジェクトモデルを取得
-    // EipTTodo p_holiday_data = ToDoUtils.getEipTTodo(rundata, context, false);
+    // EipMHoliday p_holiday_data = SystemUtils.getEipTTodo(rundata, context,
+    // false);
     // if (p_holiday_data == null) {
     // return false;
     // }
     //
     // // entityIdの取得
-    // int entityId = p_holiday_data.getTodoId();
+    // int entityId = p_holiday_data.getHolidayId();
     // // タイトルの取得
-    // String todoName = p_holiday_data.getTodoName();
+    // String todoName = p_holiday_data.getHolidayName();
     //
     // // Todoを削除
     // Database.delete(p_holiday_data);
