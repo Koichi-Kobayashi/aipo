@@ -60,8 +60,8 @@ import com.aimluck.eip.util.ALEipUtils;
 public class ExtTimecardUtils {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ExtTimecardUtils.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(ExtTimecardUtils.class.getName());
 
   /** <code>TARGET_GROUP_NAME</code> グループによる表示切り替え用変数の識別子 */
   public static final String TARGET_GROUP_NAME = "target_group_name";
@@ -88,8 +88,8 @@ public class ExtTimecardUtils {
   public static final String OVERTIME_TYPE_O = "O";
 
   /** タイムカードファイルを一時保管するディレクトリの指定 */
-  public static final String FOLDER_TMP_FOR_TIMECARD_FILES = JetspeedResources
-    .getString("aipo.tmp.timecard.directory", "");
+  public static final String FOLDER_TMP_FOR_TIMECARD_FILES =
+    JetspeedResources.getString("aipo.tmp.timecard.directory", "");
 
   public static final String EXTTIMECARD_PORTLET_NAME = "ExtTimecard";
 
@@ -141,8 +141,9 @@ public class ExtTimecardUtils {
         ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
         ALAccessControlConstants.VALUE_ACL_UPDATE))) {
         Expression exp21 =
-          ExpressionFactory.matchExp(EipTExtTimecard.USER_ID_PROPERTY, Integer
-            .valueOf(ALEipUtils.getUserId(rundata)));
+          ExpressionFactory.matchExp(
+            EipTExtTimecard.USER_ID_PROPERTY,
+            Integer.valueOf(ALEipUtils.getUserId(rundata)));
         query.andQualifier(exp21);
       }
 
@@ -188,8 +189,9 @@ public class ExtTimecardUtils {
       SelectQuery<EipTExtTimecard> query =
         Database.query(EipTExtTimecard.class);
       Expression exp1 =
-        ExpressionFactory.matchExp(EipTExtTimecard.USER_ID_PROPERTY, Integer
-          .valueOf(target_uid));
+        ExpressionFactory.matchExp(
+          EipTExtTimecard.USER_ID_PROPERTY,
+          Integer.valueOf(target_uid));
       Expression exp2 =
         ExpressionFactory.matchExp(
           EipTExtTimecard.PUNCH_DATE_PROPERTY,
@@ -231,7 +233,8 @@ public class ExtTimecardUtils {
     }
   }
 
-  public static EipTExtTimecardSystem getEipTExtTimecardSystemById(int system_id) {
+  public static EipTExtTimecardSystem getEipTExtTimecardSystemById(
+      int system_id) {
     try {
       SelectQuery<EipTExtTimecardSystem> query =
         Database.query(EipTExtTimecardSystem.class);
@@ -365,8 +368,9 @@ public class ExtTimecardUtils {
 
     SelectQuery<EipTExtTimecard> query = Database.query(EipTExtTimecard.class);
     Expression exp1 =
-      ExpressionFactory.matchExp(EipTExtTimecard.USER_ID_PROPERTY, Integer
-        .valueOf(ALEipUtils.getUserId(rundata)));
+      ExpressionFactory.matchExp(
+        EipTExtTimecard.USER_ID_PROPERTY,
+        Integer.valueOf(ALEipUtils.getUserId(rundata)));
     Expression exp2 =
       ExpressionFactory.matchExp(
         EipTExtTimecard.PUNCH_DATE_PROPERTY,
@@ -488,9 +492,8 @@ public class ExtTimecardUtils {
     if (request != null) {
       try {
         cacheVersion =
-          (String) request
-            .getAttribute(ALConfigHandler.Property.EXTTIMECARD_VERTION
-              .toString());
+          (String) request.getAttribute(
+            ALConfigHandler.Property.EXTTIMECARD_VERTION.toString());
       } catch (Throwable ignore) {
 
       }
@@ -499,8 +502,9 @@ public class ExtTimecardUtils {
       cacheVersion =
         ALConfigService.get(ALConfigHandler.Property.EXTTIMECARD_VERTION);
       if (request != null) {
-        request.setAttribute(ALConfigHandler.Property.EXTTIMECARD_VERTION
-          .toString(), cacheVersion);
+        request.setAttribute(
+          ALConfigHandler.Property.EXTTIMECARD_VERTION.toString(),
+          cacheVersion);
       }
     }
     return "2".equals(cacheVersion);
@@ -569,8 +573,8 @@ public class ExtTimecardUtils {
       if (request != null) {
         try {
           cacheHoliday =
-            (String) request
-              .getAttribute(ALConfigHandler.Property.HOLIDAY_OF_WEEK.toString());
+            (String) request.getAttribute(
+              ALConfigHandler.Property.HOLIDAY_OF_WEEK.toString());
         } catch (Throwable ignore) {
 
         }
@@ -579,8 +583,9 @@ public class ExtTimecardUtils {
         cacheHoliday =
           ALConfigService.get(ALConfigHandler.Property.HOLIDAY_OF_WEEK);
         if (request != null) {
-          request.setAttribute(ALConfigHandler.Property.HOLIDAY_OF_WEEK
-            .toString(), cacheHoliday);
+          request.setAttribute(
+            ALConfigHandler.Property.HOLIDAY_OF_WEEK.toString(),
+            cacheHoliday);
         }
       }
       return cacheHoliday;
@@ -610,8 +615,9 @@ public class ExtTimecardUtils {
    * @return
    */
   public static boolean isResttimePoints(EipTExtTimecardSystem model) {
-    return (isNewRule() && ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS
-      .equals(model.getResttimeType()));
+    return (isNewRule()
+      && ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+        model.getResttimeType()));
   }
 
   public static float getResttime(Date start, Date end,
@@ -619,20 +625,44 @@ public class ExtTimecardUtils {
     long startTime = start.getTime();
     long endTime = end.getTime();
 
+    // 出勤日時ベースの休憩時間
     Calendar restStart = Calendar.getInstance();
     restStart.setTime(start);
     restStart.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
     restStart.set(Calendar.MINUTE, model.getResttimeStartMinute());
-    long restStartTime = restStart.getTime().getTime();
 
     Calendar restEnd = Calendar.getInstance();
-    restEnd.setTime(end);
+    restEnd.setTime(start);
     restEnd.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
     restEnd.set(Calendar.MINUTE, model.getResttimeEndMinute());
+
+    // 退勤日時ベースの休憩時間
+    Calendar restStart2 = Calendar.getInstance();
+    restStart2.setTime(end);
+    restStart2.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
+    restStart2.set(Calendar.MINUTE, model.getResttimeStartMinute());
+
+    Calendar restEnd2 = Calendar.getInstance();
+    restEnd2.setTime(end);
+    restEnd2.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
+    restEnd2.set(Calendar.MINUTE, model.getResttimeEndMinute());
+
+    long restStartTime = restStart.getTime().getTime();
     long restEndTime = restEnd.getTime().getTime();
+    long restStartTime2 = restStart2.getTime().getTime();
+    long restEndTime2 = restEnd2.getTime().getTime();
 
     if (startTime < restStartTime && restEndTime < endTime) {
+      // 通常のケース
       return (restEndTime - restStartTime) / 1000f / 60f / 60f;
+    }
+    if (startTime < restStartTime2 && restEndTime2 < endTime) {
+      // 日付が変わってから休憩があるケース
+      return (restEndTime2 - restStartTime2) / 1000f / 60f / 60f;
+    }
+    if (startTime < restStartTime && restEndTime2 < endTime) {
+      // 日付をまたいだ休憩時間
+      return (restEndTime2 - restStartTime) / 1000f / 60f / 60f;
     }
     return 0;
   }
