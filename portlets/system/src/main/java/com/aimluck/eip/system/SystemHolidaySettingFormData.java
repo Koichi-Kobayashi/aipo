@@ -37,7 +37,6 @@ import com.aimluck.eip.modules.actions.common.ALAction;
 import com.aimluck.eip.orm.Database;
 import com.aimluck.eip.services.config.ALConfigHandler;
 import com.aimluck.eip.services.config.ALConfigService;
-import com.aimluck.eip.system.util.SystemUtils;
 import com.aimluck.eip.util.ALLocalizationUtils;
 
 /**
@@ -190,8 +189,8 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   @Override
   protected boolean insertFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
-    EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
     try {
+      EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
       // 個別の休日の日付
       p_holiday_data.setHolidayDate(p_holiday.getValue().getDate());
       // 個別の休日の名前
@@ -223,8 +222,10 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   @Override
   protected boolean updateFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
-    EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata, context);
     try {
+      // EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata,
+      // context);
+      // EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
       String value = statutoryHoliday.getValue();
       if ("1".equals(value)) {
         week1.setValue("1");
@@ -260,15 +261,17 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       ALConfigService.put(ALConfigHandler.Property.HOLIDAY_OF_WEEK, b
         .toString());
 
-      // 個別の休日の日付
-      p_holiday_data.setHolidayDate(p_holiday.getValue().getDate());
-      // 個別の休日の名前
-      p_holiday_data.setHolidayName(p_holiday_name.getValue());
-      // 更新日
-      p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
-
-      // 個別の休日を登録
-      Database.commit();
+      // // 個別の休日の日付
+      // p_holiday_data.setHolidayDate(p_holiday.getValue().getDate());
+      // // 個別の休日の名前
+      // p_holiday_data.setHolidayName(p_holiday_name.getValue());
+      // // 作成日
+      // p_holiday_data.setCreateDate(Calendar.getInstance().getTime());
+      // // 更新日
+      // p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
+      //
+      // // 個別の休日を登録
+      // Database.commit();
 
     } catch (Exception ex) {
       logger.error("SystemHolidaySettingFormData", ex);
@@ -280,6 +283,21 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   @Override
   protected boolean deleteFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
+    // // オブジェクトモデルを取得
+    // EipTTodo p_holiday_data = ToDoUtils.getEipTTodo(rundata, context, false);
+    // if (p_holiday_data == null) {
+    // return false;
+    // }
+    //
+    // // entityIdの取得
+    // int entityId = p_holiday_data.getTodoId();
+    // // タイトルの取得
+    // String todoName = p_holiday_data.getTodoName();
+    //
+    // // Todoを削除
+    // Database.delete(p_holiday_data);
+    // Database.commit();
+
     return false;
   }
 

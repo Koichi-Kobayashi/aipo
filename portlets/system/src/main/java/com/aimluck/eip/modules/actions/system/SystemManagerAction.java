@@ -26,7 +26,6 @@ import org.apache.velocity.context.Context;
 
 import com.aimluck.eip.common.ALEipConstants;
 import com.aimluck.eip.modules.actions.common.ALBaseAction;
-import com.aimluck.eip.system.SystemHolidaySettingFormData;
 import com.aimluck.eip.system.SystemHolidaySettingSelectData;
 import com.aimluck.eip.system.SystemNetworkFormData;
 import com.aimluck.eip.system.SystemNetworkSelectData;
@@ -138,89 +137,5 @@ public class SystemManagerAction extends ALBaseAction {
     detailData.initField();
     detailData.doViewDetail(this, rundata, context);
     setTemplate(rundata, "system-version");
-  }
-
-  /**
-   * ToDoを登録します。 <BR>
-   *
-   * @param rundata
-   * @param context
-   * @throws Exception
-   */
-  public void doPersonalHoliday_insert(RunData rundata, Context context)
-      throws Exception {
-    SystemHolidaySettingFormData formData = new SystemHolidaySettingFormData();
-    formData.initField();
-    if (formData.doInsert(this, rundata, context)) {
-      // データ登録が成功したとき
-      doPersonalHoliday_list(rundata, context);
-      // JetspeedLink jsLink = JetspeedLinkFactory.getInstance(rundata);
-      // rundata.setRedirectURI(
-      // jsLink
-      // .getPortletById(ALEipUtils.getPortlet(rundata, context).getID())
-      // .addQueryData("eventSubmit_doTodo_list", "1")
-      // .toString());
-      // rundata.getResponse().sendRedirect(rundata.getRedirectURI());
-      // jsLink = null;
-    } else {
-      setTemplate(rundata, "todo-form");
-    }
-  }
-
-  /**
-   * ToDoを更新します。 <BR>
-   *
-   * @param rundata
-   * @param context
-   * @throws Exception
-   */
-  public void doPersonalHoliday_update(RunData rundata, Context context)
-      throws Exception {
-    SystemHolidaySettingFormData formData = new SystemHolidaySettingFormData();
-    formData.initField();
-    if (formData.doUpdate(this, rundata, context)) {
-      // データ更新が成功したとき
-      doPersonalHoliday_list(rundata, context);
-      // JetspeedLink jsLink = JetspeedLinkFactory.getInstance(rundata);
-      // rundata.setRedirectURI(jsLink.getPortletById(
-      // ALEipUtils.getPortlet(rundata, context).getID()).addQueryData(
-      // "eventSubmit_doTodo_list", "1").toString());
-      // rundata.getResponse().sendRedirect(rundata.getRedirectURI());
-      // jsLink = null;
-    } else {
-      setTemplate(rundata, "todo-form");
-    }
-  }
-
-  /**
-   * ToDoを一覧表示します。 <BR>
-   *
-   * @param rundata
-   * @param context
-   * @throws Exception
-   */
-  public void doPersonalHoliday_list(RunData rundata, Context context)
-      throws Exception {
-    SystemHolidaySettingSelectData listData =
-      new SystemHolidaySettingSelectData();
-    listData.initField();
-
-    // デフォルトのソートカラムを設定
-    ALEipUtils.setTemp(rundata, context, LIST_SORT_STR, "end_date");
-    ALEipUtils.setTemp(
-      rundata,
-      context,
-      LIST_SORT_TYPE_STR,
-      ALEipConstants.LIST_SORT_TYPE_ASC);
-
-    // PSMLからパラメータをロードする
-    // 最大表示件数（最大化時）
-    listData.setRowsNum(Integer.parseInt(ALEipUtils
-      .getPortlet(rundata, context)
-      .getPortletConfig()
-      .getInitParameter("p1b-rows")));
-    listData.setStrLength(0);
-    listData.doViewList(this, rundata, context);
-    setTemplate(rundata, "todo-list");
   }
 }

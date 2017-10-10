@@ -22,11 +22,9 @@
 #if  ($mode=="new_form")
 #set ($action_str = $l10n.SYSTEM_ADD)
 #set ($event_submit = "eventSubmit_doSystem_report_setting_insert")
-#set ($holiday_submit = "eventSubmit_doPersonalHoliday_insert")
 #else
 #set ($action_str = $l10n.SYSTEM_UPDATE)
 #set ($event_submit = "eventSubmit_doSystem_report_setting_update")
-#set ($holiday_submit = "eventSubmit_doPersonalHoliday_update")
 #end
 ## ---------------------------------------------------------------------------
 #ALdialogheaderCloseJS($subtitle "aipo.system.hideDialog()")
@@ -92,7 +90,7 @@
 #ALtextfield('p_holiday_name' $!result.PersonalHolidayName 20 50 'active')
 </td>
 <td>
-<input name="$holiday_submit" class="button" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
+<input name="$event_submit" class="button" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
 </td>
 #ALtditemfooter()
 
