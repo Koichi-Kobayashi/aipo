@@ -34,7 +34,7 @@
 #ALajaxIndicator("$!indicator_id" "$!portlet.ID" "")
 #ALajaxscreenformheader("systemForm" $jslink $portlet "SystemHolidaySettingFormJSONScreen" "aimluck.io.submit(this, '$!indicator_id', '$!portlet.ID',aipo.system.onReceiveMessage)")
 #ALtableheaderWide()
-<tr>
+
 #ALtdcaption("#ALrequired($l10n.HOLIDAY_SETTING_WEEK_OF_DAY)")
 #ALtditemheader()
 <input name="week1" type="checkbox" value="1" id="week1" #if ($!result.Week1.toString() == "1") checked="checked" #end />
@@ -52,7 +52,7 @@
 <input name="week7" type="checkbox" value="1" id="week7" #if ($!result.Week7.toString() == "1") checked="checked" #end />
 <label for="week7">$l10n.HOLIDAY_SETTING_WEEK7</label>
 #ALtditemfooter()
-<tr>
+
 #ALtdcaption("#ALrequired($l10n.HOLIDAY_SETTING_STATUTORY_HOLIDAY)")
 #ALtditemheader()
 <select name="statutoryHoliday">
@@ -66,99 +66,67 @@
 	<option value="7" #if ($!result.StatutoryHoliday.toString() == "7") selected="selected"#end>$l10n.HOLIDAY_SETTING_WEEK7</option>
 </select>
 #ALtditemfooter()
-<tr>
+
 #ALtdcaption("#ALrequired($l10n.HOLIDAY_SETTING_HOLIDAY)")
 #ALtditemheader()
 <input name="holiday" type="checkbox" value="1" id="holiday" #if ($!result.Holiday.toString() == "1") checked="checked" #end />
 <label for="holiday">$l10n.HOLIDAY_SETTING_HOLIDAY_MESSAGE</label>
 #ALtditemfooter()
 
-<tr>
 #ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY)
 #ALtditemheader()
-<div>
- <ul class="auiSelectButton">
-  <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
-  <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
- </ul>
- <div class="count"><strong>$!{result.PersonalHoliday.Year}年</strong></div>
- </div>
- <td class="auiSetDate">
-  <div dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.PersonalHoliday.Year}/$!{result.PersonalHoliday.Month}/$!{result.PersonalHoliday.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
- </td>
-<td>
+<p>
+<ul class="auiSelectButton">
+ <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
+ <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
+</ul>
+<div class="count"><strong>$!{result.PersonalHoliday.Year}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
+<div class="auiSetDate">
+<div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.PersonalHoliday.Year}/$!{result.PersonalHoliday.Month}/$!{result.PersonalHoliday.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
 #ALtextfield('p_holiday_name' $!result.PersonalHolidayName 20 50 'active')
-</td>
-<td>
 <input name="$event_submit" class="button" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
+</div>
+</p>
+<p></p>
+
+<p>
+<table class="auiRowTable auiMbTable wide">
+  <thead>
+<tr>
+#ALtdheadAtt($l10n.HOLIDAY_SETTING_DATE "class='thin left'")
+#ALtdhead($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME)
+<th class="thin"></th>
+</tr>
+</thead>
+ <tbody>
+
+#foreach($record in $result.list)
+<tr>
+#ALtdcell("<div>$!record.PersonalHoliday</div>")
+#ALtdcell("<div>$!record.PersonalHolidayName</div>")
+<td>
+<input name="$name" class="button" type="button" value="削除" onclick="" />
 </td>
+</tr>
+#end
+
+<tr>
+#ALtdcell("<div>$!{result.PersonalHolidayString}</div>")
+#ALtdcell("<div>$!{result.PersonalHolidayNameString}</div>")
+<td>
+<input name="$name" class="button" type="button" value="削除" onclick="" />
+</td>
+</tr>
+  </tbody>
+</table>
+</p>
+<p></p>
+
 #ALtditemfooter()
-
-#*#AUIcontentsAreaHeader()
-#ALajaxlistformheaderAction('Holiday')
-#if($result.List.size() == 0)
-#AUIEmptyMessage("icon-list-ul" "$l10n.HOLIDAY_SETTING_NO_HOLIDAY")
-#else
-#AUISummaryDiv()
-#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
-#AUISummaryDivfooter()
-#AUIrowMTableWide()
-<tr>
-#ALtdhead("#ALajaxsort('p_holiday' $l10n.HOLIDAY_SETTING_DATE $result 'SystemHolidaySettingFormScreen')")
-#ALtdhead("#ALajaxsort('p_holiday_name' $l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME　$result 'SystemHolidaySettingFormScreen')")
-</tr>
-#AUItablefooter()
-#foreach ($record in $result.List)
-<tr>
-#ALtdcell("<div>$!record.HolidayName</div>" 'nowrap="nowrap"')
-#ALtdcellheaderAtt('class="auiMTCaption"')
-<div>
-<a href="javascript:void(0);" onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template","SystemHolidaySettingFormScreen").addQueryData("entityid",$record.HolidayId))');">$!record.HolidayName</a>
-</div>
-#ALtdcellfooter()
-#ALtdcell("<div>$!record.HolidayName</div>" 'nowrap="nowrap"')
-</tr>>
-#end
-#AUItablefooter()
-#AUISummaryDiv()
-#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
-#AUISummaryDivfooter()
-#end
-#ALformfooter()
-#AUIcontentsAreaFooter()*#
-
-#*#AUIcontentsAreaHeader()
-#ALajaxIndicator("${indicator_id}" "$!{portlet.ID}" "")
-<div id="listmessageDiv"></div>
-#if($result.List.size() == 0)
-#AUIEmptyMessage("icon-list-ul" "$l10n.HOLIDAY_SETTING_NO_HOLIDAY")
-#else
-#ALajaxlistformheaderAction('Holiday')
-<div class="auiSummaryMeta clearfix">
-#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
-</div>
-#AUIrowMTableWide()
-<tr>
-#ALtdhead("#ALajaxsort('p_holiday' $l10n.HOLIDAY_SETTING_DATE $result 'SystemHolidaySettingFormScreen')")
-#ALtdhead("#ALajaxsort('p_holiday_name' $l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME　$result 'SystemHolidaySettingFormScreen')")
-</tr>
-#foreach ($record in $result.List)
-<tr>
-#ALtdcell("<div>$!record.HolidayDate</div>" 'nowrap="nowrap"')
-#ALtdcell("<div>$!record.HolidayName</div>" 'nowrap="nowrap"')
-</tr>
-#end
-#AUItablefooter()
-<div class="auiSummaryMeta clearfix">
-#AUIajaxpageview('SystemHolidaySettingFormScreen' $result)
-</div>
-#end
-#ALformfooter()
-#AUIcontentsAreaFooter()*#
 
 #ALtablefooter()
 #ALbuttonheader()
-<input name="$name" class="auiButtonAction" type="button" value="$action_str" onclick="aimluck.io.setHiddenValue(this);" />
+<input name="$name" class="auiButtonAction" type="button" value="$action_str" onclick="" />
 ##ALsubmit($event_submit $action_str)
 #ALajaxbuttonClose()
 #ALbuttonfooter()

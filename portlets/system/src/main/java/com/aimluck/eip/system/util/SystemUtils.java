@@ -208,4 +208,38 @@ public class SystemUtils {
     }
   }
 
+  public static List<EipMHoliday> getEipMHolidayList(RunData rundata,
+      Context context) throws ALPageNotFoundException {
+
+    String holiday_id =
+      ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID);
+    try {
+      if (holiday_id == null || Integer.valueOf(holiday_id) == null) {
+        // IDが空の場合
+        logger.debug("Empty ID...");
+        throw new ALPageNotFoundException();
+      }
+
+      SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+      // Expression exp1 =
+      // ExpressionFactory.matchDbExp(
+      // EipMHoliday.HOLIDAY_ID_PK_COLUMN,
+      // holiday_id);
+      // query.setQualifier(exp1);
+
+      List<EipMHoliday> list = query.fetchList();
+      if (list == null || list.size() == 0) {
+        logger.debug("Not found ID...");
+        throw new ALPageNotFoundException();
+      }
+      return list;
+    } catch (ALPageNotFoundException ex) {
+      ALEipUtils.redirectPageNotFound(rundata);
+      return null;
+    } catch (Exception ex) {
+      logger.debug("Empty ID...");
+      throw new ALPageNotFoundException();
+    }
+  }
+
 }

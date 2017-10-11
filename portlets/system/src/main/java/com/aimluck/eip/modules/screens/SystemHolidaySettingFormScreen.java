@@ -50,16 +50,8 @@ public class SystemHolidaySettingFormScreen extends ALVelocityScreen {
       SystemHolidaySettingFormData formData =
         new SystemHolidaySettingFormData();
       formData.initField();
+      formData.initField(rundata, context);
       formData.doViewForm(this, rundata, context);
-
-      // SystemHolidaySettingSelectData listData =
-      // new SystemHolidaySettingSelectData();
-      // listData.initField();
-      // listData.setRowsNum(Integer.parseInt(ALEipUtils.getPortlet(
-      // rundata,
-      // context).getPortletConfig().getInitParameter("p1b-rows")));
-      // listData.doViewList(this, rundata, context);
-
       setTemplate(
         rundata,
         context,
