@@ -625,6 +625,12 @@ public class ExtTimecardUtils {
     long startTime = start.getTime();
     long endTime = end.getTime();
 
+    Calendar tpmStart = Calendar.getInstance();
+    tpmStart.setTime(start);
+
+    Calendar tpmEnd = Calendar.getInstance();
+    tpmEnd.setTime(end);
+
     // 出勤日時ベースの休憩時間
     Calendar restStart = Calendar.getInstance();
     restStart.setTime(start);
@@ -652,18 +658,29 @@ public class ExtTimecardUtils {
     long restStartTime2 = restStart2.getTime().getTime();
     long restEndTime2 = restEnd2.getTime().getTime();
 
-    if (startTime < restStartTime && restEndTime < endTime) {
-      // 通常のケース
-      return (restEndTime - restStartTime) / 1000f / 60f / 60f;
-    }
-    if (startTime < restStartTime2 && restEndTime2 < endTime) {
-      // 日付が変わってから休憩があるケース
-      return (restEndTime2 - restStartTime2) / 1000f / 60f / 60f;
-    }
-    if (startTime < restStartTime && restEndTime2 < endTime) {
-      // 日付をまたいだ休憩時間
-      return (restEndTime2 - restStartTime) / 1000f / 60f / 60f;
+    if (tpmStart.get(Calendar.DATE) != tpmEnd.get(Calendar.DATE)) {
+      if (restStart.getTime().getTime() > restEnd.getTime().getTime()) {
+        if (startTime < restStartTime && restEndTime2 < endTime) {
+          // 日付をまたいだ休憩時間
+          return (restEndTime2 - restStartTime) / 1000f / 60f / 60f;
+        }
+      } else {
+        if (startTime < restStartTime2 && restEndTime2 < endTime) {
+          // 日付が変わってから休憩があるケース
+          return (restEndTime2 - restStartTime2) / 1000f / 60f / 60f;
+        }
+        if (startTime < restStartTime && restEndTime < endTime) {
+          // 通常のケース
+          return (restEndTime - restStartTime) / 1000f / 60f / 60f;
+        }
+      }
+    } else {
+      if (startTime < restStartTime && restEndTime < endTime) {
+        // 通常のケース
+        return (restEndTime - restStartTime) / 1000f / 60f / 60f;
+      }
     }
     return 0;
+
   }
 }
