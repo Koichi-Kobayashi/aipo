@@ -66,8 +66,11 @@
 #AUISummaryDiv()
 <form class="auiForm floatLeft" action="#" method="post" style="margin-right:1em;" onsubmit="return false;">
 <select onchange="aipo.viewPage(this.options[this.selectedIndex].value, '$!portlet.ID')" style="width:180px;">
-<option value="$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template", $screen).addQueryData("filter","1").addQueryData("filtertype","status"))">$l10n.EVENTLOG_LOGIN</option>
-<option value="$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template", $screen).addQueryData("filter","0").addQueryData("filtertype","status"))">$l10n.EVENTLOG_UPDATE</option>
+<option value="$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template","ExtTimecardSystemMapListScreen").addQueryData("filter","").addQueryData("filtertype","post"))">$l10n.EVENTLOG_FEATURE_ALL</option>
+#foreach( $record in $result.ResultDataDetail )
+<option value="$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template",$screen).addQueryData("filter",$!record.PortletName).addQueryData("filtertype","post"))" #if ($!result.CurrentFilter && $!result.CurrentFilter == $!record.PortletName.toString()) selected="selected" #end>$!record.PortletName</option>
+#end
+
 </select>
 #ALformfooter()
 <div class="floatLeft ml10" style="padding-top: 0.4em;">#ALajaxIndicator("${indicator_id}" "$!{portlet.ID}" "")</div>
@@ -131,13 +134,16 @@
 #ALtdcell("<div>$!record.EventName</div>")
 #ALtdcell("<div>$!record.IpAddr</div>")
 
+
 #end
 </tr>
 #end
+
 </tbody>
 </table>
 #AUISummaryDiv()
 <div class="floatLeft">
+
 #AUIajaxbuttonCheckboxDelete("$l10n.COMMON_DELETE" "$!jslink.getPortletById($!portlet.ID).addQueryData('template','EventlogFormJSONScreen').addQueryData('mode','multi_delete')" "$!indicator_id" "$!portlet.ID" "aipo.eventlog.onReceiveMessage")
 </div>
 #AUIajaxpageview('EventlogScreen' $result)

@@ -48,7 +48,7 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * イベントログ検索データを管理するクラスです。 <BR>
- * 
+ *
  */
 public class EventlogSelectData extends
     ALAbstractSelectData<EipTEventlog, EipTEventlog> implements ALData {
@@ -70,7 +70,7 @@ public class EventlogSelectData extends
   private int view_date_max_year;
 
   /**
-   * 
+   *
    * @param action
    * @param rundata
    * @param context
@@ -136,7 +136,7 @@ public class EventlogSelectData extends
 
   /**
    * 一覧データを取得します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @return
@@ -187,7 +187,7 @@ public class EventlogSelectData extends
 
   /**
    * 検索条件を設定した SelectQuery を返します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @return
@@ -200,7 +200,7 @@ public class EventlogSelectData extends
 
   /**
    * ResultData に値を格納して返します。（一覧データ） <BR>
-   * 
+   *
    * @param obj
    * @return
    */
@@ -240,7 +240,7 @@ public class EventlogSelectData extends
 
   /**
    * 詳細データを取得します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @return
@@ -252,7 +252,7 @@ public class EventlogSelectData extends
 
   /**
    * ResultData に値を格納して返します。（詳細データ） <BR>
-   * 
+   *
    * @param obj
    * @return
    */
@@ -310,7 +310,7 @@ public class EventlogSelectData extends
 
   /**
    * イベントログの総数を返す． <BR>
-   * 
+   *
    * @return
    */
   public int getEventlogSum() {
@@ -319,7 +319,7 @@ public class EventlogSelectData extends
 
   /**
    * @return
-   * 
+   *
    */
   @Override
   protected Attributes getColumnMap() {
@@ -335,12 +335,16 @@ public class EventlogSelectData extends
   }
 
   /**
-   * 
+   *
    * @param id
    * @return
    */
   public boolean isMatch(int id1, long id2) {
     return id1 == (int) id2;
+  }
+
+  public Attributes getPostMap() {
+    return getColumnMap();
   }
 
 }
