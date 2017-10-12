@@ -623,69 +623,6 @@ public class ExtTimecardUtils {
 
   public static float getResttime(Date start, Date end,
       EipTExtTimecardSystem model) {
-    long startTime = start.getTime();
-    long endTime = end.getTime();
-
-    Calendar tpmStart = Calendar.getInstance();
-    tpmStart.setTime(start);
-
-    Calendar tpmEnd = Calendar.getInstance();
-    tpmEnd.setTime(end);
-
-    // 出勤日時ベースの休憩時間
-    Calendar restStart = Calendar.getInstance();
-    restStart.setTime(start);
-    restStart.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
-    restStart.set(Calendar.MINUTE, model.getResttimeStartMinute());
-
-    Calendar restEnd = Calendar.getInstance();
-    restEnd.setTime(start);
-    restEnd.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
-    restEnd.set(Calendar.MINUTE, model.getResttimeEndMinute());
-
-    // 退勤日時ベースの休憩時間
-    Calendar restStart2 = Calendar.getInstance();
-    restStart2.setTime(end);
-    restStart2.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
-    restStart2.set(Calendar.MINUTE, model.getResttimeStartMinute());
-
-    Calendar restEnd2 = Calendar.getInstance();
-    restEnd2.setTime(end);
-    restEnd2.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
-    restEnd2.set(Calendar.MINUTE, model.getResttimeEndMinute());
-
-    long restStartTime = restStart.getTime().getTime();
-    long restEndTime = restEnd.getTime().getTime();
-    long restStartTime2 = restStart2.getTime().getTime();
-    long restEndTime2 = restEnd2.getTime().getTime();
-
-    if (tpmStart.get(Calendar.DATE) != tpmEnd.get(Calendar.DATE)) {
-      if (restStart.getTime().getTime() > restEnd.getTime().getTime()) {
-        if (startTime < restStartTime && restEndTime2 < endTime) {
-          // 日付をまたいだ休憩時間
-          return (restEndTime2 - restStartTime) / 1000f / 60f / 60f;
-        }
-      } else {
-        if (startTime < restStartTime2 && restEndTime2 < endTime) {
-          // 日付が変わってから休憩があるケース
-          return (restEndTime2 - restStartTime2) / 1000f / 60f / 60f;
-        }
-        if (startTime < restStartTime && restEndTime < endTime) {
-          // 通常のケース
-          return (restEndTime - restStartTime) / 1000f / 60f / 60f;
-        }
-      }
-    } else {
-      if (startTime < restStartTime && restEndTime < endTime) {
-        // 通常のケース
-        return (restEndTime - restStartTime) / 1000f / 60f / 60f;
-      }
-    }
-    return 0;
-  }
-
-  public static float getResttime2(Date start, Date end,
-      EipTExtTimecardSystem model) {
     HashMap<String, Date> restTimeDate = getRestTimeDate(start, end, model);
     if (restTimeDate.size() > 0
       && restTimeDate.containsKey("startDate")

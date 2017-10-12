@@ -1578,89 +1578,87 @@ public class ExtTimecardListResultData implements ALData {
               ExtTimecardUtils.getRestTimeDate(from, to, timecard_system);
             Date restStartDate = restTimeDate.get("startDate");
             Date restEndDate = restTimeDate.get("endDate");
-            if (restStartDate.before(midTimeEarly)
-              || restEndDate.after(midTimeLate)) {
-              // 休憩時間が深夜にかかる時間帯のみ差し引く
-              if (from.before(midTimeEarly)) {
-                // 休憩開始時刻が5時前
-                float rest = NO_DATA;
-                if (midTimeEarly.getTime() < restEndDate.getTime()) {
-                  // 休憩終了時刻が5時以降
-                  rest =
-                    (midTimeEarly.getTime() - restStartDate.getTime())
-                      / 1000f
-                      / 60f
-                      / 60f;
-                } else {
-                  // 休憩終了時刻が5時前
-                  rest =
+            // 休憩時間が深夜にかかる時間帯のみ差し引く
+            if (from.before(midTimeEarly)
+              && restStartDate.before(midTimeEarly)) {
+              // 休憩開始時刻が5時前
+              float rest = NO_DATA;
+              if (midTimeEarly.getTime() < restEndDate.getTime()) {
+                // 休憩終了時刻が5時以降
+                rest =
+                  (midTimeEarly.getTime() - restStartDate.getTime())
+                    / 1000f
+                    / 60f
+                    / 60f;
+              } else {
+                // 休憩終了時刻が5時前
+                rest =
+                  (restEndDate.getTime() - restStartDate.getTime())
+                    / 1000f
+                    / 60f
+                    / 60f;
+              }
+              if (rest != NO_DATA) {
+                time -= rest;
+              }
+            }
+            if (midTimeLate.before(to) && restEndDate.after(midTimeLate)) {
+              float l = NO_DATA;
+              if (to.before(nextEarly)) {
+                if (midTimeLate.getTime() < restStartDate.getTime()) {
+                  // 休憩開始時刻が22時以降
+                  l =
                     (restEndDate.getTime() - restStartDate.getTime())
                       / 1000f
                       / 60f
                       / 60f;
+                } else {
+                  // 休憩開始時刻が22時前
+                  l =
+                    (restEndDate.getTime() - midTimeLate.getTime())
+                      / 1000f
+                      / 60f
+                      / 60f;
                 }
-                if (rest != NO_DATA) {
-                  time -= rest;
-                }
-              }
-              if (midTimeLate.before(to)) {
-                float l = NO_DATA;
-                if (to.before(nextEarly)) {
-                  if (midTimeLate.getTime() < restStartDate.getTime()) {
-                    // 休憩開始時刻が22時以降
+              } else {
+                if (midTimeLate.getTime() < restStartDate.getTime()) {
+                  // 休憩開始時刻が22時以降
+                  if (nextEarly.getTime() < restEndDate.getTime()) {
+                    // 休憩終了時刻が5時以降
+                    l =
+                      (nextEarly.getTime() - restStartDate.getTime())
+                        / 1000f
+                        / 60f
+                        / 60f;
+                  } else {
+                    // 休憩終了時刻が5時前
                     l =
                       (restEndDate.getTime() - restStartDate.getTime())
                         / 1000f
                         / 60f
                         / 60f;
+                  }
+                } else {
+                  // 休憩開始時刻が22時前
+                  if (nextEarly.getTime() < restEndDate.getTime()) {
+                    // 休憩終了時刻が5時以降
+                    l =
+                      (nextEarly.getTime() - midTimeLate.getTime())
+                        / 1000f
+                        / 60f
+                        / 60f;
                   } else {
-                    // 休憩開始時刻が22時前
+                    // 休憩終了時刻が5時前
                     l =
                       (restEndDate.getTime() - midTimeLate.getTime())
                         / 1000f
                         / 60f
                         / 60f;
                   }
-                } else {
-                  if (midTimeLate.getTime() < restStartDate.getTime()) {
-                    // 休憩開始時刻が22時以降
-                    if (nextEarly.getTime() < restEndDate.getTime()) {
-                      // 休憩終了時刻が5時以降
-                      l =
-                        (nextEarly.getTime() - restStartDate.getTime())
-                          / 1000f
-                          / 60f
-                          / 60f;
-                    } else {
-                      // 休憩終了時刻が5時前
-                      l =
-                        (restEndDate.getTime() - restStartDate.getTime())
-                          / 1000f
-                          / 60f
-                          / 60f;
-                    }
-                  } else {
-                    // 休憩開始時刻が22時前
-                    if (nextEarly.getTime() < restEndDate.getTime()) {
-                      // 休憩終了時刻が5時以降
-                      l =
-                        (nextEarly.getTime() - midTimeLate.getTime())
-                          / 1000f
-                          / 60f
-                          / 60f;
-                    } else {
-                      // 休憩終了時刻が5時前
-                      l =
-                        (restEndDate.getTime() - midTimeLate.getTime())
-                          / 1000f
-                          / 60f
-                          / 60f;
-                    }
-                  }
                 }
-                if (l != NO_DATA) {
-                  time -= l;
-                }
+              }
+              if (l != NO_DATA) {
+                time -= l;
               }
             }
           }
