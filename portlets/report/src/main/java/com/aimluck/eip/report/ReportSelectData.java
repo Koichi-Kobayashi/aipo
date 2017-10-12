@@ -466,20 +466,26 @@ public class ReportSelectData extends
 
     String search = ALEipUtils.getTemp(rundata, context, LIST_SEARCH_STR);
 
-    if (search != null && !search.equals("")) {
-      current_search = "%" + search + "%";
-      body.append(" AND ");
-      body.append(" (t0.report_name LIKE #bind($search) OR ");
-      body.append(" t0.note LIKE #bind($search)) ");
+    if (search != null && !"".equals(search)) {
+      body.append(" AND( ");
+      for (int i = 0; i < search.length(); i++) {
+        body.append(" t0.report_name LIKE '%"
+          + String.valueOf(search.charAt(i))
+          + "%' OR ");
+        body.append(" t0.note LIKE '%"
+          + String.valueOf(search.charAt(i))
+          + "%' ");
+        if (i != search.length() - 1) {
+          body.append(" OR ");
+        }
+      }
+      body.append(" ) ");
     }
 
     SQLTemplate<EipTReport> countQuery =
       Database.sql(EipTReport.class, count.toString() + body.toString()).param(
         "login_user_id",
         uid);
-    if (search != null) {
-      countQuery.param("search", current_search);
-    }
 
     int offset = 0;
     countValue = 0;
