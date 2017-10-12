@@ -1410,6 +1410,8 @@ ALTER TABLE `turbine_user_group_role` ADD FOREIGN KEY (  `group_id` ) REFERENCES
 
 ALTER TABLE `turbine_user_group_role` ADD FOREIGN KEY (  `role_id` ) REFERENCES  `turbine_role` (`role_id`);
 
+ALTER TABLE `turbine_user_group_role` ADD INDEX turbine_user_group_role_index1(`user_id`,`group_id`);
+
 ALTER TABLE `eip_t_schedule_map` ADD FOREIGN KEY (  `schedule_id` ) REFERENCES  `eip_t_schedule` (`schedule_id`) ON DELETE CASCADE ;
 
 ALTER TABLE `eip_t_schedule_map` ADD FOREIGN KEY (  `common_category_id` ) REFERENCES  `eip_t_common_category` (`common_category_id`) ON DELETE CASCADE ;

@@ -326,14 +326,12 @@ public class ReportSelectData extends
 
       List<String> postIds = current_filterMap.get("post");
 
-      sb.append(" SELECT DISTINCT ");
-      sb.append(" B.USER_ID FROM turbine_user_group_role as A  ");
-      sb.append(" LEFT JOIN turbine_user as B ");
-      sb.append(" on A.USER_ID = B.USER_ID LEFT JOIN turbine_group as C ");
-      sb
-        .append(" on A.GROUP_ID = C.GROUP_ID LEFT JOIN eip_m_user_position as D ");
-      sb.append(" on A.USER_ID = D.USER_ID ");
-      sb.append(" WHERE B.USER_ID > 3 ");
+      sb.append(" SELECT B.USER_ID ");
+      sb.append(" FROM turbine_user_group_role as A  ");
+      sb.append(" LEFT JOIN turbine_user as B on A.USER_ID = B.USER_ID  ");
+      sb.append(" LEFT JOIN turbine_group as C on A.GROUP_ID = C.GROUP_ID ");
+      sb.append(" WHERE B.USER_ID = t0.USER_ID ");
+      sb.append(" AND B.USER_ID > 3  ");
       sb.append(" AND B.DISABLED = 'F' ");
       sb.append(" AND C.GROUP_NAME = " + "'" + postIds.get(0) + "' ");
     }
@@ -458,11 +456,10 @@ public class ReportSelectData extends
         .append(" (SELECT * FROM eip_t_report_map t1 WHERE t0.report_id = t1.report_id) AND ");
       body.append(" parent_id = 0 ");
     }
-    String test = buildSQLForFilter(rundata, context);
-    if (!"".equals(test)) {
-      body.append(" AND ");
-      body.append(" t0.user_id = ANY (");
-      body.append(test);
+    String group = buildSQLForFilter(rundata, context);
+    if (!"".equals(group)) {
+      body.append(" AND EXISTS ( ");
+      body.append(group);
       body.append(") ");
     }
     // 検索
