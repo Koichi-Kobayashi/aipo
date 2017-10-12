@@ -196,6 +196,10 @@ public class MessageRoomMemberListSelectData extends
     return userId;
   }
 
+  public String getRoomType() {
+    return room.getRoomType();
+  }
+
   /**
    * @param targetUserId
    *          セットする targetUserId
