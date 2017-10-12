@@ -270,6 +270,8 @@
 	<db-entity name="eip_t_ext_timecard_system">
 		<db-attribute name="AFTERNOON_OFF" type="INTEGER" length="4"/>
 		<db-attribute name="CHANGE_HOUR" type="INTEGER"/>
+		<db-attribute name="CONSIDERED_OVERTIME" type="INTEGER" length="3"/>
+		<db-attribute name="CONSIDERED_OVERTIME_FLAG" type="VARCHAR" length="1"/>
 		<db-attribute name="CREATE_DATE" type="DATE" length="4"/>
 		<db-attribute name="END_HOUR" type="INTEGER" length="2"/>
 		<db-attribute name="END_MINUTE" type="INTEGER" length="2"/>
@@ -277,8 +279,13 @@
 		<db-attribute name="MORNING_OFF" type="INTEGER" length="4"/>
 		<db-attribute name="OUTGOING_ADD_FLAG" type="VARCHAR" length="1"/>
 		<db-attribute name="OVERTIME_TYPE" type="VARCHAR" length="8"/>
+		<db-attribute name="RESTTIME_END_HOUR" type="INTEGER" length="2"/>
+		<db-attribute name="RESTTIME_END_MINUTE" type="INTEGER" length="2"/>
 		<db-attribute name="RESTTIME_IN" type="INTEGER" length="4"/>
 		<db-attribute name="RESTTIME_OUT" type="INTEGER" length="4"/>
+		<db-attribute name="RESTTIME_START_HOUR" type="INTEGER" length="2"/>
+		<db-attribute name="RESTTIME_START_MINUTE" type="INTEGER" length="2"/>
+		<db-attribute name="RESTTIME_TYPE" type="VARCHAR" length="1"/>
 		<db-attribute name="START_DAY" type="SMALLINT" length="2"/>
 		<db-attribute name="START_HOUR" type="INTEGER" length="2"/>
 		<db-attribute name="START_MINUTE" type="INTEGER" length="2"/>
@@ -1074,6 +1081,8 @@
 	<obj-entity name="EipTExtTimecardSystem" className="com.aimluck.eip.cayenne.om.portlet.EipTExtTimecardSystem" dbEntityName="eip_t_ext_timecard_system">
 		<obj-attribute name="afternoonOff" type="java.lang.Integer" db-attribute-path="AFTERNOON_OFF"/>
 		<obj-attribute name="changeHour" type="java.lang.Integer" db-attribute-path="CHANGE_HOUR"/>
+		<obj-attribute name="consideredOvertime" type="java.lang.Integer" db-attribute-path="CONSIDERED_OVERTIME"/>
+		<obj-attribute name="consideredOvertimeFlag" type="java.lang.String" db-attribute-path="CONSIDERED_OVERTIME_FLAG"/>
 		<obj-attribute name="createDate" type="java.util.Date" db-attribute-path="CREATE_DATE"/>
 		<obj-attribute name="endHour" type="java.lang.Integer" db-attribute-path="END_HOUR"/>
 		<obj-attribute name="endMinute" type="java.lang.Integer" db-attribute-path="END_MINUTE"/>
@@ -1081,8 +1090,13 @@
 		<obj-attribute name="morningOff" type="java.lang.Integer" db-attribute-path="MORNING_OFF"/>
 		<obj-attribute name="outgoingAddFlag" type="java.lang.String" db-attribute-path="OUTGOING_ADD_FLAG"/>
 		<obj-attribute name="overtimeType" type="java.lang.String" db-attribute-path="OVERTIME_TYPE"/>
+		<obj-attribute name="resttimeEndHour" type="java.lang.Integer" db-attribute-path="RESTTIME_END_HOUR"/>
+		<obj-attribute name="resttimeEndMinute" type="java.lang.Integer" db-attribute-path="RESTTIME_END_MINUTE"/>
 		<obj-attribute name="resttimeIn" type="java.lang.Integer" db-attribute-path="RESTTIME_IN"/>
 		<obj-attribute name="resttimeOut" type="java.lang.Integer" db-attribute-path="RESTTIME_OUT"/>
+		<obj-attribute name="resttimeStartHour" type="java.lang.Integer" db-attribute-path="RESTTIME_START_HOUR"/>
+		<obj-attribute name="resttimeStartMinute" type="java.lang.Integer" db-attribute-path="RESTTIME_START_MINUTE"/>
+		<obj-attribute name="resttimeType" type="java.lang.String" db-attribute-path="RESTTIME_TYPE"/>
 		<obj-attribute name="startDay" type="java.lang.Integer" db-attribute-path="START_DAY"/>
 		<obj-attribute name="startHour" type="java.lang.Integer" db-attribute-path="START_HOUR"/>
 		<obj-attribute name="startMinute" type="java.lang.Integer" db-attribute-path="START_MINUTE"/>

@@ -151,6 +151,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
   /** アクセス権限の機能名 */
   private String aclPortletFeature = null;
 
+  private String session_date;
+
   /**
    *
    * @param action
@@ -165,6 +167,7 @@ public class ExtTimecardFormData extends ALAbstractFormData {
     super.init(action, rundata, context);
 
     login_uid = ALEipUtils.getUserId(rundata);
+    session_date = rundata.getParameters().get("date");
     selectedUserId = rundata.getParameters().getString("userid", "");
 
     // 出勤・退勤時間
@@ -267,6 +270,21 @@ public class ExtTimecardFormData extends ALAbstractFormData {
   public boolean doViewForm(ALAction action, RunData rundata, Context context) {
     try {
       init(action, rundata, context);
+
+      // ALEipConstants.ENTITY_ID は null だが entity が存在する場合
+      int targetUserId;
+      if ("".equals(selectedUserId)) {
+        targetUserId = login_uid;
+      } else {
+        targetUserId = Integer.parseInt(selectedUserId);
+      }
+      if ((ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID) == null)
+        && (hasEntityId(targetUserId, session_date))) {
+        // entity_id を ALEipConstants.ENTITY_ID にをセットする
+        ALEipUtils.setTemp(rundata, context, ALEipConstants.ENTITY_ID, String
+          .valueOf(entity_id));
+      }
+
       boolean isedit =
         (ALEipUtils.getTemp(
           rundata,
@@ -301,7 +319,6 @@ public class ExtTimecardFormData extends ALAbstractFormData {
           ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER;
       }
       doCheckAclPermission(rundata, context, aclType);
-
       action.setResultData(this);
       if (!msgList.isEmpty()) {
         action.addErrorMessages(msgList);
@@ -691,7 +708,6 @@ public class ExtTimecardFormData extends ALAbstractFormData {
             String type = rundata.getParameters().get("type");
             this.type.setValue(type);
           }
-
           String punch_date_year =
             rundata.getParameters().get("punch_date_year");
           String punch_date_month =
@@ -776,7 +792,7 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       if (timecard == null) {
         return false;
       }
-      //
+
       timecard_id.setValue(timecard.getExtTimecardId().longValue());
       user_id.setValue(timecard.getUserId().intValue());
       punch_date.setValue(timecard.getPunchDate());
@@ -1626,6 +1642,29 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
   public boolean isNewRule() {
     return ExtTimecardUtils.isNewRule();
+  }
+
+  /**
+   * 新規フォーム作成の際、すでに Entity が存在するなら entity_id をセットさせます。
+   */
+  public boolean hasEntityId(int target_uid, String target_date) {
+    try {
+      List<EipTExtTimecard> timecards =
+        ExtTimecardUtils.getEipTExtTimecardsByUserIdAndDate(
+          target_uid,
+          target_date);
+      if (timecards.size() == 0) {
+        // ENTITY_ID は null だし、 entity も存在 *しない* 場合
+        return false;
+      } else {
+        // ENTITY_ID は null だが、 entity は存在 *する* 場合
+        this.entity_id = timecards.get(0).getExtTimecardId();
+        return true;
+      }
+    } catch (Exception ex) {
+      logger.error("exttimecard", ex);
+      return false;
+    }
   }
 
 }

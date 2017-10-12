@@ -11,6 +11,8 @@ public class _EipTExtTimecardSystem extends org.apache.cayenne.CayenneDataObject
 
     public static final String AFTERNOON_OFF_PROPERTY = "afternoonOff";
     public static final String CHANGE_HOUR_PROPERTY = "changeHour";
+    public static final String CONSIDERED_OVERTIME_PROPERTY = "consideredOvertime";
+    public static final String CONSIDERED_OVERTIME_FLAG_PROPERTY = "consideredOvertimeFlag";
     public static final String CREATE_DATE_PROPERTY = "createDate";
     public static final String END_HOUR_PROPERTY = "endHour";
     public static final String END_MINUTE_PROPERTY = "endMinute";
@@ -18,8 +20,13 @@ public class _EipTExtTimecardSystem extends org.apache.cayenne.CayenneDataObject
     public static final String MORNING_OFF_PROPERTY = "morningOff";
     public static final String OUTGOING_ADD_FLAG_PROPERTY = "outgoingAddFlag";
     public static final String OVERTIME_TYPE_PROPERTY = "overtimeType";
+    public static final String RESTTIME_END_HOUR_PROPERTY = "resttimeEndHour";
+    public static final String RESTTIME_END_MINUTE_PROPERTY = "resttimeEndMinute";
     public static final String RESTTIME_IN_PROPERTY = "resttimeIn";
     public static final String RESTTIME_OUT_PROPERTY = "resttimeOut";
+    public static final String RESTTIME_START_HOUR_PROPERTY = "resttimeStartHour";
+    public static final String RESTTIME_START_MINUTE_PROPERTY = "resttimeStartMinute";
+    public static final String RESTTIME_TYPE_PROPERTY = "resttimeType";
     public static final String START_DAY_PROPERTY = "startDay";
     public static final String START_HOUR_PROPERTY = "startHour";
     public static final String START_MINUTE_PROPERTY = "startMinute";
@@ -45,6 +52,22 @@ public class _EipTExtTimecardSystem extends org.apache.cayenne.CayenneDataObject
     }
     public Integer getChangeHour() {
         return (Integer)readProperty("changeHour");
+    }
+    
+    
+    public void setConsideredOvertime(Integer consideredOvertime) {
+        writeProperty("consideredOvertime", consideredOvertime);
+    }
+    public Integer getConsideredOvertime() {
+        return (Integer)readProperty("consideredOvertime");
+    }
+    
+    
+    public void setConsideredOvertimeFlag(String consideredOvertimeFlag) {
+        writeProperty("consideredOvertimeFlag", consideredOvertimeFlag);
+    }
+    public String getConsideredOvertimeFlag() {
+        return (String)readProperty("consideredOvertimeFlag");
     }
     
     
@@ -104,6 +127,22 @@ public class _EipTExtTimecardSystem extends org.apache.cayenne.CayenneDataObject
     }
     
     
+    public void setResttimeEndHour(Integer resttimeEndHour) {
+        writeProperty("resttimeEndHour", resttimeEndHour);
+    }
+    public Integer getResttimeEndHour() {
+        return (Integer)readProperty("resttimeEndHour");
+    }
+    
+    
+    public void setResttimeEndMinute(Integer resttimeEndMinute) {
+        writeProperty("resttimeEndMinute", resttimeEndMinute);
+    }
+    public Integer getResttimeEndMinute() {
+        return (Integer)readProperty("resttimeEndMinute");
+    }
+    
+    
     public void setResttimeIn(Integer resttimeIn) {
         writeProperty("resttimeIn", resttimeIn);
     }
@@ -117,6 +156,30 @@ public class _EipTExtTimecardSystem extends org.apache.cayenne.CayenneDataObject
     }
     public Integer getResttimeOut() {
         return (Integer)readProperty("resttimeOut");
+    }
+    
+    
+    public void setResttimeStartHour(Integer resttimeStartHour) {
+        writeProperty("resttimeStartHour", resttimeStartHour);
+    }
+    public Integer getResttimeStartHour() {
+        return (Integer)readProperty("resttimeStartHour");
+    }
+    
+    
+    public void setResttimeStartMinute(Integer resttimeStartMinute) {
+        writeProperty("resttimeStartMinute", resttimeStartMinute);
+    }
+    public Integer getResttimeStartMinute() {
+        return (Integer)readProperty("resttimeStartMinute");
+    }
+    
+    
+    public void setResttimeType(String resttimeType) {
+        writeProperty("resttimeType", resttimeType);
+    }
+    public String getResttimeType() {
+        return (String)readProperty("resttimeType");
     }
     
     
