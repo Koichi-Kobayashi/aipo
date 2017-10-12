@@ -21,6 +21,7 @@ package com.aimluck.eip.exttimecard.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -681,6 +682,86 @@ public class ExtTimecardUtils {
       }
     }
     return 0;
+  }
 
+  public static float getResttime2(Date start, Date end,
+      EipTExtTimecardSystem model) {
+    HashMap<String, Date> restTimeDate = getRestTimeDate(start, end, model);
+    if (restTimeDate.size() > 0
+      && restTimeDate.containsKey("startDate")
+      && restTimeDate.containsKey("endDate")) {
+      long restStart = restTimeDate.get("startDate").getTime();
+      long restEnd = restTimeDate.get("endDate").getTime();
+      return (restEnd - restStart) / 1000f / 60f / 60f;
+    }
+    return 0;
+  }
+
+  public static HashMap<String, Date> getRestTimeDate(Date start, Date end,
+      EipTExtTimecardSystem model) {
+    HashMap<String, Date> hashMap = new HashMap<String, Date>();
+    long startTime = start.getTime();
+    long endTime = end.getTime();
+
+    Calendar tpmStart = Calendar.getInstance();
+    tpmStart.setTime(start);
+
+    Calendar tpmEnd = Calendar.getInstance();
+    tpmEnd.setTime(end);
+
+    // 出勤日時ベースの休憩時間
+    Calendar restStart = Calendar.getInstance();
+    restStart.setTime(start);
+    restStart.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
+    restStart.set(Calendar.MINUTE, model.getResttimeStartMinute());
+
+    Calendar restEnd = Calendar.getInstance();
+    restEnd.setTime(start);
+    restEnd.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
+    restEnd.set(Calendar.MINUTE, model.getResttimeEndMinute());
+
+    // 退勤日時ベースの休憩時間
+    Calendar restStart2 = Calendar.getInstance();
+    restStart2.setTime(end);
+    restStart2.set(Calendar.HOUR_OF_DAY, model.getResttimeStartHour());
+    restStart2.set(Calendar.MINUTE, model.getResttimeStartMinute());
+
+    Calendar restEnd2 = Calendar.getInstance();
+    restEnd2.setTime(end);
+    restEnd2.set(Calendar.HOUR_OF_DAY, model.getResttimeEndHour());
+    restEnd2.set(Calendar.MINUTE, model.getResttimeEndMinute());
+
+    long restStartTime = restStart.getTime().getTime();
+    long restEndTime = restEnd.getTime().getTime();
+    long restStartTime2 = restStart2.getTime().getTime();
+    long restEndTime2 = restEnd2.getTime().getTime();
+
+    if (tpmStart.get(Calendar.DATE) != tpmEnd.get(Calendar.DATE)) {
+      if (restStart.getTime().getTime() > restEnd.getTime().getTime()) {
+        if (startTime < restStartTime && restEndTime2 < endTime) {
+          // 日付をまたいだ休憩時間
+          hashMap.put("startDate", restStart.getTime());
+          hashMap.put("endDate", restEnd2.getTime());
+        }
+      } else {
+        if (startTime < restStartTime2 && restEndTime2 < endTime) {
+          // 日付が変わってから休憩があるケース
+          hashMap.put("startDate", restStart2.getTime());
+          hashMap.put("endDate", restEnd2.getTime());
+        }
+        if (startTime < restStartTime && restEndTime < endTime) {
+          // 通常のケース
+          hashMap.put("startDate", restStart.getTime());
+          hashMap.put("endDate", restEnd.getTime());
+        }
+      }
+    } else {
+      if (startTime < restStartTime && restEndTime < endTime) {
+        // 通常のケース
+        hashMap.put("startDate", restStart.getTime());
+        hashMap.put("endDate", restEnd.getTime());
+      }
+    }
+    return hashMap;
   }
 }
