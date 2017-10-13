@@ -442,7 +442,6 @@ public class ExtTimecardSystemDetailResultData extends
   }
 
   /**
-   * <<<<<<< HEAD
    *
    * @return considered_overtime_flag
    */

@@ -122,11 +122,7 @@
 </select>
 #ALtditemfooter()
 
-<<<<<<< HEAD
 <tr id="outgoing_comeback_box" #if ($!result.Type.toString() != "P" && $!result.Type.toString() != "M" && $!result.Type.toString() != "N" && $!result.Type.toString() != "D") style="display:none" #end>
-=======
-<tr id="outgoing_comeback_box" #if ($!result.Type.toString() != "P") style="display:none" #end>
->>>>>>> refs/remotes/origin/master
 <td class="caption">$!result.getFieldName('outgoing_comeback')</td>
 #ALtditemheader()
 #foreach ( $outcome in [1..5] )
