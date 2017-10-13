@@ -100,17 +100,18 @@
 </thead>
  <tbody>
 
-#foreach($record in $result.list)
+#foreach($record in $result.PersonalHolidayList)
 <tr>
-#ALtdcell("<div>$!record.PersonalHoliday</div>")
-#ALtdcell("<div>$!record.PersonalHolidayName</div>")
+#ALtdcell("<div>$!record.HolidayDateString</div>")
+##ALtdcell("<div>$!{record.PersonalHolidayString}</div>")
+#ALtdcell("<div>$!record.HolidayName</div>")
 <td>
 <input name="$name" class="button" type="button" value="削除" onclick="" />
 </td>
 </tr>
 #end
 
-<tr>
+#*<tr>
 #ALtdcell("<div>$!{result.PersonalHolidayString}</div>")
 #ALtdcell("<div>$!{result.PersonalHolidayNameString}</div>")
 <td>
@@ -120,7 +121,7 @@
   </tbody>
 </table>
 </p>
-<p></p>
+<p></p>*#
 
 #ALtditemfooter()
 

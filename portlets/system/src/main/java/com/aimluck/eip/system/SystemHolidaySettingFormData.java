@@ -176,12 +176,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       statutoryHoliday.setValue(String.valueOf(holidayOfWeek.charAt(7)));
       holiday.setValue(holidayOfWeek.charAt(8) != '0' ? "1" : null);
 
-      // EipMHoliday p_holiday_data = SystemUtils.getEipMHoliday(rundata,
-      // context);
-      // p_holiday_open.setValue(p_holiday_data.getHolidayDate());
-      // p_holiday_name_open.setValue(p_holiday_data.getHolidayName());
-
-      List<EipMHoliday> list = SystemUtils.getEipMHolidayList(rundata, context);
       for (int i = 0; i < list.size(); i++) {
         p_holiday_open.setValue(list.get(i).getHolidayDate());
         p_holiday_name_open.setValue(list.get(i).getHolidayName());
@@ -193,17 +187,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     }
     return true;
   }
-
-  // protected List<EipMHoliday> getList(RunData rundata, Context context,
-  // List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
-  // try {
-  // List<EipMHoliday> list = SystemUtils.getEipMHolidayList(rundata, context);
-  // return list;
-  // } catch (Exception ex) {
-  // logger.error("SystemHolidaySettingFormData", ex);
-  // return null;
-  // }
-  // }
 
   /**
    * 個別の休日をデータベースに格納します。 <BR>
@@ -396,4 +379,9 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   public ALStringField getPersonalHolidayNameString() {
     return p_holiday_name_open;
   }
+
+  public List<EipMHoliday> getPersonalHolidayList() {
+    return list;
+  }
+
 }

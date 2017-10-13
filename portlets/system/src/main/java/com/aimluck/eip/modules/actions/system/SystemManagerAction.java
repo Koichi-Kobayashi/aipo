@@ -26,7 +26,6 @@ import org.apache.velocity.context.Context;
 
 import com.aimluck.eip.common.ALEipConstants;
 import com.aimluck.eip.modules.actions.common.ALBaseAction;
-import com.aimluck.eip.system.SystemHolidaySettingSelectData;
 import com.aimluck.eip.system.SystemNetworkFormData;
 import com.aimluck.eip.system.SystemNetworkSelectData;
 import com.aimluck.eip.system.SystemVersionSelectData;
@@ -37,15 +36,6 @@ import com.aimluck.eip.util.ALEipUtils;
  *
  */
 public class SystemManagerAction extends ALBaseAction {
-
-  /** logger */
-  static final String LIST_SORT_STR = new StringBuffer().append(
-    SystemHolidaySettingSelectData.class.getSimpleName()).append(
-    ALEipConstants.LIST_SORT).toString();
-
-  static final String LIST_SORT_TYPE_STR = new StringBuffer().append(
-    SystemHolidaySettingSelectData.class.getSimpleName()).append(
-    ALEipConstants.LIST_SORT_TYPE).toString();
 
   /**
    *
