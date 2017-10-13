@@ -99,29 +99,19 @@
 </tr>
 </thead>
  <tbody>
-
 #foreach($record in $result.PersonalHolidayList)
 <tr>
 #ALtdcell("<div>$!record.HolidayDateString</div>")
-##ALtdcell("<div>$!{record.PersonalHolidayString}</div>")
 #ALtdcell("<div>$!record.HolidayName</div>")
 <td>
-<input name="$name" class="button" type="button" value="削除" onclick="" />
+<input name="$name" class="button" type="button" value="$l10n.HOLIDAY_SETTING_DELETE" onclick="" />
 </td>
 </tr>
 #end
-
-#*<tr>
-#ALtdcell("<div>$!{result.PersonalHolidayString}</div>")
-#ALtdcell("<div>$!{result.PersonalHolidayNameString}</div>")
-<td>
-<input name="$name" class="button" type="button" value="削除" onclick="" />
-</td>
-</tr>
   </tbody>
 </table>
 </p>
-<p></p>*#
+<p></p>
 
 #ALtditemfooter()
 

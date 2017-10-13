@@ -28,6 +28,7 @@ import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
 import com.aimluck.commons.field.ALDateField;
+import com.aimluck.commons.field.ALDateTimeField;
 import com.aimluck.commons.field.ALStringField;
 import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALAbstractFormData;
@@ -79,7 +80,17 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   /** 個別の休日の名前（表示用） */
   private ALStringField p_holiday_name_open;
 
+  /** データベース上の個別の名前のリスト */
   private List<EipMHoliday> list;
+
+  /** <code>viewMonth</code> 現在の月 */
+  private ALDateTimeField viewYear;
+
+  /** <code>prevMonth</code> 前の月 */
+  private ALDateTimeField prevYear;
+
+  /** <code>nextMonth</code> 次の月 */
+  private ALDateTimeField nextYear;
 
   @Override
   public void init(ALAction action, RunData rundata, Context context)
@@ -125,6 +136,14 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
 
     p_holiday_open = new ALDateField();
     p_holiday_name_open = new ALStringField();
+
+    // 現在の月
+    viewYear = new ALDateTimeField("yyyy");
+    viewYear.setNotNull(true);
+    // 前の月
+    prevYear = new ALDateTimeField("yyyy");
+    // 次の月
+    nextYear = new ALDateTimeField("yyyy");
 
   }
 
