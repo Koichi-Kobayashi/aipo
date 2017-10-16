@@ -642,7 +642,24 @@ public class ExtTimecardSummaryListSelectData extends
         rd.setOutgoingTime(record.getOutgoingTime(i), i);
         rd.setComebackTime(record.getComebackTime(i), i);
       }
-      rd.setType(record.getType());
+      String type = record.getType();
+      rd.setType(type);
+
+      if ("P".equals(type)) {
+        rd.setIsTypeP(true);
+      } else if ("A".equals(type)) {
+        rd.setIsTypeA(true);
+      } else if ("H".equals(type)) {
+        rd.setIsTypeH(true);
+      } else if ("M".equals(type)) {
+        rd.setIsTypeM(true);
+      } else if ("N".equals(type)) {
+        rd.setIsTypeN(true);
+      } else if ("C".equals(type)) {
+        rd.setIsTypeC(true);
+      } else if ("E".equals(type)) {
+        rd.setIsTypeE(true);
+      }
 
       List<ExtTimecardResultData> list;
       if (usermap.containsKey(user_id)) {
@@ -1209,7 +1226,8 @@ public class ExtTimecardSummaryListSelectData extends
                 overtime_hour += lrd.getOvertimeHourWithoutRestHour();
               }
               /** 法定内残業 */
-              if (lrd.getWithinStatutoryOvertimeWorkHourWithoutOffday() != ExtTimecardListResultData.NO_DATA) {
+              if (lrd
+                .getWithinStatutoryOvertimeWorkHourWithoutOffday() != ExtTimecardListResultData.NO_DATA) {
                 overtime_within_statutory_working_hour +=
                   lrd.getWithinStatutoryOvertimeWorkHourWithoutOffday();
               }
@@ -1227,7 +1245,8 @@ public class ExtTimecardSummaryListSelectData extends
                     lrd.getMidnightOvertimeWorkHour();
                   statutory_off_day_regular_midnight_work_hour +=
                     lrd.getMidnightRegularWorkHour();
-                  if (lrd.getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                  if (lrd
+                    .getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
                     statutory_off_day_within_statutory_overtime_hour +=
                       lrd.getWithinStatutoryOvertimeWorkHour();
                   }
@@ -1240,22 +1259,26 @@ public class ExtTimecardSummaryListSelectData extends
                     lrd.getMidnightOvertimeWorkHour();
                   off_day_regular_midnight_work_hour +=
                     lrd.getMidnightRegularWorkHour();
-                  if (lrd.getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                  if (lrd
+                    .getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
                     off_day_within_statutory_overtime_hour +=
                       lrd.getWithinStatutoryOvertimeWorkHour();
                   }
                 }
               } else {
                 /** 深夜勤務（平日） */
-                if (lrd.getMidnightRegularWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                if (lrd
+                  .getMidnightRegularWorkHour() != ExtTimecardListResultData.NO_DATA) {
                   midnight_work_hour += lrd.getMidnightRegularWorkHour();
                 }
-                if (lrd.getMidnightOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                if (lrd
+                  .getMidnightOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
                   midnight_overtime_hour += lrd.getMidnightOvertimeWorkHour();
                 }
               }
               /** 深夜時間 */
-              if (lrd.getMidnightWorkHour() != ExtTimecardListResultData.NO_DATA) {
+              if (lrd
+                .getMidnightWorkHour() != ExtTimecardListResultData.NO_DATA) {
                 total_midnight_work_hour += lrd.getMidnightWorkHour();
               }
               // /** 遅刻 */
@@ -1291,7 +1314,8 @@ public class ExtTimecardSummaryListSelectData extends
                 overtime_hour += lrd.getOvertimeHourWithoutRestHour();
               }
               /** 法定内残業 */
-              if (lrd.getWithinStatutoryOvertimeWorkHourWithoutOffday() != ExtTimecardListResultData.NO_DATA) {
+              if (lrd
+                .getWithinStatutoryOvertimeWorkHourWithoutOffday() != ExtTimecardListResultData.NO_DATA) {
                 overtime_within_statutory_working_hour +=
                   lrd.getWithinStatutoryOvertimeWorkHourWithoutOffday();
               }
@@ -1309,7 +1333,8 @@ public class ExtTimecardSummaryListSelectData extends
                     lrd.getMidnightOvertimeWorkHour();
                   statutory_off_day_regular_midnight_work_hour +=
                     lrd.getMidnightRegularWorkHour();
-                  if (lrd.getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                  if (lrd
+                    .getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
                     statutory_off_day_within_statutory_overtime_hour +=
                       lrd.getWithinStatutoryOvertimeWorkHour();
                   }
@@ -1322,22 +1347,26 @@ public class ExtTimecardSummaryListSelectData extends
                     lrd.getMidnightOvertimeWorkHour();
                   off_day_regular_midnight_work_hour +=
                     lrd.getMidnightRegularWorkHour();
-                  if (lrd.getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                  if (lrd
+                    .getWithinStatutoryOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
                     off_day_within_statutory_overtime_hour +=
                       lrd.getWithinStatutoryOvertimeWorkHour();
                   }
                 }
               } else {
                 /** 深夜勤務（平日） */
-                if (lrd.getMidnightRegularWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                if (lrd
+                  .getMidnightRegularWorkHour() != ExtTimecardListResultData.NO_DATA) {
                   midnight_work_hour += lrd.getMidnightRegularWorkHour();
                 }
-                if (lrd.getMidnightOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
+                if (lrd
+                  .getMidnightOvertimeWorkHour() != ExtTimecardListResultData.NO_DATA) {
                   midnight_overtime_hour += lrd.getMidnightOvertimeWorkHour();
                 }
               }
               /** 深夜時間 */
-              if (lrd.getMidnightWorkHour() != ExtTimecardListResultData.NO_DATA) {
+              if (lrd
+                .getMidnightWorkHour() != ExtTimecardListResultData.NO_DATA) {
                 total_midnight_work_hour += lrd.getMidnightWorkHour();
               }
               /** 遅刻 */
