@@ -171,7 +171,6 @@ aipo.message.reloadMessageList = function() {
     }
    aipo.message.moreMessageLock = false;
    aipo.message.messagePane.viewPage(screen);
-
 }
 
 aipo.message.roomMemberPane = null;
