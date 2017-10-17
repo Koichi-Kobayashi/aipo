@@ -18,18 +18,20 @@
  */
 package com.aimluck.eip.services.eventlog;
 
+import java.util.HashMap;
+
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
 import org.apache.jetspeed.services.logging.JetspeedLogger;
 
 /**
  * イベントログを管理する抽象クラスです。 <br />
- * 
+ *
  */
 public abstract class ALEventlogHandler {
 
   @SuppressWarnings("unused")
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ALEventlogHandler.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(ALEventlogHandler.class.getName());
 
   public abstract void log(int entity_id, int portlet_type, String note);
 
@@ -47,4 +49,6 @@ public abstract class ALEventlogHandler {
   public abstract String getEventAliasName(int eventType);
 
   public abstract String getPortletAliasName(int portletType);
+
+  public abstract HashMap<Integer, String> getPortletAliasNameMap();
 }

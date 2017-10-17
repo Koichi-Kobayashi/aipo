@@ -18,6 +18,9 @@
  */
 package com.aimluck.eip.eventlog.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.jetspeed.om.profile.Entry;
 import org.apache.jetspeed.om.profile.Portlets;
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
@@ -25,6 +28,7 @@ import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.jetspeed.services.rundata.JetspeedRunData;
 import org.apache.turbine.util.RunData;
 
+import com.aimluck.eip.eventlog.beans.EventlogPortletBean;
 import com.aimluck.eip.services.eventlog.ALEventlogFactoryService;
 
 /**
@@ -32,12 +36,12 @@ import com.aimluck.eip.services.eventlog.ALEventlogFactoryService;
  */
 public class ALEventlogUtils {
 
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ALEventlogUtils.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(ALEventlogUtils.class.getName());
 
   /**
    * mode を DB に保存するための数値に変換します。
-   * 
+   *
    * @param mode
    * @return
    */
@@ -50,7 +54,7 @@ public class ALEventlogUtils {
 
   /**
    * イベントのエイリアス名を取得します。
-   * 
+   *
    * @param eventType
    * @return
    */
@@ -63,7 +67,7 @@ public class ALEventlogUtils {
 
   /**
    * ポートレットのエイリアス名を取得します。
-   * 
+   *
    * @param eventType
    * @return
    */
@@ -76,7 +80,7 @@ public class ALEventlogUtils {
 
   /**
    * ポートレットIDからそのポートレットのPSMLのparentの文字列を取得する
-   * 
+   *
    * @param rundata
    * @param portletEntryId
    * @return
@@ -113,5 +117,30 @@ public class ALEventlogUtils {
       return null;
     }
     return null;
+  }
+
+  /**
+   * イベントのエイリアス名のハッシュマップを取得します。
+   *
+   * @param eventType
+   * @return
+   */
+  public static ArrayList<EventlogPortletBean> getPortletAliasNameMap() {
+    HashMap<Integer, String> map =
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .getPortletAliasNameMap();
+
+    ArrayList<EventlogPortletBean> arrayList =
+      new ArrayList<EventlogPortletBean>();
+    for (Integer key : map.keySet()) {
+      EventlogPortletBean bean = new EventlogPortletBean();
+      bean.initField();
+      bean.setPortletType(key);
+      bean.setPortletName(map.get(key));
+      arrayList.add(bean);
+    }
+    return arrayList;
   }
 }

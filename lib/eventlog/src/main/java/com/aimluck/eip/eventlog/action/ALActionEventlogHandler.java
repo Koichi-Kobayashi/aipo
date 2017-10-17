@@ -19,6 +19,7 @@
 package com.aimluck.eip.eventlog.action;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
 import org.apache.jetspeed.services.logging.JetspeedLogger;
@@ -36,12 +37,13 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * ログ保存ハンドラ．
- * 
+ *
  */
 public class ALActionEventlogHandler extends ALEventlogHandler {
 
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ALActionEventlogHandler.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(
+      ALActionEventlogHandler.class.getName());
 
   public ALActionEventlogHandler() {
   }
@@ -106,7 +108,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
 
   /**
    * Login処理
-   * 
+   *
    * @param mode
    * @return
    */
@@ -126,7 +128,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
 
   /**
    * Logout処理
-   * 
+   *
    * @param mode
    * @return
    */
@@ -146,7 +148,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
 
   /**
    * XLS出力処理
-   * 
+   *
    * @param mode
    * @return
    */
@@ -164,7 +166,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
   }
 
   /**
-   * 
+   *
    * @param event_type
    *          イベント種別
    * @param uid
@@ -213,7 +215,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
 
   /**
    * mode を DB に保存するための数値に変換します。
-   * 
+   *
    * @param mode
    * @return
    */
@@ -252,8 +254,8 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
       return ALActionEventlogConstants.EVENT_TYPE_PUNCHOUT;
     } else if (ALActionEventlogConstants.EVENT_MODE_XLS_SCREEN.equals(mode)) {
       return ALActionEventlogConstants.EVENT_TYPE_XLS_SCREEN;
-    } else if (ALActionEventlogConstants.EVENT_MODE_UPDATE_PASSWORD
-      .equals(mode)) {
+    } else if (ALActionEventlogConstants.EVENT_MODE_UPDATE_PASSWORD.equals(
+      mode)) {
       return ALActionEventlogConstants.EVENT_TYPE_UPDATE_PASSWORD;
     } else if (ALActionEventlogConstants.EVENT_MODE_DOWNLOAD.equals(mode)) {
       return ALActionEventlogConstants.EVENT_TYPE_DOWNLOAD;
@@ -267,7 +269,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
 
   /**
    * イベントのエイリアス名を取得します。
-   * 
+   *
    * @param eventType
    * @return
    */
@@ -285,7 +287,7 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
 
   /**
    * ポートレットのエイリアス名を取得します。
-   * 
+   *
    * @param eventType
    * @return
    */
@@ -392,5 +394,165 @@ public class ALActionEventlogHandler extends ALEventlogHandler {
     } else {
       return ALActionEventlogConstants.PORTLET_TYPE_STR_STR_NONE;
     }
+  }
+
+  /**
+   * ポートレットのエイリアス名を取得します。
+   *
+   * @param eventType
+   * @return
+   */
+  @Override
+  public HashMap<Integer, String> getPortletAliasNameMap() {
+    HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_NONE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_STR_NONE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_LOGIN,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_LOGIN);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_LOGOUT,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_LOGOUT);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_ACCOUNT,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_ACCOUNT);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_SYSTEM,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_SYSTEM);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_AJAXSCHEDULEWEEKLY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_AJAXSCHEDULEWEEKLY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_BLOG_ENTRY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_BLOG_ENTRY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_BLOG_THEMA,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_BLOG_THEMA);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WORKFLOW,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WORKFLOW);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WORKFLOW_CATEGORY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WORKFLOW_CATEGORY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WORKFLOW_ROUTE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WORKFLOW_ROUTE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_TODO,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_TODO);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_TODO_CATEGORY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_TODO_CATEGORY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_NOTE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_NOTE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_TIMECARD,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_TIMECARD);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_TIMECARD_XLS_SCREEN,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_TIMECARD_XLS_SCREEN);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_ADDRESSBOOK,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_ADDRESSBOOK);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_ADDRESSBOOK_COMPANY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_ADDRESSBOOK_COMPANY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_ADDRESSBOOK_GROUP,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_ADDRESSBOOK_GROUP);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_MEMO,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_MEMO);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_MSGBOARD_TOPIC,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_MSGBOARD);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_MSGBOARD_CATEGORY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_EXTERNALSEARCH,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_EXTERNALSEARCH);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_MYLINK,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_MYLINK);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WHATSNEW,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WHATSNEW);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_CABINET_FILE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_CABINET_FILE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_CABINET_FOLDER,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_CABINET_FOLDER);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WEBMAIL,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WEBMAIL);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WEBMAIL_ACCOUNT,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WEBMAIL);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WEBMAIL_FOLDER,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WEBMAIL_FOLDER);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WEBMAIL_FILTER,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WEBMAIL_FILTER);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_SCHEDULE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_MANHOUR,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_MANHOUR);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_ACCOUNTPERSON,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_ACCOUNTPERSON);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_MYGROUP,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_MYGROUP);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_PAGE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_PAGE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_CELLULAR,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_CELLULAR);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_COMMON_CATEGORY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_COMMON_CATEGORY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_EXTTIMECARD,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_EXTTIMECARD);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_EXTTIMECARD_SYSTEM,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_EXTTIMECARD_SYSTEM);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_REPORT,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_REPORT);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_REPORT,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_REPORT);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_TIMELINE,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_TIMELINE);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_GPDB,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_GPDB);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_ACCESSCTL,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_ACCESSCTL);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_FACILITY,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_FACILITY);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_GADGET,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_GADGET);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_WIKI,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_WIKI);
+    hashMap.put(
+      ALEventlogConstants.PORTLET_TYPE_PROJECT,
+      ALActionEventlogConstants.PORTLET_TYPE_STR_PROJECT);
+    hashMap.put(999, ALActionEventlogConstants.PORTLET_TYPE_STR_STR_NONE);
+    return hashMap;
   }
 }
