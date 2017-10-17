@@ -75,7 +75,7 @@
 
 #ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY)
 #ALtditemheader()
-<p>
+#*<p>
 <ul class="auiSelectButton">
  <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
  <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
@@ -111,9 +111,16 @@
   </tbody>
 </table>
 </p>
-<p></p>
+<p></p>*#
+##<li><a href="javascript:void(0);" onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template","SystemHolidaySettingListScreen"))');"></a></li>
+##<img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.reloadHolidayList();" />
+<div id="holidayListPane"><!--<div class="loader"><i class="indicator">--></i></div></div>
 
 #ALtditemfooter()
+
+
+
+
 
 #ALtablefooter()
 #ALbuttonheader()

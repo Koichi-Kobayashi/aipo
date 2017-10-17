@@ -74,12 +74,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   /** 個別の休日の名前 */
   private ALStringField p_holiday_name;
 
-  /** 個別の休日の日付 (表示用） */
-  private ALDateField p_holiday_open;
-
-  /** 個別の休日の名前（表示用） */
-  private ALStringField p_holiday_name_open;
-
   /** データベース上の個別の名前のリスト */
   private List<EipMHoliday> list;
 
@@ -133,9 +127,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     p_holiday_name.setFieldName(ALLocalizationUtils
       .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
     p_holiday_name.setTrim(true);
-
-    p_holiday_open = new ALDateField();
-    p_holiday_name_open = new ALStringField();
 
     // 現在の月
     viewYear = new ALDateTimeField("yyyy");
@@ -194,11 +185,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       week7.setValue(holidayOfWeek.charAt(6) != '0' ? "1" : null);
       statutoryHoliday.setValue(String.valueOf(holidayOfWeek.charAt(7)));
       holiday.setValue(holidayOfWeek.charAt(8) != '0' ? "1" : null);
-
-      for (int i = 0; i < list.size(); i++) {
-        p_holiday_open.setValue(list.get(i).getHolidayDate());
-        p_holiday_name_open.setValue(list.get(i).getHolidayName());
-      }
 
     } catch (Exception ex) {
       logger.error("SystemHolidaySettingFormData", ex);
@@ -382,21 +368,8 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     return p_holiday;
   }
 
-  public String getPersonalHolidayString() {
-    return p_holiday_open.getYear()
-      + "年"
-      + p_holiday_open.getMonth()
-      + "月"
-      + p_holiday_open.getDay()
-      + "日";
-  }
-
   public ALStringField getPersonalHolidayName() {
     return p_holiday_name;
-  }
-
-  public ALStringField getPersonalHolidayNameString() {
-    return p_holiday_name_open;
   }
 
   public List<EipMHoliday> getPersonalHolidayList() {
