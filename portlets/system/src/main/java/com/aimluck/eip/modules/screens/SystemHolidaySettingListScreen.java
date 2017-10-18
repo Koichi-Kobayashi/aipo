@@ -19,16 +19,22 @@
 
 package com.aimluck.eip.modules.screens;
 
+import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
+import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
 import com.aimluck.eip.system.SystemHolidaySettingSelectData;
+import com.aimluck.eip.system.util.SystemUtils;
 import com.aimluck.eip.util.ALEipUtils;
 
 /**
  *
  */
 public class SystemHolidaySettingListScreen extends ALVelocityScreen {
+
+  private static final JetspeedLogger logger = JetspeedLogFactoryService
+    .getLogger(SystemHolidaySettingListScreen.class.getName());
 
   /**
    * @param rundata
@@ -37,18 +43,22 @@ public class SystemHolidaySettingListScreen extends ALVelocityScreen {
    */
   @Override
   protected void doOutput(RunData rundata, Context context) throws Exception {
+    try {
+      SystemHolidaySettingSelectData listData =
+        new SystemHolidaySettingSelectData();
+      listData.initField();
+      // listData.setRowsNum(Integer.parseInt(ALEipUtils
+      // .getPortlet(rundata, context)
+      // .getPortletConfig()
+      // .getInitParameter("p1b-rows")));
+      listData.doViewList(this, rundata, context);
 
-    SystemHolidaySettingSelectData listData =
-      new SystemHolidaySettingSelectData();
-    listData.initField();
-    listData.setRowsNum(Integer.parseInt(ALEipUtils
-      .getPortlet(rundata, context)
-      .getPortletConfig()
-      .getInitParameter("p1b-rows")));
-    listData.doViewList(this, rundata, context);
-
-    String layout_template = "portlets/html/ajax-system-holiday-list.vm";
-    setTemplate(rundata, context, layout_template);
+      String layout_template = "portlets/html/ajax-system-holiday-list.vm";
+      setTemplate(rundata, context, layout_template);
+    } catch (Exception ex) {
+      logger.error("SystemHolidaySettingListScreen.doOutput", ex);
+      ALEipUtils.redirectDBError(rundata);
+    }
   }
 
   /**
@@ -56,7 +66,7 @@ public class SystemHolidaySettingListScreen extends ALVelocityScreen {
    */
   @Override
   protected String getPortletName() {
-    return null;
+    return SystemUtils.SYSTEM_PORTLET_NAME;
   }
 
 }

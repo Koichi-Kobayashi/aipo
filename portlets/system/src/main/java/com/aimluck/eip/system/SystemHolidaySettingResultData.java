@@ -55,6 +55,7 @@ public class SystemHolidaySettingResultData implements ALData {
   public void initField() {
     holiday_id = new ALNumberField();
     holiday_date = new ALDateTimeField();
+    holiday_date.setValue(new Date());
     holiday_name = new ALStringField();
     create_date = new ALDateTimeField();
     update_date = new ALDateTimeField();
@@ -71,7 +72,7 @@ public class SystemHolidaySettingResultData implements ALData {
    * @param i
    */
   public void setHolidayId(long i) {
-    holiday_id.setValue(i);
+    this.holiday_id.setValue(i);
   }
 
   /**
@@ -86,7 +87,14 @@ public class SystemHolidaySettingResultData implements ALData {
    * @param string
    */
   public void setHolidayName(String string) {
-    holiday_name.setValue(string);
+    this.holiday_name.setValue(string);
+  }
+
+  /**
+   * @param date
+   */
+  public void setHolidayDate(Date date) {
+    this.holiday_date.setValue(date);
   }
 
   /**
@@ -106,13 +114,6 @@ public class SystemHolidaySettingResultData implements ALData {
       + "月"
       + holiday_date.getDay()
       + "日";
-  }
-
-  /**
-   * @param date
-   */
-  public void setHolidayDate(Date date) {
-    holiday_date.setValue(date);
   }
 
   /**

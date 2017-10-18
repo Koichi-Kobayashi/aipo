@@ -62,19 +62,24 @@ aipo.system.switchAuthSendAdmin = function(check) {
 		dojo.byId('pop_auth_field').style.display = "none";
 	}
 }
-aipo.system.init = function(jslink) {
-	aipo.system.jslink = jslink;
-	}
-aipo.system.holidayListPane = null;
-aipo.system.reloadHolidayList = function() {
+
+//aipo.system.init = function(jslink) {
+//	aipo.system.jslink = null;
+//	aipo.system.jslink = jslink;
+//}
+
+//aipo.system.holidayListPane = null;
+aipo.system.reloadHolidayList = function(jslink) {
+	aipo.system.jslink = null;
+	aipo.system.holidayListPane = null;
     if (!aipo.system.holidayListPane) {
     	aipo.system.holidayListPane = dijit.byId("holidayListPane");
-    	aipo.system.holidayListPane = new aimluck.widget.Contentpane({},'holidayListPane');
+    	aipo.system.holidayListPane = new aimluck.widget.Contentpane({},"holidayListPane");
     	aipo.system.holidayListPane.onLoad = function() {
             	dojo.byId("holidayList").scrollTop = dojo.byId("holidayListPane").offsetTop
         }
     }
-
+	aipo.system.jslink = jslink;
     var screen = aipo.system.jslink + "?template=SystemHolidaySettingListScreen";
     aipo.system.holidayListPane.viewPage(screen);
 };

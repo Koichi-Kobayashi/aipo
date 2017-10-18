@@ -75,47 +75,8 @@
 
 #ALtdcaption($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY)
 #ALtditemheader()
-#*<p>
-<ul class="auiSelectButton">
- <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
- <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
-</ul>
-<div class="count"><strong>$!{result.PersonalHoliday.Year}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
-<div class="auiSetDate">
-<div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.PersonalHoliday.Year}/$!{result.PersonalHoliday.Month}/$!{result.PersonalHoliday.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
-#ALtextfield('p_holiday_name' $!result.PersonalHolidayName 20 50 'active')
-<input name="$event_submit" class="button" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
-</div>
-</p>
-<p></p>
-
-<p>
-<table class="auiRowTable auiMbTable wide">
-  <thead>
-<tr>
-#ALtdheadAtt($l10n.HOLIDAY_SETTING_DATE "class='thin left'")
-#ALtdhead($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME)
-<th class="thin"></th>
-</tr>
-</thead>
- <tbody>
-#foreach($record in $result.PersonalHolidayList)
-<tr>
-#ALtdcell("<div>$!record.HolidayDateString</div>")
-#ALtdcell("<div>$!record.HolidayName</div>")
-<td>
-<input name="$name" class="button" type="button" value="$l10n.HOLIDAY_SETTING_DELETE" onclick="" />
-</td>
-</tr>
-#end
-  </tbody>
-</table>
-</p>
-<p></p>*#
-##<li><a href="javascript:void(0);" onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template","SystemHolidaySettingListScreen"))');"></a></li>
-##<img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.reloadHolidayList();" />
-<div id="holidayListPane"><!--<div class="loader"><i class="indicator">--></i></div></div>
-
+<img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.reloadHolidayList('$!jslink.getPortletById($!portlet.ID)');" />
+<div id="holidayListPane"><div class="loader"><i class="indicator"></i></div></div>
 #ALtditemfooter()
 
 

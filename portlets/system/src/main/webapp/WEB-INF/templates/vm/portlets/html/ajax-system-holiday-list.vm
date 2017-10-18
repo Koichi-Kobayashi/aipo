@@ -23,11 +23,11 @@
  <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
  <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
 </ul>
-<div class="count"><strong>$!{result.PersonalHoliday.Year}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
+<div class="count"><strong>$!{result.HolidayViewYear}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
 <div class="auiSetDate">
-<div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.PersonalHoliday.Year}/$!{result.PersonalHoliday.Month}/$!{result.PersonalHoliday.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
-#ALtextfield('p_holiday_name' $!result.PersonalHolidayName 20 50 'active')
-<input name="$event_submit" class="button" type="submit" value=" $l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
+<div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.month}/$!{result.HolidayDate.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
+<input class="text" type="text" name="$name" id="holiday_name" value="" maxlength="50" style="width:20;ime-mode:active" />
+<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="">
 </div>
 </p>
 <p></p>
@@ -42,6 +42,10 @@
 </tr>
 </thead>
  <tbody>
+#if($result.List.isEmpty()==true)
+<td></td>
+<td></td>
+#else
 #foreach($record in $result.List)
 <tr>
 #ALtdcell("<div>$!record.HolidayDateString</div>")
@@ -51,55 +55,9 @@
 </td>
 </tr>
 #end
+#end
   </tbody>
 </table>
 </p>
 <p></p>
-
-#*#if($result.List.size() == 0)
-#if($!isSearch)
-<ul class="messageSummary">
-	<li><a href="javascript:void(0)" onclick="aipo.message.clearSearchUserList();" class="searchClear"><i class="icon-remove"></i>$l10n.MESSAGE_SEARCH_CLEAR</a></li>
-</ul>
-#end
-#AUIEmptyMessage("" "$l10n.MESSAGE_ROOM_USER_EMPTY_MESSAGE")
-#else
-#set ($currentIndex = "")
-#set ($isFirst = true)
-#foreach ($record in $result.List)
-#if($currentIndex != $!record.getIndex().getValue())
-#if(!$isFirst)</ul>#end
-#if($!isSearch && $isFirst)
-<ul>
-	<li><a href="javascript:void(0)" onclick="aipo.message.clearSearchUserList();" class="searchClear"><i class="icon-remove"></i>$l10n.MESSAGE_SEARCH_CLEAR</a></li>
-</ul>
-#end
-<div class="index">$!record.Index</div><ul>
-#set ($isFirst = false)
-#end
-#if($isFirst)
-<ul>
-#if($!isSearch)
-	<li><a href="javascript:void(0)" onclick="aipo.message.clearSearchUserList();" class="searchClear"><i class="icon-remove"></i>$l10n.MESSAGE_SEARCH_CLEAR</a></li>
-#end
-#set ($isFirst = false)
-#end
-#set ($currentIndex = $!record.getIndex().getValue())
-<li id="messageUser$!record.UserId" #if("$!currentUser" == "$!record.UserId")class="active"#end>
-	<a href="javascript:void(0)" onclick="aipo.message.selectUser($!record.UserId)">
-		<span class="avatar">
-		#if($!record.isHasPhoto())
-			<img src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!record.UserId).addQueryData("t", "$!record.PhotoModified"))" alt="$!record.LastName $!record.FirstName" class="avatar_s"/>
-		#else
-			<img src="themes/default/images/common/icon_user100.png" alt="$!record.LastName $!record.FirstName" class="avatar_s"/>
-		#end
-		</span>
-		<span class="name">$!record.LastName $!record.FirstName</span>
-	</a>
-</li>
-#end
-</ul>
-#end*#
-
-
 </div>
