@@ -467,19 +467,8 @@ public class ReportSelectData extends
     String search = ALEipUtils.getTemp(rundata, context, LIST_SEARCH_STR);
 
     if (search != null && !"".equals(search)) {
-      body.append(" AND( ");
-      for (int i = 0; i < search.length(); i++) {
-        body.append(" t0.report_name LIKE '%"
-          + String.valueOf(search.charAt(i))
-          + "%' OR ");
-        body.append(" t0.note LIKE '%"
-          + String.valueOf(search.charAt(i))
-          + "%' ");
-        if (i != search.length() - 1) {
-          body.append(" OR ");
-        }
-      }
-      body.append(" ) ");
+      body.append(" AND(t0.report_name LIKE '%" + search + "%' OR ");
+      body.append(" t0.note LIKE '%" + search + "%' ) ");
     }
 
     SQLTemplate<EipTReport> countQuery =
@@ -515,13 +504,11 @@ public class ReportSelectData extends
     offset = limit * (page - 1);
     StringBuilder last = new StringBuilder();
     last.append(" ORDER BY ");
-    // /////
     // Attributes map = getColumnMap();
+
     String sort = ALEipUtils.getTemp(rundata, context, LIST_SORT_STR);
     last
       .append(" t0." + sort + " " + buildSQLForListViewSort(rundata, context));
-
-    // /////
 
     last.append(" LIMIT ");
     last.append(limit);
@@ -533,9 +520,6 @@ public class ReportSelectData extends
         select.toString() + body.toString() + last.toString()).param(
         "login_user_id",
         uid);
-    if (search != null) {
-      query.param("search", current_search);
-    }
     return query;
   }
 
