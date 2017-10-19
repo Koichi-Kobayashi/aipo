@@ -129,6 +129,7 @@ aipo.message.reloadMessageList = function() {
         aipo.message.messagePane = new aimluck.widget.Contentpane({},
                 'messagePane');
         aipo.message.messagePane.onLoad = function() {
+        	messagePane.scrollTo(0,messagePane.scrollHeight);
         	if(aipo.message.jumpCursor) {
         		var pane = dojo.byId("messagePane");
         		var active = dojo.byId("message" + aipo.message.jumpCursor);
@@ -180,7 +181,6 @@ aipo.message.reloadRoomMemberList = function() {
         aipo.message.roomMemberPane = new aimluck.widget.Contentpane({},
                 'roomMemberPane');
         aipo.message.roomMemberPane.onLoad = function() {
-
         }
     }
 
@@ -363,6 +363,7 @@ aipo.message.reloadRoomList = function(roomId, userId) {
         aipo.message.messageRoomListPane = new aimluck.widget.Contentpane({},
                 'messageRoomListPane');
         aipo.message.messageRoomListPane.onLoad = function() {
+        	messagePane.scrollTo(0,messagePane.scrollHeight);
             aipo.message.fixMessageWindow();
             var messageTotalUnreadCountValue = dojo
                     .byId("messageTotalUnreadCountValue");
