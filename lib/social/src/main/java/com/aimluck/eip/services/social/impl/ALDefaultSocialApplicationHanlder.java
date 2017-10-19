@@ -1040,38 +1040,37 @@ public class ALDefaultSocialApplicationHanlder extends
             .param("appId", request.getAppId())
             .param("externalId", request.getExternalId())
             .execute();
-        } else {
-          EipTTimeline timeline = Database.create(EipTTimeline.class);
-          timeline.setParentId(parentId);
-          timeline.setOwnerId(request.getUserId());
-          timeline.setAppId(request.getAppId());
-          timeline.setExternalId(request.getExternalId());
-          timeline.setNote(request.getTitle());
-          timeline.setTimelineType(EipTTimeline.TIMELINE_TYPE_ACTIVITY);
-          timeline.setParams(request.getPortletParams());
-          timeline.setPinned("F");
-          // 作成日
-          timeline.setCreateDate(tCal.getTime());
-          // 更新日
-          timeline.setUpdateDate(tCal.getTime());
+        }
+        EipTTimeline timeline = Database.create(EipTTimeline.class);
+        timeline.setParentId(parentId);
+        timeline.setOwnerId(request.getUserId());
+        timeline.setAppId(request.getAppId());
+        timeline.setExternalId(request.getExternalId());
+        timeline.setNote(request.getTitle());
+        timeline.setTimelineType(EipTTimeline.TIMELINE_TYPE_ACTIVITY);
+        timeline.setParams(request.getPortletParams());
+        timeline.setPinned("F");
+        // 作成日
+        timeline.setCreateDate(tCal.getTime());
+        // 更新日
+        timeline.setUpdateDate(tCal.getTime());
 
-          // タイムラインマップ追加
-          if (recipients != null && recipients.size() > 0) {
-            for (String recipient : recipients) {
-              EipTTimelineMap timelineMap =
-                Database.create(EipTTimelineMap.class);
-              timelineMap.setLoginName(recipient);
-              timelineMap.setEipTTimeline(timeline);
-              timelineMap.setIsRead(priority == 1f ? 0 : 1);
-            }
-          } else {
+        // タイムラインマップ追加
+        if (recipients != null && recipients.size() > 0) {
+          for (String recipient : recipients) {
             EipTTimelineMap timelineMap =
               Database.create(EipTTimelineMap.class);
-            timelineMap.setLoginName("-1");
+            timelineMap.setLoginName(recipient);
             timelineMap.setEipTTimeline(timeline);
-            timelineMap.setIsRead(1);
+            timelineMap.setIsRead(priority == 1f ? 0 : 1);
           }
+        } else {
+          EipTTimelineMap timelineMap = Database.create(EipTTimelineMap.class);
+          timelineMap.setLoginName("-1");
+          timelineMap.setEipTTimeline(timeline);
+          timelineMap.setIsRead(1);
         }
+
         Database.commit();
       }
     } catch (Throwable t) {
