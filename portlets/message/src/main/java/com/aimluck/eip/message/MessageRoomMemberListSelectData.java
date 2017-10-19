@@ -200,16 +200,8 @@ public class MessageRoomMemberListSelectData extends
     return room.getRoomType();
   }
 
-  public boolean isHasPhotoUser() throws ALDBErrorException {
-    return ALEipUtils.getALEipUser(userId).hasPhoto();
-  }
-
   public boolean isHasPhotoRoom() {
     return "N".equals(room.getHasPhoto());
-  }
-
-  public String getUserName() throws ALDBErrorException {
-    return ALEipUtils.getALEipUser(userId).getAliasName().toString();
   }
 
   /**

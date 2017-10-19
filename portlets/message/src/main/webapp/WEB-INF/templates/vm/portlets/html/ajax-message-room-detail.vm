@@ -26,18 +26,11 @@
 <div class="clearfix">
 			<span class="avatar">
 			#if(${result.RoomType} == "O") ##ダイレクトメッセージの場合
-			#if($!result.isHasPhotoUser())
-				<img src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!result.UserId))" alt="$!result.UserName"  class="avatar_l"/>
-			#elseif("${result.UserId}" == "1")
-			    <img src="themes/default/images/common/icon_aipo100.png" alt="$!result.UserName" class="avatar_l"/>
-			#elseif("${result.UserId}" == "2")
-			    <img src="themes/default/images/common/icon_aipo100.png" alt="$!result.UserName" class="avatar_l"/>
-			#elseif("${result.UserId}" == "3")
-			    <img src="themes/default/images/common/icon_message100.png" alt="$!result.UserName" class="avatar_l"/>
-			#else
-				<img src="themes/default/images/common/icon_user100.png" alt="$!result.UserName" class="avatar_l"/>
+			#foreach ($record in $result.List)
+				#if("${record.userId}" != "${result.userId}")
+                <img #if($!record.isHasPhoto())src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!record.UserId).addQueryData("t", "$!record.PhotoModified"))"#else src="themes/default/images/common/icon_user100.png"#end title="$!record.LastName $!record.FirstName" class="avatar_l">
+				#end
 			#end
-
 			#else ##グループの場合
 			#if($!result.isHasPhotoRoom())
 				<img src="$!utils.escapeXML($jslink.getTemplate("MessageFileuploadRoomPhotoScreen").addQueryData("rid", $!result.RoomId))" alt="$!result.RoomName"  class="avatar_l"/>
@@ -47,7 +40,11 @@
 			#end
 			</span>
 #if(${result.RoomType} == "O")
-<span class="name">${result.UserName}</span>
+	#foreach ($record in $result.List)
+		#if("${record.userId}" != "${result.userId}")
+			<span class="name">${record.lastName} ${record.firstName}</span>
+		#end
+	#end
 #else
 <span class="name">${result.RoomName}</span>
 #end
