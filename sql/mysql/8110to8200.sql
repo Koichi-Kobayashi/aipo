@@ -96,7 +96,7 @@ UPDATE `eip_t_ext_timecard_system` SET `considered_overtime` = 0;
 
 -- 20170928
 CREATE TABLE `eip_m_holiday` (
-    `holiday_id` integer NOT NULL,
+    `holiday_id` int(11) NOT NULL AUTO_INCREMENT,
     `holiday_name` varchar (99) NOT NULL,
     `holiday_date` date NOT NULL,
     `create_date` date,

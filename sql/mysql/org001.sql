@@ -1404,7 +1404,7 @@ CREATE TABLE `eip_t_message_read` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `eip_m_holiday` (
-    `holiday_id` integer NOT NULL,
+    `holiday_id` int(11) NOT NULL AUTO_INCREMENT,
     `holiday_name` varchar (99) NOT NULL,
     `holiday_date` date NOT NULL,
     `create_date` date,
