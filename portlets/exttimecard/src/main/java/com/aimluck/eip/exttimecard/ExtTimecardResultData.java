@@ -80,7 +80,7 @@ public class ExtTimecardResultData implements ALData {
   private ALDateTimeField clock_in_time;
 
   /** 退勤時間 */
-  private ALDateTimeField clock_out_time;
+  private ALDateTimeField clock_out_time = null;
 
   /** 外出時間 */
   private List<ALDateTimeField> outgoing_time;
@@ -224,8 +224,8 @@ public class ExtTimecardResultData implements ALData {
             if (!outgoing_time.get(i).isNullHour()
               && !comeback_time.get(i).isNullHour()) {
               time -=
-                (comeback_time.get(i).getValue().getTime() - outgoing_time.get(
-                  i).getValue().getTime())
+                (comeback_time.get(i).getValue().getTime()
+                  - outgoing_time.get(i).getValue().getTime())
                   / (1000.0 * 60.0 * 60.0);
             }
           }
@@ -233,15 +233,27 @@ public class ExtTimecardResultData implements ALData {
 
         /** 就業時間の中で決まった時間の休憩を取らせます。 */
         /** 決まった時間ごとの休憩時間を取らせます。 */
-        float worktimein = (timecard_system.getWorktimeIn() / 60f);
-        float resttimein = (timecard_system.getResttimeIn() / 60f);
-        if (worktimein != 0F) {
-          int resttimes = (int) (time / worktimein);
-          time -= resttimes * resttimein;
+        if (ExtTimecardUtils.isResttimePoints(timecard_system)
+          && !"".equals(getClockOutTime().getTime())) {
+          float resttime =
+            ExtTimecardUtils.getResttime(
+              clock_in_time.getValue(),
+              clock_out_time.getValue(),
+              timecard_system);
+          if (resttime != 0F) {
+            time -= resttime;
+          }
+        } else {
+          float worktimein = (timecard_system.getWorktimeIn() / 60f);
+          float resttimein = (timecard_system.getResttimeIn() / 60f);
+          if (worktimein != 0F) {
+            int resttimes = (int) (time / worktimein);
+            time -= resttimes * resttimein;
+          }
         }
         float overTime =
-          ExtTimecardUtils.getOvertimeMinuteByDay(timecard_system
-            .getOvertimeType()) / 60f;
+          ExtTimecardUtils.getOvertimeMinuteByDay(
+            timecard_system.getOvertimeType()) / 60f;
         if (time >= overTime) {
           return true;
         } else {
