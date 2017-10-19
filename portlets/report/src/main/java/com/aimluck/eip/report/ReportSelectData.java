@@ -480,7 +480,7 @@ public class ReportSelectData extends
     countValue = 0;
 
     // トップ画面(受信かつ未読)は5行、それ以外は20行表示
-    limit = onlyUnread ? 5 : 20;
+    limit = getRowsNum();
 
     List<DataRow> fetchCount = countQuery.fetchListAsDataRow();
 
