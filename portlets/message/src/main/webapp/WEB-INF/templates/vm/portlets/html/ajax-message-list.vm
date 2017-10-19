@@ -40,7 +40,7 @@
 	<div class="avatar avatar_m">
 		<a href="javascript: void(0)" onclick="aipo.message.popupProfile(${record.UserId.Value},arguments[0])">
 		#if($!record.isHasPhoto())
-			<img src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!record.UserId).addQueryData("t", "$!record.PhotoModified"))" alt="$!record.DisplayName" width="32" height="32" class="avatar_l"/>
+			<img src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!record.UserId).addQueryData("t", "$!record.PhotoModified"))" alt="$!record.DisplayName" width="32" height="32" class="avatar_m"/>
 		#elseif("${record.UserId.Value}" == "1")
 			<img src="themes/default/images/common/icon_aipo100.png" alt="$!record.DisplayName" width="32" height="32"/>
 		#elseif("${record.UserId.Value}" == "2")
