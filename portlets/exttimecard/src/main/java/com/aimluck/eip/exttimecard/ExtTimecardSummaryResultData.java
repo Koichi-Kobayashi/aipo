@@ -68,6 +68,13 @@ public class ExtTimecardSummaryResultData implements ALData {
   /** 残業時間 */
   private ALNumberField overtime_hour = null;
 
+  /** みなし外残業時間 */
+  private ALNumberField considered_overtime_outside_hour = null;
+
+  /** みなし外残業時間 */
+  private ALNumberField considered_overtime_within_statutory_outside_hour =
+    null;
+
   /** 休出日数 */
   private ALNumberField off_day = null;
 
@@ -179,6 +186,8 @@ public class ExtTimecardSummaryResultData implements ALData {
 
     overtime_day = new ALNumberField(0);
     overtime_hour = new ALNumberField(0);
+    considered_overtime_outside_hour = new ALNumberField(0);
+    considered_overtime_within_statutory_outside_hour = new ALNumberField(0);
 
     off_day = new ALNumberField(0);
     off_hour = new ALNumberField(0);
@@ -243,6 +252,28 @@ public class ExtTimecardSummaryResultData implements ALData {
   public void setOvertimeDayHour(int days, float hour) {
     overtime_day.setValue(days);
     overtime_hour.setValue(String.valueOf(hour));
+  }
+
+  /**
+   * みなし外残業時間を設定します。
+   *
+   * @param days
+   * @param hour
+   */
+  public void setConsideredOvertimeOutsideHour(float hour) {
+    considered_overtime_outside_hour.setValue(String.valueOf(hour));
+  }
+
+  /**
+   * みなし外残業時間を設定します。
+   *
+   * @param days
+   * @param hour
+   */
+  public void setConsideredOvertimeWithinStatutoryWorkingOutsideHour(
+      float hour) {
+    considered_overtime_within_statutory_outside_hour.setValue(
+      String.valueOf(hour));
   }
 
   /**
@@ -361,6 +392,26 @@ public class ExtTimecardSummaryResultData implements ALData {
    */
   public ALNumberField getOvertimeHour() {
     return overtime_hour;
+  }
+
+  /**
+   * みなし外残業時間を取得します。
+   *
+   * @return
+   */
+
+  public ALNumberField getConsideredOvertimeOutsideHour() {
+    return considered_overtime_outside_hour;
+  }
+
+  /**
+   * みなし外残業時間を取得します。
+   *
+   * @return
+   */
+
+  public ALNumberField getConsideredOvertimeWithinStatutoryWorkingOutsideHour() {
+    return considered_overtime_within_statutory_outside_hour;
   }
 
   /**
@@ -540,7 +591,8 @@ public class ExtTimecardSummaryResultData implements ALData {
     int size = list.size();
     for (int i = 0; i < size; i++) {
       rd = list.get(i);
-      if (!ExtTimecardUtils.WORK_FLG_DUMMY.equals(rd.getWorkFlag().getValue())) {
+      if (!ExtTimecardUtils.WORK_FLG_DUMMY.equals(
+        rd.getWorkFlag().getValue())) {
         viewlist.add(rd);
       }
     }
@@ -703,8 +755,8 @@ public class ExtTimecardSummaryResultData implements ALData {
    *          セットする midnight_overtime_hour
    */
   public void setMidnightOvertimeHour(float midnight_overtime_hour) {
-    this.midnight_overtime_hour
-      .setValue(String.valueOf(midnight_overtime_hour));
+    this.midnight_overtime_hour.setValue(
+      String.valueOf(midnight_overtime_hour));
   }
 
   /**
@@ -781,8 +833,8 @@ public class ExtTimecardSummaryResultData implements ALData {
   }
 
   public void setStatutoryOffDayRegularMidnightWorkHour(float hour) {
-    this.statutory_off_day_regular_midnight_work_hour.setValue(String
-      .valueOf(hour));
+    this.statutory_off_day_regular_midnight_work_hour.setValue(
+      String.valueOf(hour));
   }
 
   /**
@@ -793,8 +845,8 @@ public class ExtTimecardSummaryResultData implements ALData {
   }
 
   public void setStatutoryOffDayWithinStatutoryOvertimeWorkingHour(float hour) {
-    this.statutory_off_day_within_statutory_working_hour.setValue(String
-      .valueOf(hour));
+    this.statutory_off_day_within_statutory_working_hour.setValue(
+      String.valueOf(hour));
   }
 
   /**
@@ -861,8 +913,8 @@ public class ExtTimecardSummaryResultData implements ALData {
    *          セットする total_official_off_hour
    */
   public void setTotalOfficialOffHour(float total_official_off_hour) {
-    this.total_official_off_hour.setValue(String
-      .valueOf(total_official_off_hour));
+    this.total_official_off_hour.setValue(
+      String.valueOf(total_official_off_hour));
   }
 
   /**
@@ -877,8 +929,8 @@ public class ExtTimecardSummaryResultData implements ALData {
    *          セットする total_statutory_off_hour
    */
   public void setTotalStatutoryOffHour(float total_statutory_off_hour) {
-    this.total_statutory_off_hour.setValue(String
-      .valueOf(total_statutory_off_hour));
+    this.total_statutory_off_hour.setValue(
+      String.valueOf(total_statutory_off_hour));
   }
 
   /**
@@ -893,7 +945,7 @@ public class ExtTimecardSummaryResultData implements ALData {
    *          セットする total_midnight_work_hour
    */
   public void setTotalMidnightWorkHour(float total_midnight_work_hour) {
-    this.total_midnight_work_hour.setValue(String
-      .valueOf(total_midnight_work_hour));
+    this.total_midnight_work_hour.setValue(
+      String.valueOf(total_midnight_work_hour));
   }
 }

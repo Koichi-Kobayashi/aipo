@@ -67,8 +67,8 @@ import com.aimluck.eip.util.ALLocalizationUtils;
 public class MsgboardTopicFormData extends ALAbstractFormData {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(MsgboardTopicFormData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(MsgboardTopicFormData.class.getName());
 
   /** トピック名 */
   private ALStringField topic_name;
@@ -168,12 +168,12 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
     topic_name.setTrim(true);
     // カテゴリID
     category_id = new ALNumberField();
-    category_id.setFieldName(ALLocalizationUtils
-      .getl10n("MSGBOARD_PORTLET_CATEGORY"));
+    category_id.setFieldName(
+      ALLocalizationUtils.getl10n("MSGBOARD_PORTLET_CATEGORY"));
     // カテゴリ
     category_name = new ALStringField();
-    category_name.setFieldName(ALLocalizationUtils
-      .getl10n("MSGBOARD_CATEGORY_NAME"));
+    category_name.setFieldName(
+      ALLocalizationUtils.getl10n("MSGBOARD_CATEGORY_NAME"));
     // メモ
     note = new ALStringField();
     note.setFieldName(ALLocalizationUtils.getl10n("MSGBOARD_NOTE"));
@@ -263,9 +263,10 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       // ファイル
       SelectQuery<EipTMsgboardFile> query =
         Database.query(EipTMsgboardFile.class);
-      query.andQualifier(ExpressionFactory.matchDbExp(
-        EipTMsgboardFile.EIP_TMSGBOARD_TOPIC_PROPERTY,
-        topic.getTopicId()));
+      query.andQualifier(
+        ExpressionFactory.matchDbExp(
+          EipTMsgboardFile.EIP_TMSGBOARD_TOPIC_PROPERTY,
+          topic.getTopicId()));
       List<EipTMsgboardFile> msgboardFileList = query.fetchList();
       for (EipTMsgboardFile file : msgboardFileList) {
         FileuploadLiteBean fbean = new FileuploadLiteBean();
@@ -299,10 +300,8 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
 
       // FIX_ME イベントログのために一度IDと名前を取得
       int parentid =
-        Integer.parseInt(ALEipUtils.getTemp(
-          rundata,
-          context,
-          ALEipConstants.ENTITY_ID));
+        Integer.parseInt(
+          ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID));
 
       EipTMsgboardTopic parent =
         Database.get(EipTMsgboardTopic.class, (long) parentid);
@@ -359,9 +358,11 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
             for (int j = 0; j < fsize; j++) {
               fpaths.add(((EipTMsgboardFile) files.get(j)).getFilePath());
             }
-            MsgboardUtils.deleteFiles(topics.get(i).getTopicId(), orgId, topics
-              .get(i)
-              .getOwnerId(), fpaths);
+            MsgboardUtils.deleteFiles(
+              topics.get(i).getTopicId(),
+              orgId,
+              topics.get(i).getOwnerId(),
+              fpaths);
           }
         }
       }
@@ -369,9 +370,11 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       Database.deleteAll(topics);
       Database.commit();
 
-      TimelineUtils.deleteTimelineActivity(rundata, context, "Msgboard", parent
-        .getTopicId()
-        .toString());
+      TimelineUtils.deleteTimelineActivity(
+        rundata,
+        context,
+        "Msgboard",
+        parent.getTopicId().toString());
 
       // イベントログに保存
       ALEventlogFactoryService.getInstance().getEventlogHandler().log(
@@ -415,8 +418,9 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
         }
       } else {
         category =
-          Database.get(EipTMsgboardCategory.class, Integer
-            .valueOf((int) category_id.getValue()));
+          Database.get(
+            EipTMsgboardCategory.class,
+            Integer.valueOf((int) category_id.getValue()));
       }
 
       // 新規オブジェクトモデル
@@ -471,9 +475,10 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
 
       } else {
         List<Integer> userIds =
-          MsgboardUtils.getWhatsNewInsertList(rundata, category
-            .getCategoryId()
-            .intValue(), category.getPublicFlag());
+          MsgboardUtils.getWhatsNewInsertList(
+            rundata,
+            category.getCategoryId().intValue(),
+            category.getPublicFlag());
 
         List<String> recipients = new ArrayList<String>();
         int u_size = userIds.size();
@@ -522,12 +527,14 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       List<String> msgList) {
     try {
 
-      setAclPortletFeature(ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_CATEGORY);
+      setAclPortletFeature(
+        ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_CATEGORY);
       doCheckAclPermission(
         rundata,
         context,
         ALAccessControlConstants.VALUE_ACL_INSERT);
-      setAclPortletFeature(ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_TOPIC);
+      setAclPortletFeature(
+        ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_TOPIC);
 
       int userid = ALEipUtils.getUserId(rundata);
 
@@ -595,10 +602,10 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
         }
       } else {
         category =
-          Database.get(EipTMsgboardCategory.class, Integer
-            .valueOf((int) category_id.getValue()));
+          Database.get(
+            EipTMsgboardCategory.class,
+            Integer.valueOf((int) category_id.getValue()));
       }
-
       // 新規オブジェクトモデル
       EipTMsgboardTopic topic =
         MsgboardUtils.getEipTMsgboardParentTopic(rundata, context, false);
@@ -612,6 +619,9 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       topic.setUpdateUserId(Integer.valueOf(uid));
       // 更新日
       topic.setUpdateDate(Calendar.getInstance().getTime());
+
+      // コメントのカテゴリ変更
+      changeCommentCategoryId(rundata, context, topic);
 
       // ファイルをデータベースに登録する．
       if (!MsgboardUtils.insertFileDataDelegate(
@@ -644,9 +654,10 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
 
       } else {
         List<Integer> userIds =
-          MsgboardUtils.getWhatsNewInsertList(rundata, category
-            .getCategoryId()
-            .intValue(), category.getPublicFlag());
+          MsgboardUtils.getWhatsNewInsertList(
+            rundata,
+            category.getCategoryId().intValue(),
+            category.getPublicFlag());
 
         List<String> recipients = new ArrayList<String>();
         int u_size = userIds.size();
@@ -680,6 +691,37 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
       return false;
     }
     return true;
+  }
+
+  // コメントの処理
+  void changeCommentCategoryId(RunData rundata, Context context,
+      EipTMsgboardTopic topic) {
+
+    try {
+
+      EipTMsgboardCategory categoryIdTopic = topic.getEipTMsgboardCategory();
+
+      // コメントを取得
+      SelectQuery<EipTMsgboardTopic> topicQuery =
+        Database.query(EipTMsgboardTopic.class);
+      Expression topicExp =
+        ExpressionFactory.matchExp(
+          EipTMsgboardTopic.PARENT_ID_PROPERTY,
+          topic.getTopicId());
+      topicQuery.setQualifier(topicExp);
+
+      List<EipTMsgboardTopic> commentList = topicQuery.fetchList();
+
+      // カテゴリの変更
+      if (commentList.size() > 0) {
+        for (EipTMsgboardTopic comment : commentList) {
+          comment.setEipTMsgboardCategory(categoryIdTopic);
+        }
+      }
+
+    } catch (Exception ex) {
+      logger.error("changeCommentCategoryId", ex);
+    }
   }
 
   /**
@@ -849,9 +891,10 @@ public class MsgboardTopicFormData extends ALAbstractFormData {
         // この辺の効率化が課題とは思うものの、一応動作はしているはず。
         SelectQuery<EipTMsgboardFile> dbquery =
           Database.query(EipTMsgboardFile.class);
-        dbquery.andQualifier(ExpressionFactory.matchDbExp(
-          EipTMsgboardFile.EIP_TMSGBOARD_TOPIC_PROPERTY,
-          topicId));
+        dbquery.andQualifier(
+          ExpressionFactory.matchDbExp(
+            EipTMsgboardFile.EIP_TMSGBOARD_TOPIC_PROPERTY,
+            topicId));
         List<EipTMsgboardFile> existsFiles = dbquery.fetchList();
 
         List<Integer> existFileIdList = new ArrayList<Integer>();

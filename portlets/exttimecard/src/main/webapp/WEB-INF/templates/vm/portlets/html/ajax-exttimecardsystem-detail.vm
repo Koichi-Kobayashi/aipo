@@ -37,8 +37,12 @@ ${result.Detail.StartDay}$l10n.EXTTIMECARD_DAY
 #ALtditemfooter()
 #ALtdcaption($l10n.EXTTIMECARD_RESTTIME)
 #ALtditemheader()
+#if($!result.isNewRule() && $result.Detail.isResttimeTypePoints())
+${result.Detail.RestTimeSpan}
+#else
 <h3 class="mb5">$l10n.EXTTIMECARD_WORKTIME_IN</h3><p>$!{result.Detail.WorkTimeInRestTimeInText}</p>
 <h3 class="mb5">$l10n.EXTTIMECARD_WORKTIME_OUT</h3><p>$!{result.Detail.WorkTimeOutRestTimeOutText}</p>
+#end
 #ALtditemfooter()
 #ALtdcaption($l10n.EXTTIMECARD_CHANGE_HOUR)
 #ALtditemheader()
@@ -63,6 +67,16 @@ ${result.Detail.StartDay}$l10n.EXTTIMECARD_DAY
 $l10n.EXTTIMECARD_OVERTIME_TYPE_O
 #end
 #ALtditemfooter()
+#if($!result.isNewRule())
+#ALtdcaption($l10n.EXTTIMECARD_CONSIDERED_OVERTIME)
+#ALtditemheader()
+#if($result.Detail.ConsideredOvertimeFlag.toString() == 'T')
+$l10n.EXTTIMECARD_CONSIDERED_OVERTIME_MONTH1$!result.Detail.ConsideredOvertime.toString()$l10n.EXTTIMECARD_CONSIDERED_OVERTIME_MONTH2
+#else
+$l10n.EXTTIMECARD_CONSIDERED_OVERTIME_NOTHING
+#end
+#ALtditemfooter()
+#end
 #ALtdcaption($l10n.EXTTIMECARD_HOLIDAY)
 #ALtditemheader()
 #if($!result.Detail.DefaultHolidayFlag.toString() == "A") $l10n.EXTTIMECARD_HOLIDAY_SETTING_DEFAULT_HOLIDAY
