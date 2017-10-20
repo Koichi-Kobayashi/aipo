@@ -20,18 +20,23 @@
 <div class="holidayList scroll" id="holidayList">
 <p>
 <ul class="auiSelectButton">
- <li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
- <li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
+ ##<li title="$l10n.HOLIDAY_SETTING_PREV_YEAR"><a href="javascript:void(0);" class="first arrow"><i class="icon-caret-left"></i></a></li>
+ ##<li title="$l10n.HOLIDAY_SETTING_NEXT_YEAR"><a href="javascript:void(0);" class="last arrow"><i class="icon-caret-right"></i></a></li>
+ <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.PrevYear);" title="$l10n.HOLIDAY_SETTING_PREV_YEAR" class="first arrow"><i class="icon-caret-left"></i></a></li>
+ <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.NextYear);" title="$l10n.HOLIDAY_SETTING_NEXT_YEAR" class="last arrow"><i class="icon-caret-right"></i></a></li>
 </ul>
 <div class="count"><strong>$!{result.HolidayViewYear}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
 <div class="auiSetDate">
 <div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.month}/$!{result.HolidayDate.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
 <input class="text" type="text" name="$name" id="holiday_name" value="" maxlength="50" style="width:20;ime-mode:active" />
-<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="">
+<input name="$event_submit" class="button" type="submit" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
 </div>
 </p>
 <p></p>
 
+#if($result.List.size() == 0)
+
+#else
 <p>
 <table class="auiRowTable auiMbTable wide">
   <thead>
@@ -42,10 +47,6 @@
 </tr>
 </thead>
  <tbody>
-#if($result.List.isEmpty()==true)
-<td></td>
-<td></td>
-#else
 #foreach($record in $result.List)
 <tr>
 #ALtdcell("<div>$!record.HolidayDateString</div>")

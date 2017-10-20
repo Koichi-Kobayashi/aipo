@@ -63,24 +63,30 @@ aipo.system.switchAuthSendAdmin = function(check) {
 	}
 }
 
-//aipo.system.init = function(jslink) {
-//	aipo.system.jslink = null;
-//	aipo.system.jslink = jslink;
-//}
-
 //aipo.system.holidayListPane = null;
-aipo.system.reloadHolidayList = function(jslink) {
+aipo.system.reloadHolidayList = function(jslink, year) {
 	aipo.system.jslink = null;
+	aipo.system.year = null;
 	aipo.system.holidayListPane = null;
     if (!aipo.system.holidayListPane) {
     	aipo.system.holidayListPane = dijit.byId("holidayListPane");
     	aipo.system.holidayListPane = new aimluck.widget.Contentpane({},"holidayListPane");
     	aipo.system.holidayListPane.onLoad = function() {
-            	dojo.byId("holidayList").scrollTop = dojo.byId("holidayListPane").offsetTop
+            	dojo.byId("holidayList").scrollTop = dojo.byId("holidayListPane").offsetTop;
         }
     }
 	aipo.system.jslink = jslink;
-    var screen = aipo.system.jslink + "?template=SystemHolidaySettingListScreen";
+	aipo.system.year = year;
+    var screen = aipo.system.jslink + "?template=SystemHolidaySettingListScreen&view_year=" + aipo.system.year;
+    aipo.system.holidayListPane.viewPage(screen);
+}
+
+aipo.system.pagerHolidayList = function(jslink, year) {
+	aipo.system.jslink = null;
+	aipo.system.year = null;
+	aipo.system.jslink = jslink;
+	aipo.system.year = year;
+    var screen = aipo.system.jslink + "?template=SystemHolidaySettingListScreen&view_year=" + aipo.system.year;
     aipo.system.holidayListPane.viewPage(screen);
 };
 

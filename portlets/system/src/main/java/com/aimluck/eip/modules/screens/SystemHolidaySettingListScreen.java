@@ -47,10 +47,9 @@ public class SystemHolidaySettingListScreen extends ALVelocityScreen {
       SystemHolidaySettingSelectData listData =
         new SystemHolidaySettingSelectData();
       listData.initField();
-      // listData.setRowsNum(Integer.parseInt(ALEipUtils
-      // .getPortlet(rundata, context)
-      // .getPortletConfig()
-      // .getInitParameter("p1b-rows")));
+      // listData.setRowsNum(Integer.parseInt(ALEipUtils.getPortlet(
+      // rundata,
+      // context).getPortletConfig().getInitParameter("p1b-rows")));
       listData.doViewList(this, rundata, context);
 
       String layout_template = "portlets/html/ajax-system-holiday-list.vm";

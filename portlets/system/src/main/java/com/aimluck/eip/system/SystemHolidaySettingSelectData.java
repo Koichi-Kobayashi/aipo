@@ -52,34 +52,71 @@ public class SystemHolidaySettingSelectData extends
   /** 個別の休日の日付 */
   private ALDateField holiday_date;
 
-  /** <code>viewMonth</code> 現在の月 */
+  /** 現在のページの年 */
   private ALDateTimeField viewYear;
 
-  /** <code>prevMonth</code> 前の月 */
+  /** 前の年 */
   private ALDateTimeField prevYear;
 
-  /** <code>nextMonth</code> 次の月 */
+  /** 次の年 */
   private ALDateTimeField nextYear;
+
+  /** 現在の年 */
+  private ALDateTimeField currentYear;
+
+  /** 今日 */
+  private ALDateTimeField today;
 
   @Override
   public void init(ALAction action, RunData rundata, Context context)
       throws ALPageNotFoundException {
+
     Calendar cal = Calendar.getInstance();
+    // 今年
+    currentYear = new ALDateTimeField("yyyy");
+    // 今日
+    today = new ALDateTimeField("yyyy");
+    // 前の年　次の年
+    prevYear = new ALDateTimeField("yyyy");
+    nextYear = new ALDateTimeField("yyyy");
     holiday_date = new ALDateField();
     holiday_date.setValue(cal.getTime());
-
-    // 現在の月
+    // 現在のページの年
     viewYear = new ALDateTimeField("yyyy");
     viewYear.setNotNull(true);
+
+    Calendar to = Calendar.getInstance();
+    today.setValue(to.getTime());
     viewYear.setValue(cal.getTime());
     if (!viewYear.validate(new ArrayList<String>())) {
       ALEipUtils.removeTemp(rundata, context, "view_month");
       throw new ALPageNotFoundException();
     }
-    // 前の月
+
+    if (Integer.parseInt(today.getMonth()) == Integer.parseInt(viewYear
+      .getMonth()
+      .toString())) {
+      currentYear.setValue(to.getTime());
+    }
+
+    // 前の年　次の年
     prevYear = new ALDateTimeField("yyyy");
-    // 次の月
     nextYear = new ALDateTimeField("yyyy");
+
+    Calendar cal2 = Calendar.getInstance();
+    cal2.setTime(viewYear.getValue());
+    cal2.add(Calendar.YEAR, 1);
+    nextYear.setValue(cal2.getTime());
+    cal2.add(Calendar.YEAR, -2);
+    prevYear.setValue(cal2.getTime());
+
+  }
+
+  private SelectQuery<EipMHoliday> getSelectQuery(RunData rundata,
+      Context context) {
+    SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+
+    return buildSelectQueryForFilter(query, rundata, context);
   }
 
   /**
@@ -93,8 +130,10 @@ public class SystemHolidaySettingSelectData extends
   protected ResultList<EipMHoliday> selectList(RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
 
-    SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
-    buildSelectQueryForFilter(query, rundata, context);
+    // SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    SelectQuery<EipMHoliday> query = getSelectQuery(rundata, context);
+
+    // buildSelectQueryForFilter(query, rundata, context);
     buildSelectQueryForListView(query);
     buildSelectQueryForListViewSort(query, rundata, context);
 
@@ -105,6 +144,14 @@ public class SystemHolidaySettingSelectData extends
       return list;
     }
 
+  }
+
+  public boolean isNullList(RunData rundata, Context context)
+      throws ALPageNotFoundException, ALDBErrorException {
+    if (selectList(rundata, context) == null) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -165,6 +212,51 @@ public class SystemHolidaySettingSelectData extends
 
   public String getHolidayViewYear() {
     return viewYear.getYear();
+  }
+
+  /**
+   * 前の年を取得します。
+   *
+   * @return
+   */
+  public ALDateTimeField getViewYear() {
+    return viewYear;
+  }
+
+  /**
+   * 前の年を取得します。
+   *
+   * @return
+   */
+  public ALDateTimeField getPrevYear() {
+    return prevYear;
+  }
+
+  /**
+   * 次の年を取得します。
+   *
+   * @return
+   */
+  public ALDateTimeField getNextYear() {
+    return nextYear;
+  }
+
+  /**
+   * 今年を取得します。
+   *
+   * @return
+   */
+  public ALDateTimeField getCurrentYear() {
+    return currentYear;
+  }
+
+  /**
+   * 今日を取得します。
+   *
+   * @return
+   */
+  public ALDateTimeField getToday() {
+    return today;
   }
 
 }

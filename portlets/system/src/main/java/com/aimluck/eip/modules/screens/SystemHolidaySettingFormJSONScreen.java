@@ -59,7 +59,7 @@ public class SystemHolidaySettingFormJSONScreen extends ALJSONScreen {
       SystemHolidaySettingFormData formData =
         new SystemHolidaySettingFormData();
       formData.initField();
-      if (formData.doInsert(this, rundata, context)) {
+      if (formData.doUpdate(this, rundata, context)) {
       } else {
         JSONArray json =
           JSONArray.fromObject(context.get(ALEipConstants.ERROR_MESSAGE_LIST));
