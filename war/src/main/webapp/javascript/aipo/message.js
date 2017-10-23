@@ -257,7 +257,9 @@ aipo.message.moreMessageList = function() {
             load : function(response, ioArgs) {
                 var messagePane = dojo.byId("messagePane");
                 if(messagePane) {
+                	var prev = messagePane.scrollHeight;
                     messagePane.innerHTML = response + messagePane.innerHTML;
+                    messagePane.scrollTop = messagePane.scrollHeight - prev;
                     if(messagePane.children.length > 1) {
                         var emptyMessage = dojo.query("#messagePane .emptyMessage");
                         if(emptyMessage.length == 1) {
