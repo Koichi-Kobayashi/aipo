@@ -303,7 +303,12 @@ aipo.message.latestMessageList = function() {
         load : function(response, ioArgs) {
             var messagePane = dojo.byId("messagePane");
             if(messagePane) {
+            	var prevheight = messagePane.scrollHeight;
+            	var prevpos = messagePane.scrollTop;
                 messagePane.innerHTML = messagePane.innerHTML + response;
+                if(messagePane.scrollHeight - prevheight != 0){
+                	messagePane.scrollTo(0,messagePane.scrollHeight);
+                }
                 if(messagePane.children.length > 1) {
                     var emptyMessage = dojo.query("#messagePane .emptyMessage");
                     if(emptyMessage.length == 1) {
@@ -365,7 +370,7 @@ aipo.message.reloadRoomList = function(roomId, userId) {
         aipo.message.messageRoomListPane = new aimluck.widget.Contentpane({},
                 'messageRoomListPane');
         aipo.message.messageRoomListPane.onLoad = function() {
-        	messagePane.scrollTo(0,messagePane.scrollHeight);
+        	//messagePane.scrollTo(0,messagePane.scrollHeight);
             aipo.message.fixMessageWindow();
             var messageTotalUnreadCountValue = dojo
                     .byId("messageTotalUnreadCountValue");
