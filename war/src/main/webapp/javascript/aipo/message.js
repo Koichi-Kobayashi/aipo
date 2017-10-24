@@ -305,9 +305,12 @@ aipo.message.latestMessageList = function() {
             if(messagePane) {
             	var prevheight = messagePane.scrollHeight;
             	var prevpos = messagePane.scrollTop;
+            	var isBottom = true ? messagePane.clientHeight+prevpos==prevheight : false;
                 messagePane.innerHTML = messagePane.innerHTML + response;
                 if(messagePane.scrollHeight - prevheight != 0){
-                	messagePane.scrollTo(0,messagePane.scrollHeight);
+                	if(messagePane.children[messagePane.children.length-1].className == "message me" || isBottom){
+                		messagePane.scrollTo(0,messagePane.scrollHeight);
+                	}
                 }
                 if(messagePane.children.length > 1) {
                     var emptyMessage = dojo.query("#messagePane .emptyMessage");
