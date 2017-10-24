@@ -199,13 +199,27 @@ public class AjaxScheduleDayContainer implements ALData {
    * @return
    */
   public boolean isHoliday() {
+    // Date now = today.getValue();
+    // boolean isPersonalHoliday = false;
+    // SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    // Expression exp1 =
+    // ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
+    // query.setQualifier(exp1);
+    //
+    // if (!query.getResultList().isEmpty()) {
+    // isPersonalHoliday = true;
+    // }
+    //
+    // if (holiday != null || isPersonalHoliday) {
+    // return true;
+    // }
     return (holiday == null) ? false : true;
   }
 
   /**
    * ユーザーが設定した休日かどうか
    *
-   * 
+   *
    */
   public boolean isUserHoliday() {
     Integer weekNum = today.getDayOfWeekNum();

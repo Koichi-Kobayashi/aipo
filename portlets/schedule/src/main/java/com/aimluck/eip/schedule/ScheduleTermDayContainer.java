@@ -20,10 +20,16 @@ package com.aimluck.eip.schedule;
 
 import java.util.Date;
 
+import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
+
 import com.aimluck.commons.field.ALDateTimeField;
+import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALData;
 import com.aimluck.eip.common.ALEipHolidaysManager;
 import com.aimluck.eip.common.ALHoliday;
+import com.aimluck.eip.orm.Database;
+import com.aimluck.eip.orm.query.SelectQuery;
 import com.aimluck.eip.schedule.util.ScheduleUtils;
 
 /**
@@ -94,6 +100,20 @@ public class ScheduleTermDayContainer implements ALData {
    * @return
    */
   public boolean isHoliday() {
+    Date now = today.getValue();
+    boolean isPersonalHoliday = false;
+    SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    Expression exp1 =
+      ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
+    query.setQualifier(exp1);
+
+    if (!query.getResultList().isEmpty()) {
+      isPersonalHoliday = true;
+    }
+
+    if (holiday != null || isPersonalHoliday) {
+      return true;
+    }
     return (holiday == null) ? false : true;
   }
 
