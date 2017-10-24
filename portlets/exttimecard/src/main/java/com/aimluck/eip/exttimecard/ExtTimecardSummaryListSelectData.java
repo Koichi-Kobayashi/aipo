@@ -163,23 +163,6 @@ public class ExtTimecardSummaryListSelectData extends
    */
   @Override
   public void initField() {
-  }
-
-  /**
-   *
-   * @param action
-   * @param rundata
-   * @param context
-   * @throws ALPageNotFoundException
-   * @throws ALDBErrorException
-   */
-  @Override
-  public void init(ALAction action, RunData rundata, Context context)
-      throws ALPageNotFoundException, ALDBErrorException {
-    super.init(action, rundata, context);
-
-    this.initField();
-
     // POST/GET から yyyy-MM の形式で受け渡される。
     // 現在の月
     viewMonth = new ALDateTimeField("yyyy-MM");
@@ -198,6 +181,23 @@ public class ExtTimecardSummaryListSelectData extends
     viewEndCrt = new ALDateTimeField("yyyy-MM-dd");
 
     startDay = 1;
+
+  }
+
+  /**
+   *
+   * @param action
+   * @param rundata
+   * @param context
+   * @throws ALPageNotFoundException
+   * @throws ALDBErrorException
+   */
+  @Override
+  public void init(ALAction action, RunData rundata, Context context)
+      throws ALPageNotFoundException, ALDBErrorException {
+    super.init(action, rundata, context);
+
+    this.initField();
 
     // 自ポートレットからのリクエストであれば、パラメータを展開しセッションに保存する。
     if (ALEipUtils.isMatch(rundata, context)) {
@@ -397,6 +397,15 @@ public class ExtTimecardSummaryListSelectData extends
       }
     }
 
+    initDateFields(rundata, context);
+
+    isNewRule = ExtTimecardUtils.isNewRule();
+
+    setupLists(rundata, context);
+  }
+
+  protected void initDateFields(RunData rundata, Context context)
+      throws ALPageNotFoundException {
     // 今日の日付
     today = new ALDateTimeField("yyyy-MM-dd");
     Calendar to = Calendar.getInstance();
@@ -472,10 +481,6 @@ public class ExtTimecardSummaryListSelectData extends
       context,
       "tmpEnd",
       viewStart.toString() + "-00-00");
-
-    isNewRule = ExtTimecardUtils.isNewRule();
-
-    setupLists(rundata, context);
   }
 
   /**
@@ -1635,5 +1640,9 @@ public class ExtTimecardSummaryListSelectData extends
 
   public boolean isNewRule() {
     return ExtTimecardUtils.isNewRule();
+  }
+
+  protected int getStartDay() {
+    return this.startDay;
   }
 }
