@@ -22,6 +22,8 @@ package com.aimluck.eip.system;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
 import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.turbine.util.RunData;
@@ -87,10 +89,23 @@ public class SystemHolidaySettingSelectData extends
 
     Calendar to = Calendar.getInstance();
     today.setValue(to.getTime());
-    viewYear.setValue(cal.getTime());
-    if (!viewYear.validate(new ArrayList<String>())) {
-      ALEipUtils.removeTemp(rundata, context, "view_month");
-      throw new ALPageNotFoundException();
+
+    if (ALEipUtils.isMatch(rundata, context)) {
+      if (rundata.getParameters().containsKey("view_year")) {
+        ALEipUtils.setTemp(rundata, context, "view_year", rundata
+          .getParameters()
+          .getString("view_year"));
+      }
+    }
+    String tmpViewYear = ALEipUtils.getTemp(rundata, context, "view_year");
+    if (tmpViewYear == null || tmpViewYear.equals("")) {
+      viewYear.setValue(cal.getTime());
+    } else {
+      viewYear.setValue(tmpViewYear);
+      if (!viewYear.validate(new ArrayList<String>())) {
+        ALEipUtils.removeTemp(rundata, context, "view_year");
+        throw new ALPageNotFoundException();
+      }
     }
 
     if (Integer.parseInt(today.getMonth()) == Integer.parseInt(viewYear
@@ -103,18 +118,28 @@ public class SystemHolidaySettingSelectData extends
     prevYear = new ALDateTimeField("yyyy");
     nextYear = new ALDateTimeField("yyyy");
 
-    Calendar cal2 = Calendar.getInstance();
-    cal2.setTime(viewYear.getValue());
-    cal2.add(Calendar.YEAR, 1);
-    nextYear.setValue(cal2.getTime());
-    cal2.add(Calendar.YEAR, -2);
-    prevYear.setValue(cal2.getTime());
+    Calendar cal1 = Calendar.getInstance();
+    cal1.setTime(viewYear.getValue());
+    cal1.add(Calendar.YEAR, 1);
+    nextYear.setValue(cal1.getTime());
+    cal1.add(Calendar.YEAR, -2);
+    prevYear.setValue(cal1.getTime());
 
   }
 
   private SelectQuery<EipMHoliday> getSelectQuery(RunData rundata,
       Context context) {
     SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    Expression exp1 =
+      ExpressionFactory.greaterOrEqualExp(
+        EipMHoliday.HOLIDAY_DATE_PROPERTY,
+        viewYear.getYear() + "-01-01");
+    query.setQualifier(exp1);
+    Expression exp2 =
+      ExpressionFactory.lessOrEqualExp(
+        EipMHoliday.HOLIDAY_DATE_PROPERTY,
+        viewYear.getYear() + "-12-31");
+    query.andQualifier(exp2);
 
     return buildSelectQueryForFilter(query, rundata, context);
   }
@@ -129,29 +154,15 @@ public class SystemHolidaySettingSelectData extends
   @Override
   protected ResultList<EipMHoliday> selectList(RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
-
-    // SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
-    SelectQuery<EipMHoliday> query = getSelectQuery(rundata, context);
-
-    // buildSelectQueryForFilter(query, rundata, context);
-    buildSelectQueryForListView(query);
-    buildSelectQueryForListViewSort(query, rundata, context);
-
-    ResultList<EipMHoliday> list = query.getResultList();
-    if (list.isEmpty()) {
+    try {
+      SelectQuery<EipMHoliday> query = getSelectQuery(rundata, context);
+      buildSelectQueryForListView(query);
+      query.orderAscending(EipMHoliday.HOLIDAY_DATE_PROPERTY);
+      return query.getResultList();
+    } catch (Exception ex) {
+      logger.error("system", ex);
       return null;
-    } else {
-      return list;
     }
-
-  }
-
-  public boolean isNullList(RunData rundata, Context context)
-      throws ALPageNotFoundException, ALDBErrorException {
-    if (selectList(rundata, context) == null) {
-      return true;
-    }
-    return false;
   }
 
   /**
