@@ -29,7 +29,7 @@
 <div class="auiSetDate">
 <div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.month}/$!{result.HolidayDate.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
 <input class="text" type="text" name="$name" id="holiday_name" value="" maxlength="50" style="width:20;ime-mode:active" />
-<input name="$event_submit" class="button" type="submit" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
+<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
 </div>
 </p>
 <p></p>

@@ -63,21 +63,11 @@ public class SystemHolidaySettingSelectData extends
   /** 次の年 */
   private ALDateTimeField nextYear;
 
-  /** 現在の年 */
-  private ALDateTimeField currentYear;
-
-  /** 今日 */
-  private ALDateTimeField today;
-
   @Override
   public void init(ALAction action, RunData rundata, Context context)
       throws ALPageNotFoundException {
 
     Calendar cal = Calendar.getInstance();
-    // 今年
-    currentYear = new ALDateTimeField("yyyy");
-    // 今日
-    today = new ALDateTimeField("yyyy");
     // 前の年　次の年
     prevYear = new ALDateTimeField("yyyy");
     nextYear = new ALDateTimeField("yyyy");
@@ -86,9 +76,6 @@ public class SystemHolidaySettingSelectData extends
     // 現在のページの年
     viewYear = new ALDateTimeField("yyyy");
     viewYear.setNotNull(true);
-
-    Calendar to = Calendar.getInstance();
-    today.setValue(to.getTime());
 
     if (ALEipUtils.isMatch(rundata, context)) {
       if (rundata.getParameters().containsKey("view_year")) {
@@ -108,12 +95,6 @@ public class SystemHolidaySettingSelectData extends
       }
     }
 
-    if (Integer.parseInt(today.getMonth()) == Integer.parseInt(viewYear
-      .getMonth()
-      .toString())) {
-      currentYear.setValue(to.getTime());
-    }
-
     // 前の年　次の年
     prevYear = new ALDateTimeField("yyyy");
     nextYear = new ALDateTimeField("yyyy");
@@ -127,6 +108,13 @@ public class SystemHolidaySettingSelectData extends
 
   }
 
+  /**
+   * 検索条件を設定した SelectQuery を返します。 <BR>
+   *
+   * @param rundata
+   * @param context
+   * @return
+   */
   private SelectQuery<EipMHoliday> getSelectQuery(RunData rundata,
       Context context) {
     SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
@@ -145,6 +133,8 @@ public class SystemHolidaySettingSelectData extends
   }
 
   /**
+   * 一覧データを取得します。 <BR>
+   *
    * @param rundata
    * @param context
    * @return
@@ -250,24 +240,6 @@ public class SystemHolidaySettingSelectData extends
    */
   public ALDateTimeField getNextYear() {
     return nextYear;
-  }
-
-  /**
-   * 今年を取得します。
-   *
-   * @return
-   */
-  public ALDateTimeField getCurrentYear() {
-    return currentYear;
-  }
-
-  /**
-   * 今日を取得します。
-   *
-   * @return
-   */
-  public ALDateTimeField getToday() {
-    return today;
   }
 
 }
