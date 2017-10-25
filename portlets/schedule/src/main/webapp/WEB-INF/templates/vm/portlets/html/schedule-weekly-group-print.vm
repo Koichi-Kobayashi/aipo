@@ -176,7 +176,8 @@ if(document.all!=undefined){
 #set ($stday = $velocityCount )
 #ALtdheadheaderAtt("class='groupWeekly' nowrap='nowrap'")
 $!{record.Date.Day} $!{record.Date.DayOfWeek}
-<span class="holiday small"><br />${record.Holiday.Name}</span>
+##<span class="holiday small"><br />${record.Holiday.Name}</span>
+<span class="holiday small"><br />${record.HolidayName}</span>
 #elseif($!{record.Date.Value.Day} == 0)
 #set ($stday = $velocityCount )
 #ALtdheadheaderAtt("class='groupWeekly' nowrap='nowrap'")
@@ -387,7 +388,8 @@ ToDo：$!{record.ToDoResultData.TodoName}
 #set ($stday = $velocityCount )
 #ALtdheadheaderAtt("class='groupWeekly' nowrap='nowrap'")
 $!{record.Date.Day} $!{record.Date.DayOfWeek}
-<span class="holiday small"><br />${record.Holiday.Name}</span>
+##<span class="holiday small"><br />${record.Holiday.Name}</span>
+<span class="holiday small"><br />${record.HolidayName}</span>
 #elseif($!{record.Date.Value.Day} == 0)
 #set ($stday = $velocityCount )
 #ALtdheadheaderAtt("class='groupWeekly' nowrap='nowrap'")

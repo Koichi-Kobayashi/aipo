@@ -144,13 +144,14 @@
 #set ($stday = $velocityCount )
 #ALOnedayLink($!portlet.ID $filter $record 'holiday groupWeekly')
 <br />
-<span class="holiday">${record.Holiday.Name}</span>
-
+##<span class="holiday">${record.Holiday.Name}</span>
+<span class="holiday">${record.HolidayName}</span>
 ##祝日である場合
 #elseif($!{record.isHoliday()})
 #ALOnedayLink($!portlet.ID $filter $record 'groupWeekly')
 <br />
-<span class="holiday">${record.Holiday.Name}</span>
+##<span class="holiday">${record.Holiday.Name}</span>
+<span class="holiday">${record.HolidayName}</span>
 
 
 ##ユーザーが設定した休日
@@ -376,7 +377,8 @@ $!{record.ToDoResultData.TodoName}
 #set ($stday = $velocityCount )
 #ALOnedayLinkFacility($!portlet.ID $filter $record 'holiday groupWeekly')
 <br />
-<span class="holiday">${record.Holiday.Name}</span>
+##<span class="holiday">${record.Holiday.Name}</span>
+<span class="holiday">${record.HolidayName}</span>
 #elseif($!{record.isUserHoliday($!{record.Date.Value.Day})})
 #set ($stday = $velocityCount)
 #ALOnedayLinkFacility($!portlet.ID $filter $record 'holiday groupWeekly')

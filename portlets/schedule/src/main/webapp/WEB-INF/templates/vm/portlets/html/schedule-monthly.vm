@@ -168,10 +168,12 @@
 ##祝日を休日にする設定かつ祝日
 #if($!{record.isDayOffHoliday()} && $!{record.isHoliday()})
 #set ($color_style_holiday = " holiday")
-#set ($holiday_name = "${record.Holiday.Name}")
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 ##祝日
 #elseif($!{record.isHoliday()})
-#set ($holiday_name = "${record.Holiday.Name}")
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 #end
 #if(! ($!{result.ViewMonth.Month.toString()} == ${record.Date.Month.toString()}))
 #set ($color_style_othermonth = " off")
@@ -304,10 +306,11 @@ $!{record.ToDoResultData.TodoName}
 ##祝日を休日にする設定でありかつ祝日である場合
 #if($!{record.isDayOffHoliday()} && $!{record.isHoliday()})
 #set ($color_style_holiday = " holiday")
-#set ($holiday_name = "${record.Holiday.Name}")
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 #elseif($!{record.isHoliday()})
-#set ($holiday_name = "${record.Holiday.Name}")
-
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 #end
 #if(! ($!{result.ViewMonth.Month.toString()} == ${record.Date.Month.toString()}))
 #set ($color_style_othermonth = " off")

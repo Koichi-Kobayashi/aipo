@@ -271,25 +271,24 @@ public class ScheduleDayContainer implements ALData {
     return holiday;
   }
 
-  // public String getHolidayName() {
-  // Date now = today.getValue();
-  // boolean isPersonalHoliday = false;
-  // SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
-  // Expression exp1 =
-  // ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
-  // query.setQualifier(exp1);
-  //
-  // List<EipMHoliday> p_holiday = query.getResultList();
-  // if (!query.getResultList().isEmpty()) {
-  // isPersonalHoliday = true;
-  // }
-  //
-  // if (isPersonalHoliday) {
-  // return p_holiday
-  // }
-  //
-  // return holiday.getName().getValue();
-  // }
+  public String getHolidayName() {
+    Date now = today.getValue();
+    boolean isPersonalHoliday = false;
+    SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    Expression exp1 =
+      ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
+    query.setQualifier(exp1);
+
+    List<EipMHoliday> p_holiday = query.fetchList();
+    if (!query.getResultList().isEmpty()) {
+      isPersonalHoliday = true;
+    }
+
+    if (isPersonalHoliday) {
+      return p_holiday.get(0).getHolidayName();
+    }
+    return holiday.getName().getValue();
+  }
 
   /**
    * 休日かどうかを判定する 休日の場合 ture

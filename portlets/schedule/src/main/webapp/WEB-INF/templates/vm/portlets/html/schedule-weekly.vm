@@ -52,7 +52,8 @@ $!{result.ViewStartFormat} $!{result.ViewStart.DayOfWeek} - $!{result.ViewEndFor
 #set ($stday = $velocityCount )
 #ALtdheadheaderAtt("class='holiday' nowrap='nowrap'")
 $!{record.Date.Day} $!{record.Date.DayOfWeek}<br />
-<span class="holiday small">${record.Holiday.Name}</span>
+##<span class="holiday small">${record.Holiday.Name}</span>
+<span class="holiday small">${record.HolidayName}</span>
 #elseif($!{record.Date.Value.Day} == 0)
 #set ($stday = $velocityCount )
 #ALtdheadheaderAtt("class='sunday' nowrap='nowrap'")
@@ -124,7 +125,8 @@ $!{record.Date.Day} $!{record.Date.DayOfWeek}
 #end
 #if($!{record.isHoliday()})
 #set ($color_style_holiday = " holiday")
-#set ($holiday_name = "${record.Holiday.Name}")
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 #end
 #set($addScheduleLink = "$!jslink.getPortletById($!portlet.ID).addQueryData('template','ScheduleFormScreen').addQueryData('entityid','new').addQueryData('form_start', $!{record.Date.toString()}).addQueryData('form_end', $!{record.Date.toString()})")
 #if ($!{result.hasAuthoritySelfInsert()})

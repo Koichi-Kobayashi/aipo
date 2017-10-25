@@ -19,6 +19,7 @@
 package com.aimluck.eip.schedule;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
@@ -124,6 +125,25 @@ public class ScheduleTermDayContainer implements ALData {
    */
   public ALHoliday getHoliday() {
     return holiday;
+  }
+
+  public String getHolidayName() {
+    Date now = today.getValue();
+    boolean isPersonalHoliday = false;
+    SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    Expression exp1 =
+      ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
+    query.setQualifier(exp1);
+
+    List<EipMHoliday> p_holiday = query.fetchList();
+    if (!query.getResultList().isEmpty()) {
+      isPersonalHoliday = true;
+    }
+
+    if (isPersonalHoliday) {
+      return p_holiday.get(0).getHolidayName();
+    }
+    return holiday.getName().getValue();
   }
 
   /**

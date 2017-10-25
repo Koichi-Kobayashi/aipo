@@ -175,7 +175,8 @@ if(document.all!=undefined){
 #set ($color_style_othermonth = "")
 #set ($holiday_name = "")
 #if($!{record.isHoliday()})
-#set ($holiday_name = "${record.Holiday.Name}")
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 #end
 #if(! ($!{result.ViewMonth.Month.toString()} == ${record.Date.Month.toString()}))
 #set ($color_style_othermonth = " off")
@@ -241,7 +242,8 @@ $!{record.TermResultData.Name}
 #set ($color_style_othermonth = "")
 #set ($holiday_name = "")
 #if($!{record.isHoliday()})
-#set ($holiday_name = "${record.Holiday.Name}")
+##set ($holiday_name = "${record.Holiday.Name}")
+#set ($holiday_name = "${record.HolidayName}")
 #end
 #if(! ($!{result.ViewMonth.Month.toString()} == ${record.Date.Month.toString()}))
 #set ($color_style_othermonth = " off")
