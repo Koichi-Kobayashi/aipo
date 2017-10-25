@@ -249,7 +249,8 @@ public class ScheduleWeeklyJSONFormData {
         _scheduleList = container.getScheduleList();
 
         if (container.isHoliday()) {
-          holidayList.add(container.getHoliday().getName().getValue());
+          // holidayList.add(container.getHoliday().getName().getValue());
+          holidayList.add(container.getHolidayName());
         } else if (container.isUserHoliday()) {
           holidayList.add("set");
         } else {
