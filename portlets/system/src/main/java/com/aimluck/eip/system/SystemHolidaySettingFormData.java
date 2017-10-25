@@ -277,18 +277,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
       //
       // // 個別の休日を登録
       // Database.commit();
-      EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
-      // 個別の休日の日付
-      p_holiday_data.setHolidayDate(p_holiday.getValue().getDate());
-      // 個別の休日の名前
-      p_holiday_data.setHolidayName(p_holiday_name.getValue());
-      // 作成日
-      p_holiday_data.setCreateDate(Calendar.getInstance().getTime());
-      // 更新日
-      p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
-
-      // 個別の休日を登録
-      Database.commit();
 
     } catch (Exception ex) {
       logger.error("SystemHolidaySettingFormData", ex);
