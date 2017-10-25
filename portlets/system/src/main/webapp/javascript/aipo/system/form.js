@@ -88,5 +88,28 @@ aipo.system.pagerHolidayList = function(jslink, year) {
 	aipo.system.year = year;
     var screen = aipo.system.jslink + "?template=SystemHolidaySettingListScreen&view_year=" + aipo.system.year;
     aipo.system.holidayListPane.viewPage(screen);
-};
+}
+
+ aipo.system.holidayDateList = [];
+ aipo.system.holidayNameList = [];
+
+ aipo.system.addHoliday = function(){
+		var Year = document.getElementById('holidayDate_year');
+		var Month = document.getElementById('holidayDate_month');
+		var Day = document.getElementById('holidayDate_day');
+		var Name = document.getElementById('holidayName');
+		aipo.system.holidayDateList.push(Year.value + "年" + Month.value + "月" + Day.value +"日");
+		aipo.system.holidayNameList.push(Name.value);
+		document.getElementById('holidayName').value = null;
+
+	}
+
+ aipo.system.addList = function() {
+	 var tr_element = document.createElement('tr');
+	 var parent_object = document.getElementById('holidayListTable');
+	 for(var i = 0; i < aipo.system.holidayDateList.length; i++){
+		 tr_element.innerHTML = '<td><div>' + aipo.system.holidayDateList[i] + '</div></td><td><div>' + aipo.system.holidayNameList[i] + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick="" /></td>';
+		 parent_object.appendChild(tr_element);
+		 }
+	 };
 
