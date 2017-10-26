@@ -1540,7 +1540,7 @@ aipo.message.fixDateLine = function() {
 }
 
 aipo.message.scrollTo = function(element, to, duration) {
-	  if (duration < 0) return;
+	  if (duration <= 0) return;
 	  var difference = to - element.scrollTop;
 	  var perTick = difference / duration * 10;
 
