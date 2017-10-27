@@ -92,31 +92,45 @@ aipo.system.pagerHolidayList = function(jslink, year) {
 
 aipo.system.holidayList = {};
 aipo.system.arraylist = [] ;
-aipo.system.addHoliday = function(){
-        var Year = document.getElementById('holidayDate_year');
-        var Month = document.getElementById('holidayDate_month');
-        var Day = document.getElementById('holidayDate_day');
-        var Name = document.getElementById('holidayName');
-           if (Name.value != ""){
-                var tr_element = document.createElement('tr');
-                tr_element.className = "add";
-                tr_element.id = document.getElementById('holidayDate').value;
-                tr_element.setAttribute('data-year', Year.value);
-//                tr_element.id = String(Year.Value) + String(Month.Value) + String(Day.Value);
-                tr_element.setAttribute('data-month', Month.value);
-                tr_element.setAttribute('data-day', Day.value);
-        var holidayDateString = Year.value + "年" + Month.value + "月" + Day.value +"日";
 
-                tr_element.innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick="aipo.system.deleteAddElement("' + tr_element.getAttribute('id') + '");" /></td>';
-            }
-                document.getElementById('holidayName').value = "";
-                aipo.system.holidayList[tr_element.getAttribute('id')] = tr_element;;
+aipo.system.addHoliday = function(){
+    var Year = document.getElementById('holidayDate_year');
+    var Month = document.getElementById('holidayDate_month');
+    var Day = document.getElementById('holidayDate_day');
+    var Name = document.getElementById('holidayName');
+    var Date = document.getElementById('holidayDate');
+    var same_date_flag = false;
+    var holidayDateString = Year.value + "年" + Month.value + "月" + Day.value +"日";
+       if (Name.value != ""){
+       	for(var key in aipo.system.holidayList){
+       		if (Date.value == aipo.system.holidayList[key].getAttribute('id')){
+       			aipo.system.holidayList[key].innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick="aipo.system.deleteAddElement("' + aipo.system.holidayList[key].getAttribute('id') + '");" /></td>';
+       			same_date_flag = true;
+       			break;
+       		}
+       	}
+       	if(!same_date_flag){
+            var tr_element = document.createElement('tr');
+            tr_element.className = "add";
+            tr_element.id = Date.value;
+            tr_element.setAttribute('data-year', Year.value);
+            tr_element.setAttribute('data-month', Month.value);
+            tr_element.setAttribute('data-day', Day.value);
+
+
+            tr_element.innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick="aipo.system.deleteAddElement("' + tr_element.getAttribute('id') + '");" /></td>';
+            aipo.system.holidayList[tr_element.getAttribute('id')] = tr_element;
+        }
+       }
+            document.getElementById('holidayName').value = "";
+
 }
 
 aipo.system.addList = function(viewYear) {
 	  var parent_object = document.getElementById('holidayListTable');
 	  var reglist = [];
 	  reglist = document.getElementsByClassName('registered');
+	  aipo.system.addListSort();
 	 for (var i = 0; i < aipo.system.arraylist.length; i++){
 		 if (viewYear == aipo.system.arraylist[i].getAttribute('data-year')){
 	         var addDate = new Date(aipo.system.arraylist[i].getAttribute('data-year') , aipo.system.arraylist[i].getAttribute('data-month'), aipo.system.arraylist[i].getAttribute('data-day'));
@@ -153,9 +167,7 @@ aipo.system.addListSort = function() {
 		} else{
 
 		}
-
-
-	}
+	　}
 
 	}
-	};
+};

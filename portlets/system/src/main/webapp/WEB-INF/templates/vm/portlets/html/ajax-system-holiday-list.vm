@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *#
 
-<img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.addListSort();aipo.system.addList($!{result.HolidayViewYear});" />
+<img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.addList($!{result.HolidayViewYear});" />
 <div class="holidayList scroll" id="holidayList">
 <p>
 
@@ -29,7 +29,7 @@
 <div class="auiSetDate">
 <div  class="auiSetDate" name="holiday_date" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="holidayDate" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.month}/$!{result.HolidayDate.Day}" inputId="input_holidayDate" dateId="holidayDate" displayCheck="none"></div>
 <input class="text" type="text" name="holidayName" id="holidayName" value="" maxlength="50" style="width:20;ime-mode:active" />
-<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aipo.system.addHoliday();aipo.system.addListSort();aipo.system.addList($!{result.HolidayViewYear});aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.HolidayViewYear);">
+<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aipo.system.addHoliday();aipo.system.addList($!{result.HolidayViewYear});">
 </div>
 </p>
 <p></p>
