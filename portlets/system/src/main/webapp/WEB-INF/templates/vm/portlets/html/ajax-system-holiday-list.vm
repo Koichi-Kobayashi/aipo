@@ -64,22 +64,20 @@
 
 
 
-
+<img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.addListSort();aipo.system.addList($!{result.HolidayViewYear});" />
 <div class="holidayList scroll" id="holidayList">
 <p>
 
 <ul class="auiSelectButton">
- <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.PrevYear);aipo.system.addList();" title="$l10n.HOLIDAY_SETTING_PREV_YEAR" class="first arrow"><i class="icon-caret-left"></i></a></li>
- <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.NextYear);aipo.system.addList();" title="$l10n.HOLIDAY_SETTING_NEXT_YEAR" class="last arrow"><i class="icon-caret-right"></i></a></li>
+ <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.PrevYear);" title="$l10n.HOLIDAY_SETTING_PREV_YEAR" class="first arrow"><i class="icon-caret-left"></i></a></li>
+ <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.NextYear);" title="$l10n.HOLIDAY_SETTING_NEXT_YEAR" class="last arrow"><i class="icon-caret-right"></i></a></li>
 </ul>
 <div class="count"><strong>$!{result.HolidayViewYear}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
-<form name="holidayForm">
 <div class="auiSetDate">
 <div  class="auiSetDate" name="holiday_date" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="holidayDate" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.month}/$!{result.HolidayDate.Day}" inputId="input_holidayDate" dateId="holidayDate" displayCheck="none"></div>
 <input class="text" type="text" name="holidayName" id="holidayName" value="" maxlength="50" style="width:20;ime-mode:active" />
-<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aipo.system.addHoliday();aipo.system.addList();">
+<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aipo.system.addHoliday();aipo.system.addListSort();aipo.system.addList($!{result.HolidayViewYear});aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.HolidayViewYear);">
 </div>
-</form>
 </p>
 <p></p>
 
@@ -97,7 +95,7 @@
 </thead>
  <tbody id="holidayListTable">
 #foreach($record in $result.List)
-<tr>
+<tr class="registered" id ="$!{record.HolidayDate.Year}$!{record.HolidayDate.Month}$!{record.HolidayDate.Day}" data-year="$!{record.HolidayDate.Year}" data-month="$!{record.HolidayDate.Month}" data-day="$!{record.HolidayDate.Day}">
 #ALtdcell("<div>$!record.HolidayDateString</div>")
 #ALtdcell("<div>$!record.HolidayName</div>")
 <td>
