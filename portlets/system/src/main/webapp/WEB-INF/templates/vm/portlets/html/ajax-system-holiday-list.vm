@@ -17,53 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *#
 
-#*<div class="holidayList scroll" id="holidayList">
-<p>
-<ul class="auiSelectButton">
- <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.PrevYear);" title="$l10n.HOLIDAY_SETTING_PREV_YEAR" class="first arrow"><i class="icon-caret-left"></i></a></li>
- <li><a href="javascript:void(0);" onclick="aipo.system.pagerHolidayList('$!jslink.getPortletById($!portlet.ID)', $!result.NextYear);" title="$l10n.HOLIDAY_SETTING_NEXT_YEAR" class="last arrow"><i class="icon-caret-right"></i></a></li>
-</ul>
-<div class="count"><strong>$!{result.HolidayViewYear}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></div>
-<div class="auiSetDate">
-<div  class="auiSetDate" dojoType="aipo.widget.DropdownDatepicker" id="datepicker" widgetId="datepicker" iconURL="images/icon/icon_date.gif" iconAlt="$l10n.HOLIDAY_SETTING_DATE" hiddenId="p_holiday" initValue="$!{result.HolidayDate.Year}/$!{result.HolidayDate.month}/$!{result.HolidayDate.Day}" inputId="input_p_holiday" dateId="p_holiday" displayCheck="none"></div>
-<input class="text" type="text" name="text" id="holiday_name" value="" maxlength="50" style="width:20;ime-mode:active" />
-<input name="$event_submit" class="button" type="button" value="$l10n.HOLIDAY_SETTING_ADD" onclick="aimluck.io.setHiddenValue(this);">
-</div>
-</p>
-<p></p>
-
-#if($result.List.size() == 0)
-
-#else
-<p>
-<table class="auiRowTable auiMbTable wide">
-  <thead>
-<tr>
-#ALtdheadAtt($l10n.HOLIDAY_SETTING_DATE "class='thin left'")
-#ALtdhead($l10n.HOLIDAY_SETTING_PERSONAL_HOLIDAY_NAME)
-<th class="thin"></th>
-</tr>
-</thead>
- <tbody>
-#foreach($record in $result.List)
-<tr>
-#ALtdcell("<div>$!record.HolidayDateString</div>")
-#ALtdcell("<div>$!record.HolidayName</div>")
-<td>
-<input name="$name" class="button" type="button" value="$l10n.HOLIDAY_SETTING_DELETE" onclick="" />
-</td>
-</tr>
-#end
-#end
-  </tbody>
-</table>
-</p>
-<p></p>
-</div>*#
-
-
-
-
 <img src="images/common/dot.gif" width="1" height="1" onload="aipo.system.addListSort();aipo.system.addList($!{result.HolidayViewYear});" />
 <div class="holidayList scroll" id="holidayList">
 <p>

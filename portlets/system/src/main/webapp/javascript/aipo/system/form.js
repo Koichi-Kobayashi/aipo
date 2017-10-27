@@ -89,6 +89,7 @@ aipo.system.pagerHolidayList = function(jslink, year) {
     aipo.system.holidayListPane.viewPage(screen);
 }
 
+
 aipo.system.holidayList = {};
 aipo.system.arraylist = [] ;
 aipo.system.addHoliday = function(){
@@ -158,4 +159,3 @@ aipo.system.addListSort = function() {
 
 	}
 	};
-
