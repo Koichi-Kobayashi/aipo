@@ -65,7 +65,7 @@
 </div>
 <div id="messageRoomSetting">
 <a href="javascript:void(0)" id="menubar_button_$!{messagePortletId}" class="customizeMenuIcon menubarOpenButton" title="$l10n.MESSAGE_ROOM_SETTING" onclick="aipo.customize.showMenu('$messagePortletId');"><span class="auiWFicon"><i class="icon-cog"></i></span></a>
-<div class="menubar body-child" id="menubar_$!{messagePortletId}" style="display: none; right: 0px; top: 20px; z-index: 9999">
+<div class="menubar body-child" id="menubar_$!{messagePortletId}" style="display: none; top: 20px; z-index: 9999">
 <ul id="roomMemberAdmin">
 #if(${result.isOwner()} && ${result.RoomType}=="G")
   <li>
