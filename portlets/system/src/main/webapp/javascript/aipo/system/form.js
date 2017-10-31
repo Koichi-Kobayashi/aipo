@@ -99,55 +99,62 @@ aipo.system.addHoliday = function(){
     var Day = document.getElementById('holidayDate_day');
     var Name = document.getElementById('holidayName');
     var Date = document.getElementById('holidayDate');
+    var ClassName = Year.value + Month.value + Day.value;
     var same_date_flag = false;
     var holidayDateString = Year.value + "年" + Month.value + "月" + Day.value +"日";
        if (Name.value != ""){
-       	for(var key in aipo.system.holidayList){
-       		if (Date.value == aipo.system.holidayList[key].getAttribute('id')){
-       			aipo.system.holidayList[key].innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick="aipo.system.deleteAddElement("' + aipo.system.holidayList[key].getAttribute('id') + '");" /></td>';
-       			same_date_flag = true;
-       			break;
-       		}
-       	}
-       	if(!same_date_flag){
+        for(var key in aipo.system.holidayList){
+            if (Date.value == aipo.system.holidayList[key].getAttribute('id')){
+                aipo.system.holidayList[key].innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick=aipo.system.deleteElement("' + aipo.system.holidayList[key].getAttribute('class') + '"); /></td>';
+                same_date_flag = true;
+                break;
+            }
+        }
+        if(!same_date_flag){
             var tr_element = document.createElement('tr');
-            tr_element.className = "add";
-            tr_element.id = Date.value;
+            tr_element.setAttribute('class', 'add' + ClassName);
+            tr_element.setAttribute('id', Date.value);
             tr_element.setAttribute('data-year', Year.value);
             tr_element.setAttribute('data-month', Month.value);
             tr_element.setAttribute('data-day', Day.value);
 
 
-            tr_element.innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick="aipo.system.deleteAddElement("' + tr_element.getAttribute('id') + '");" /></td>';
-            aipo.system.holidayList[tr_element.getAttribute('id')] = tr_element;
+            tr_element.innerHTML = '<td><div>' + holidayDateString + '</div></td><td><div>' + Name.value + '</div></td><td><input name="name" class="button" type="button" value="削除" onclick=aipo.system.deleteElement("' + tr_element.getAttribute('class') + '"); /></td>';
+            aipo.system.holidayList[tr_element.getAttribute('class')] = tr_element;
         }
        }
-            document.getElementById('holidayName').value = "";
+       aipo.system.addHolidayDateValue();
+       aipo.system.addHolidayNameValue();
+       document.getElementById('holidayName').value = "";
 
 }
 
 aipo.system.addList = function(viewYear) {
-	  var parent_object = document.getElementById('holidayListTable');
-	  var reglist = [];
-	  reglist = document.getElementsByClassName('registered');
-	  aipo.system.addListSort();
-	 for (var i = 0; i < aipo.system.arraylist.length; i++){
-		 if (viewYear == aipo.system.arraylist[i].getAttribute('data-year')){
-	         var addDate = new Date(aipo.system.arraylist[i].getAttribute('data-year') , aipo.system.arraylist[i].getAttribute('data-month'), aipo.system.arraylist[i].getAttribute('data-day'));
-	         var reference = null;
-	    for (var j = 0; j < reglist.length; j++){
-	         var regDate = new Date(reglist[j].getAttribute('data-year') , reglist[j].getAttribute('data-month'), reglist[j].getAttribute('data-day'));
+    var parent_object = document.getElementById('holidayListTable');
+    var reglist = [];
+    reglist = document.getElementsByClassName('registered');
+    aipo.system.addListSort();
+   for (var i = 0; i < aipo.system.arraylist.length; i++){
+       if (viewYear == aipo.system.arraylist[i].getAttribute('data-year')){
+           var addDate = new Date(aipo.system.arraylist[i].getAttribute('data-year') , aipo.system.arraylist[i].getAttribute('data-month'), aipo.system.arraylist[i].getAttribute('data-day'));
+           var reference = null;
+        if(reglist.length == 0){
+         parent_object.appendChild(aipo.system.arraylist[i]);
+        }else{
+      for (var j = 0; j < reglist.length; j++){
+           var regDate = new Date(reglist[j].getAttribute('data-year') , reglist[j].getAttribute('data-month'), reglist[j].getAttribute('data-day'));
 
-	        if (regDate > addDate){
-	          reference  = reglist[j];
-	          break;
-	        } else{
+          if (regDate > addDate){
+            reference  = reglist[j];
+            break;
+          } else{
 
-	        }
-	     }
-	     parent_object.insertBefore(aipo.system.arraylist[i], reference);
-	 }
-	 }
+          }
+       }
+       parent_object.insertBefore(aipo.system.arraylist[i], reference);
+   }
+       }
+   }
 }
 
 aipo.system.addListSort = function() {
@@ -170,4 +177,83 @@ aipo.system.addListSort = function() {
 	　}
 
 	}
+}
+
+aipo.system.deleteElement = function(className) {
+	var node = [];
+	node = document.querySelectorAll('.' + className);
+	for(var i = 0; i < node.length; i++){
+
+	node[i].parentNode.removeChild(node[i]);
+
+	}
+}
+
+aipo.system.holidayDateValue = {};
+aipo.system.holidayNameValue = {};
+
+aipo.system.addHolidayDateValue = function(){
+    var Year = document.getElementById('holidayDate_year');
+    var Month = document.getElementById('holidayDate_month');
+    var Day = document.getElementById('holidayDate_day');
+    var Name = document.getElementById('holidayName');
+    var Date = document.getElementById('holidayDate');
+    var ClassName = Year.value + Month.value + Day.value;
+    var same_date_flag = false;
+
+    var parent = document.getElementById('hiddenDateValue');
+
+       if (Name.value != ""){
+        for(var key in aipo.system.holidayDateValue){
+            if (Date.value == aipo.system.holidayDateValue[key].getAttribute('data-date')){
+                aipo.system.holidayDateValue[key].setAttribute('value', Date.value);
+                same_date_flag = true;
+            }
+        }
+        if(!same_date_flag){
+            var input_element = document.createElement('input');
+            input_element.setAttribute('class', 'add' + ClassName);
+            input_element.setAttribute('data-date', Date.value);
+            input_element.setAttribute('type', 'hidden');
+            input_element.setAttribute('name', 'p_holiday');
+            input_element.setAttribute('value', Date.value);
+
+            aipo.system.holidayDateValue[input_element.getAttribute('class')] = input_element;
+            parent.appendChild(input_element);
+        }
+       }
+
+}
+
+
+aipo.system.addHolidayNameValue = function(){
+    var Year = document.getElementById('holidayDate_year');
+    var Month = document.getElementById('holidayDate_month');
+    var Day = document.getElementById('holidayDate_day');
+    var Name = document.getElementById('holidayName');
+    var Date = document.getElementById('holidayDate');
+    var ClassName = Year.value + Month.value + Day.value;
+    var same_date_flag = false;
+
+    var parent = document.getElementById('hiddenNameValue');
+
+       if (Name.value != ""){
+        for(var key in aipo.system.holidayNameValue){
+            if (Date.value == aipo.system.holidayNameValue[key].getAttribute('data-date')){
+                aipo.system.holidayNameValue[key].setAttribute('value', Name.value);
+                same_date_flag = true;
+            }
+        }
+        if(!same_date_flag){
+            var input_element = document.createElement('input');
+            input_element.setAttribute('class', 'add' + ClassName);
+            input_element.setAttribute('data-date', Date.value);
+            input_element.setAttribute('type', 'hidden');
+            input_element.setAttribute('name', 'p_holiday_name');
+            input_element.setAttribute('value', Name.value);
+
+            aipo.system.holidayNameValue[input_element.getAttribute('class')] = input_element;
+            parent.appendChild(input_element);
+        }
+       }
 };

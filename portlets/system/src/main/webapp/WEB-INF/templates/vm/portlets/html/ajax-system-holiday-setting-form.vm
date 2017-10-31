@@ -86,14 +86,15 @@
 <div id="holidayListPane"><div class="loader"><i class="indicator"></i></div></div>
 #ALtditemfooter()
 
-
+<div id="hiddenDateValue"></div>
+<div id="hiddenNameValue"></div>
 
 
 
 #ALtablefooter()
 #ALbuttonheader()
-<input name="$name" class="auiButtonAction" type="button" value="$action_str" onclick="" />
-##ALsubmit($event_submit $action_str)
+##<input name="$name" class="auiButtonAction" type="button" value="$action_str" onclick="" />
+#ALsubmit($event_submit $action_str)
 #ALajaxbuttonClose()
 #ALbuttonfooter()
 #if($mode=="new_form")
