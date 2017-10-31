@@ -56,6 +56,7 @@ public class SystemHolidaySettingFormJSONScreen extends ALJSONScreen {
       // }
       //
       // } else {
+
       SystemHolidaySettingFormData formData =
         new SystemHolidaySettingFormData();
       formData.initField();

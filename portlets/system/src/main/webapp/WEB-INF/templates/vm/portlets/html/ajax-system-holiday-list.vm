@@ -61,4 +61,5 @@
 </table>
 </p>
 <p></p>
+##AUIajaxpageview('ReportListScreen' $result)
 </div>

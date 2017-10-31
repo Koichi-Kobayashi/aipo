@@ -28,7 +28,6 @@ import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
 import com.aimluck.commons.field.ALDateField;
-import com.aimluck.commons.field.ALDateTimeField;
 import com.aimluck.commons.field.ALStringField;
 import com.aimluck.eip.cayenne.om.portlet.EipMHoliday;
 import com.aimluck.eip.common.ALAbstractFormData;
@@ -73,15 +72,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   /** 個別の休日の名前 */
   private ALStringField p_holiday_name;
 
-  /** <code>viewMonth</code> 現在の月 */
-  private ALDateTimeField viewYear;
-
-  /** <code>prevMonth</code> 前の月 */
-  private ALDateTimeField prevYear;
-
-  /** <code>nextMonth</code> 次の月 */
-  private ALDateTimeField nextYear;
-
   @Override
   public void init(ALAction action, RunData rundata, Context context)
       throws ALPageNotFoundException, ALDBErrorException {
@@ -123,14 +113,6 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
     p_holiday_name.setFieldName(ALLocalizationUtils
       .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
     p_holiday_name.setTrim(true);
-
-    // 現在の月
-    viewYear = new ALDateTimeField("yyyy");
-    viewYear.setNotNull(true);
-    // 前の月
-    prevYear = new ALDateTimeField("yyyy");
-    // 次の月
-    nextYear = new ALDateTimeField("yyyy");
 
   }
 
@@ -196,18 +178,18 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   protected boolean insertFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     try {
-      // EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
-      // // 個別の休日の日付
-      // p_holiday_data.setHolidayDate(p_holiday.getValue().getDate());
-      // // 個別の休日の名前
-      // p_holiday_data.setHolidayName(p_holiday_name.getValue());
-      // // 作成日
-      // p_holiday_data.setCreateDate(Calendar.getInstance().getTime());
-      // // 更新日
-      // p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
-      //
-      // // 個別の休日を登録
-      // Database.commit();
+      EipMHoliday p_holiday_data = Database.create(EipMHoliday.class);
+      // 個別の休日の日付
+      p_holiday_data.setHolidayDate(p_holiday.getValue().getDate());
+      // 個別の休日の名前
+      p_holiday_data.setHolidayName(p_holiday_name.getValue());
+      // 作成日
+      p_holiday_data.setCreateDate(Calendar.getInstance().getTime());
+      // 更新日
+      p_holiday_data.setUpdateDate(Calendar.getInstance().getTime());
+
+      // 個別の休日を登録
+      Database.commit();
 
     } catch (Exception ex) {
       Database.rollback();
