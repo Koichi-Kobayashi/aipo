@@ -56,7 +56,10 @@ aipo.customize.showMenu = function(portlet_id) {
 		if(html.right-menuNode[0].clientWidth>rect.left){
 			menuNode.style("left",rect.left+scroll.left+"px");
         }else{
+        	var right = menuNode[0].style.right;
+        	menuNode.style("right","");
         	menuNode.style("left",rect.right-menuNode[0].clientWidth+scroll.left+"px");
+        	menuNode.style("right",right);
         }
          if(html.bottom-menuNode[0].clientHeight>rect.bottom){
         	 menuNode.style("top",rect.bottom+scroll.top+"px");
