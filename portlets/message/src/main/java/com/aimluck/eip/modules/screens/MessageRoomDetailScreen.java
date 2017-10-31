@@ -24,6 +24,7 @@ import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
 import com.aimluck.eip.cayenne.om.portlet.EipTMessageRoom;
+import com.aimluck.eip.common.ALEipUser;
 import com.aimluck.eip.message.MessageRoomMemberListSelectData;
 import com.aimluck.eip.message.util.MessageUtils;
 import com.aimluck.eip.util.ALEipUtils;
@@ -47,34 +48,47 @@ public class MessageRoomDetailScreen extends ALVelocityScreen {
     try {
 
       Integer roomId = null;
+      Integer targetUserId = null;
       boolean isNewRoom = false;
+      ALEipUser targetUser = null;
       EipTMessageRoom room = null;
 
       int userId = ALEipUtils.getUserId(rundata);
 
       try {
+        targetUserId = rundata.getParameters().getInteger("u");
+      } catch (Throwable ignore) {
+        // ignore
+      }
+      try {
         roomId = rundata.getParameters().getInteger("r");
       } catch (Throwable ignore) {
         // ignore
       }
-      if (roomId == null) {
+      if (roomId == null && targetUserId == null) {
         return;
       }
 
-      room = MessageUtils.getRoom(roomId);
-      if (room == null) {
-        return;
-      }
-
-      if (!isNewRoom) {
-        if (!MessageUtils.isJoinRoom(room, userId)) {
+      if (roomId != null && roomId > 0) {
+        room = MessageUtils.getRoom(roomId);
+        if (room == null) {
           return;
         }
       }
+
+      if (targetUserId != null && targetUserId > 0) {
+        targetUser = ALEipUtils.getALEipUser(targetUserId);
+        isNewRoom = true;
+      }
+
       MessageRoomMemberListSelectData listData =
         new MessageRoomMemberListSelectData();
 
-      listData.setRoom(room);
+      if (isNewRoom) {
+        listData.setTargetUserId((int) targetUser.getUserId().getValue());
+      } else {
+        listData.setRoom(room);
+      }
 
       listData.initField();
       listData.doViewList(this, rundata, context);
