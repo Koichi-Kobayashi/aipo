@@ -117,7 +117,7 @@ public class ExtTimecardSummaryNewXlsExportScreen extends ALXlsScreen {
     listData.init(this, rundata, context);
     listData.setRowsNum(1000);
     listData.doViewList(this, rundata, context);
-    listData.setuserList(target_group_name);
+    listData.setTargetGroup(target_group_name);
 
     String sheet_name = "タイムカード";
     // ヘッダ部作成

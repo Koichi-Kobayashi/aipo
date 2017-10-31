@@ -182,6 +182,10 @@ public class ExtTimecardSummaryListSelectData extends
 
     startDay = 1;
 
+    datemap = new LinkedHashMap<Integer, ExtTimecardSummaryResultData>();
+
+    usermap = new LinkedHashMap<Integer, List<ExtTimecardResultData>>();
+
   }
 
   /**
@@ -253,20 +257,12 @@ public class ExtTimecardSummaryListSelectData extends
   }
 
   /**
+   * 表示に必要な情報をセッションに設定します。
    *
-   * @param action
    * @param rundata
    * @param context
-   * @throws ALPageNotFoundException
-   * @throws ALDBErrorException
    */
-  @Override
-  public void init(ALAction action, RunData rundata, Context context)
-      throws ALPageNotFoundException, ALDBErrorException {
-    super.init(action, rundata, context);
-
-    this.initField();
-
+  protected void setSessionInfo(RunData rundata, Context context) {
     // 自ポートレットからのリクエストであれば、パラメータを展開しセッションに保存する。
     if (ALEipUtils.isMatch(rundata, context)) {
       // スケジュールの表示開始日時
@@ -278,17 +274,6 @@ public class ExtTimecardSummaryListSelectData extends
           "view_month",
           rundata.getParameters().getString("view_month"));
       }
-    }
-
-    // ログインユーザの ID を設定する．
-    userid = Integer.toString(ALEipUtils.getUserId(rundata));
-
-    // My グループの一覧を取得する．
-    List<ALEipGroup> myGroups = ALEipUtils.getMyGroups(rundata);
-    myGroupList = new ArrayList<ALEipGroup>();
-    int length = myGroups.size();
-    for (int i = 0; i < length; i++) {
-      myGroupList.add(myGroups.get(i));
     }
 
     try {
@@ -316,95 +301,90 @@ public class ExtTimecardSummaryListSelectData extends
       logger.error("exttimecard", ex);
     }
 
-    target_group_name = getTargetGroupName(rundata, context);
-    if (target_group_name != null) {
-      if ((!target_group_name.equals(""))
-        && (!target_group_name.equals("all"))
-        && (!target_group_name.equals("only"))) {
-        userList = ALEipUtils.getUsers(target_group_name);
-      } else if (target_group_name.equals("all")
-        || target_group_name.equals("only")) {
-        userList = getUserList(Integer.parseInt(userid));
-      } else {
-        userList = ALEipUtils.getUsers("LoginUser");
-      }
+  }
+
+  /**
+   * ユーザーIDに基づいて勤務形態の通常のStartDayを設定します。
+   *
+   * @param userid
+   */
+  protected void setStartDayByUserId(String userid) {
+    if (userid == null || userid.isEmpty()) {
+      return;
+    }
+    SelectQuery<EipTExtTimecardSystemMap> default_query =
+      Database.query(EipTExtTimecardSystemMap.class);
+    Expression exp =
+      ExpressionFactory.matchExp(
+        EipTExtTimecardSystemMap.USER_ID_PROPERTY,
+        userid);
+    default_query.setQualifier(exp);
+    ResultList<EipTExtTimecardSystemMap> map_list =
+      default_query.getResultList();
+    if (!map_list.isEmpty()) {
+      startDay = map_list.get(0).getEipTExtTimecardSystem().getStartDay();
     } else {
-      userList = ALEipUtils.getUsers("LoginUser");
+      // デフォルトのTimecardSystemを設定しておく
+      EipTExtTimecardSystem system =
+        Database.get(EipTExtTimecardSystem.class, 1);
+      if (system != null) {
+        try {
+          Date now = new Date();
+          EipTExtTimecardSystemMap rd = new EipTExtTimecardSystemMap();
+          rd.setEipTExtTimecardSystem(system);
+          int id = Integer.parseInt(userid);
+          rd.setUserId(id);
+          rd.setCreateDate(now);
+          rd.setUpdateDate(now);
+          Database.commit();
+          startDay = system.getStartDay();
+        } catch (Exception ex) {
+          Database.rollback();
+          logger.error("exttimecard", ex);
+        }
+      }
+    }
+  }
+
+  /**
+   *
+   * @param action
+   * @param rundata
+   * @param context
+   * @throws ALPageNotFoundException
+   * @throws ALDBErrorException
+   */
+  @Override
+  public void init(ALAction action, RunData rundata, Context context)
+      throws ALPageNotFoundException, ALDBErrorException {
+    super.init(action, rundata, context);
+
+    this.initField();
+
+    // ログインユーザの ID を設定する．
+    userid = Integer.toString(ALEipUtils.getUserId(rundata));
+
+    this.setSessionInfo(rundata, context);
+
+    // My グループの一覧を取得する．
+    List<ALEipGroup> myGroups = ALEipUtils.getMyGroups(rundata);
+    myGroupList = new ArrayList<ALEipGroup>();
+    int length = myGroups.size();
+    for (int i = 0; i < length; i++) {
+      myGroupList.add(myGroups.get(i));
     }
 
+    // 表示対象のグループ名を設定
+    setTargetGroup(getTargetGroupName(rundata, context));
+
     updateAclInfo(rundata);
-
-    datemap = new LinkedHashMap<Integer, ExtTimecardSummaryResultData>();
-
-    usermap = new LinkedHashMap<Integer, List<ExtTimecardResultData>>();
 
     /** 現在のユーザを取得 */
     if (target_user_id != null && !target_user_id.isEmpty()) {
       /** 勤務形態通常のstartDayを取得 */
-      SelectQuery<EipTExtTimecardSystemMap> default_query =
-        Database.query(EipTExtTimecardSystemMap.class);
-      Expression exp =
-        ExpressionFactory.matchExp(
-          EipTExtTimecardSystemMap.USER_ID_PROPERTY,
-          target_user_id);
-      default_query.setQualifier(exp);
-      ResultList<EipTExtTimecardSystemMap> map_list =
-        default_query.getResultList();
-      if (!map_list.isEmpty()) {
-        startDay = map_list.get(0).getEipTExtTimecardSystem().getStartDay();
-      } else {
-        EipTExtTimecardSystem system =
-          Database.get(EipTExtTimecardSystem.class, 1);
-        if (system != null) {
-          try {
-            Date now = new Date();
-            EipTExtTimecardSystemMap rd = new EipTExtTimecardSystemMap();
-            rd.setEipTExtTimecardSystem(system);
-            int userid = Integer.parseInt(target_user_id);
-            rd.setUserId(userid);
-            rd.setCreateDate(now);
-            rd.setUpdateDate(now);
-            Database.commit();
-            startDay = system.getStartDay();
-          } catch (Exception ex) {
-            Database.rollback();
-            logger.error("exttimecard", ex);
-          }
-        }
-      }
+      setStartDayByUserId(target_user_id);
     } else if (userid != null && !userid.isEmpty()) {
-      /** 勤務形態通常のstartDayを取得 */
-      SelectQuery<EipTExtTimecardSystemMap> default_query =
-        Database.query(EipTExtTimecardSystemMap.class);
-      Expression exp =
-        ExpressionFactory.matchExp(
-          EipTExtTimecardSystemMap.USER_ID_PROPERTY,
-          userid);
-      default_query.setQualifier(exp);
-      ResultList<EipTExtTimecardSystemMap> map_list =
-        default_query.getResultList();
-      if (!map_list.isEmpty()) {
-        startDay = map_list.get(0).getEipTExtTimecardSystem().getStartDay();
-      } else {
-        EipTExtTimecardSystem system =
-          Database.get(EipTExtTimecardSystem.class, 1);
-        if (system != null) {
-          try {
-            Date now = new Date();
-            EipTExtTimecardSystemMap rd = new EipTExtTimecardSystemMap();
-            rd.setEipTExtTimecardSystem(system);
-            int userid = Integer.parseInt(target_user_id);
-            rd.setUserId(userid);
-            rd.setCreateDate(now);
-            rd.setUpdateDate(now);
-            Database.commit();
-            startDay = system.getStartDay();
-          } catch (Exception ex) {
-            Database.rollback();
-            logger.error("exttimecard", ex);
-          }
-        }
-      }
+      setStartDayByUserId(userid);
     }
 
     initDateFields(rundata, context);
@@ -721,30 +701,17 @@ public class ExtTimecardSummaryListSelectData extends
    * @param context
    * @throws ALDBErrorException
    */
-  private void setupLists(RunData rundata, Context context) {
-    target_group_name = getTargetGroupName(rundata, context);
-    if (target_group_name != null) {
-      if ((!target_group_name.equals(""))
-        && (!target_group_name.equals("all"))
-        && (!target_group_name.equals("only"))) {
-        userList = ALEipUtils.getUsers(target_group_name);
-      } else if (target_group_name.equals("all")
-        || target_group_name.equals("only")) {
-        userList = getUserList(Integer.parseInt(userid));
-      } else {
-        userList = ALEipUtils.getUsers("LoginUser");
-      }
-    } else {
-      userList = ALEipUtils.getUsers("LoginUser");
-    }
+  protected void setupLists(RunData rundata, Context context) {
+
+    setTargetGroup(getTargetGroupName(rundata, context));
 
     if (userList == null || userList.size() == 0) {
       target_user_id = "";
       ALEipUtils.removeTemp(rundata, context, TARGET_USER_ID);
-      return;
+    } else {
+      target_user_id = getTargetUserId(rundata, context);
     }
 
-    target_user_id = getTargetUserId(rundata, context);
   }
 
   /**
@@ -754,23 +721,25 @@ public class ExtTimecardSummaryListSelectData extends
    * @param context
    * @return
    */
-  private String getTargetGroupName(RunData rundata, Context context) {
-    String target_group_name = null;
-    String idParam = null;
-    if (ALEipUtils.isMatch(rundata, context)) {
-      // 自ポートレットへのリクエストの場合に，グループ名を取得する．
-      idParam = rundata.getParameters().getString(TARGET_GROUP_NAME);
-    }
-    target_group_name = ALEipUtils.getTemp(rundata, context, TARGET_GROUP_NAME);
+  protected String getTargetGroupName(RunData rundata, Context context) {
+    final String idParam =
+      ALEipUtils.isMatch(rundata, context)
+        ? null
+        : rundata.getParameters().getString(TARGET_GROUP_NAME);
 
-    if (idParam == null && target_group_name == null) {
-      ALEipUtils.setTemp(rundata, context, TARGET_GROUP_NAME, "only");
-      target_group_name = "only";
-    } else if (idParam != null) {
+    if (idParam != null) {
       ALEipUtils.setTemp(rundata, context, TARGET_GROUP_NAME, idParam);
-      target_group_name = idParam;
+      return idParam;
+    } else {
+      String target_group_name =
+        ALEipUtils.getTemp(rundata, context, TARGET_GROUP_NAME);
+      if (target_group_name != null) {
+        return target_group_name;
+      } else {
+        ALEipUtils.setTemp(rundata, context, TARGET_GROUP_NAME, "only");
+        return "only";
+      }
     }
-    return target_group_name;
   }
 
   /**
@@ -781,15 +750,14 @@ public class ExtTimecardSummaryListSelectData extends
    * @return
    */
   private String getTargetUserId(RunData rundata, Context context) {
-    String target_user_id = null;
-    String idParam = null;
-    if (ALEipUtils.isMatch(rundata, context)) {
-      // 自ポートレットへのリクエストの場合に，ユーザ ID を取得する．
-      idParam = rundata.getParameters().getString(TARGET_USER_ID);
-    }
-    target_user_id = ALEipUtils.getTemp(rundata, context, TARGET_USER_ID);
+    String target_user_id =
+      ALEipUtils.getTemp(rundata, context, TARGET_USER_ID);
+    final String idParam =
+      ALEipUtils.isMatch(rundata, context)
+        ? rundata.getParameters().getString(TARGET_USER_ID)
+        : null;
 
-    if (idParam == null && (target_user_id == null)) {
+    if (idParam == null && target_user_id == null) {
       // ログインユーザのスケジュールを表示するため，ログイン ID を設定する．
       ALEipUtils.setTemp(rundata, context, TARGET_USER_ID, userid);
       target_user_id = userid;
@@ -1391,25 +1359,36 @@ public class ExtTimecardSummaryListSelectData extends
   }
 
   /**
-   * userListを設定する．
+   * TargetListを設定する
    *
    */
-  public void setuserList(String target_group_name) {
+  public void setTargetGroup(String target_group_name) {
     this.target_group_name = target_group_name;
-    if (this.target_group_name != null) {
-      if ((!this.target_group_name.equals(""))
-        && (!this.target_group_name.equals("all"))
-        && (!this.target_group_name.equals("only"))) {
-        userList = ALEipUtils.getUsers(target_group_name);
+    updateUserList();
+  }
+
+  /**
+   * 所定のTargetListにもとづいてUserListを設定する
+   */
+  protected void updateUserList() {
+    if (target_group_name != null) {
+      if ((!target_group_name.equals(""))
+        && (!target_group_name.equals("all"))
+        && (!target_group_name.equals("only"))) {
+        this.userList = ALEipUtils.getUsers(target_group_name);
       } else if (this.target_group_name.equals("all")
         || this.target_group_name.equals("only")) {
-        userList = getUserList(Integer.parseInt(userid));
+        setUserList(getUserList(Integer.parseInt(userid)));
       } else {
-        userList = ALEipUtils.getUsers("LoginUser");
+        setUserList(ALEipUtils.getUsers("LoginUser"));
       }
     } else {
-      userList = ALEipUtils.getUsers("LoginUser");
+      setUserList(ALEipUtils.getUsers("LoginUser"));
     }
+  }
+
+  protected void setUserList(List<ALEipUser> list) {
+    this.userList = list;
   }
 
   /**
@@ -1655,4 +1634,5 @@ public class ExtTimecardSummaryListSelectData extends
   protected int getStartDay() {
     return this.startDay;
   }
+
 }
