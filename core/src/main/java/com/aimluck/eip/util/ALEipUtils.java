@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 
 import org.apache.cayenne.DataRow;
+import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.jetspeed.capability.CapabilityMap;
@@ -681,6 +682,18 @@ public class ALEipUtils {
    * @param id
    * @return
    */
+  public static ALEipUser getALEipUser(int id, DataContext ctx)
+      throws ALDBErrorException {
+    TurbineUser tuser = getTurbineUser(id, ctx);
+    return getALEipUser(tuser);
+  }
+
+  /**
+   * 指定したユーザーIDの簡易オブジェクトを取得します。
+   *
+   * @param id
+   * @return
+   */
   public static ALEipUser getALEipUser(TurbineUser tuser)
       throws ALDBErrorException {
     if (tuser == null) {
@@ -751,6 +764,18 @@ public class ALEipUtils {
     } else {
       tuser = (TurbineUser) obj;
     }
+    return tuser;
+  }
+
+  /**
+   * 指定したユーザーIDのユーザーオブジェクトを取得します。
+   *
+   * @param id
+   * @return
+   */
+  public static TurbineUser getTurbineUser(int id, DataContext ctx)
+      throws ALDBErrorException {
+    TurbineUser tuser = Database.get(ctx, TurbineUser.class, id);
     return tuser;
   }
 
