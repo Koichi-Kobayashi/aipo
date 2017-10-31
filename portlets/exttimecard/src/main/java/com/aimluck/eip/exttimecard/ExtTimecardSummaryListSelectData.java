@@ -185,6 +185,74 @@ public class ExtTimecardSummaryListSelectData extends
   }
 
   /**
+   * アクセス権に関する情報をアップデートします。
+   *
+   * @param rundata
+   */
+  protected void updateAclInfo(RunData rundata) {
+    // アクセス権
+    if (!(userList == null) && !(userList.size() == 0)) {
+      for (ALEipUser group_target_user : userList) {
+        String group_target_user_id =
+          group_target_user.getUserId().getValueAsString();
+        if (userid.equals(group_target_user_id)) {
+          aclPortletFeature =
+            ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_SELF;
+          break;
+        } else {
+          aclPortletFeature =
+            ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER;
+        }
+      }
+    } else {
+      aclPortletFeature =
+        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER;
+    }
+    ALAccessControlFactoryService aclservice =
+      (ALAccessControlFactoryService) ((TurbineServices) TurbineServices
+        .getInstance()).getService(ALAccessControlFactoryService.SERVICE_NAME);
+    ALAccessControlHandler aclhandler = aclservice.getAccessControlHandler();
+    hasAclSummaryOther =
+      aclhandler.hasAuthority(
+        ALEipUtils.getUserId(rundata),
+        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
+        ALAccessControlConstants.VALUE_ACL_LIST);
+
+    // 他のユーザー更新権限
+    hasAclUpdate =
+      aclhandler.hasAuthority(
+        ALEipUtils.getUserId(rundata),
+        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
+        ALAccessControlConstants.VALUE_ACL_UPDATE);
+
+    // 他のユーザーの追加権限
+    hasAclInsert =
+      aclhandler.hasAuthority(
+        ALEipUtils.getUserId(rundata),
+        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
+        ALAccessControlConstants.VALUE_ACL_INSERT);
+
+    // 他のユーザーの編集権限
+    hasAclXlsExport =
+      aclhandler.hasAuthority(
+        ALEipUtils.getUserId(rundata),
+        aclPortletFeature,
+        ALAccessControlConstants.VALUE_ACL_EXPORT);
+
+    if (!hasAclSummaryOther) {
+      // 他ユーザーの閲覧権限がないときには、グループを未選択にする。
+      target_group_name = "only";
+      aclPortletFeature =
+        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_SELF;
+      hasAclXlsExport =
+        aclhandler.hasAuthority(
+          ALEipUtils.getUserId(rundata),
+          ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_SELF,
+          ALAccessControlConstants.VALUE_ACL_EXPORT);
+    }
+  }
+
+  /**
    *
    * @param action
    * @param rundata
@@ -263,66 +331,8 @@ public class ExtTimecardSummaryListSelectData extends
     } else {
       userList = ALEipUtils.getUsers("LoginUser");
     }
-    // アクセス権
-    if (!(userList == null) && !(userList.size() == 0)) {
-      for (ALEipUser group_target_user : userList) {
-        String group_target_user_id =
-          group_target_user.getUserId().getValueAsString();
-        if (userid.equals(group_target_user_id)) {
-          aclPortletFeature =
-            ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_SELF;
-          break;
-        } else {
-          aclPortletFeature =
-            ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER;
-        }
-      }
-    } else {
-      aclPortletFeature =
-        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER;
-    }
-    ALAccessControlFactoryService aclservice =
-      (ALAccessControlFactoryService) ((TurbineServices) TurbineServices
-        .getInstance()).getService(ALAccessControlFactoryService.SERVICE_NAME);
-    ALAccessControlHandler aclhandler = aclservice.getAccessControlHandler();
-    hasAclSummaryOther =
-      aclhandler.hasAuthority(
-        ALEipUtils.getUserId(rundata),
-        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
-        ALAccessControlConstants.VALUE_ACL_LIST);
 
-    // 他のユーザー更新権限
-    hasAclUpdate =
-      aclhandler.hasAuthority(
-        ALEipUtils.getUserId(rundata),
-        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
-        ALAccessControlConstants.VALUE_ACL_UPDATE);
-
-    // 他のユーザーの追加権限
-    hasAclInsert =
-      aclhandler.hasAuthority(
-        ALEipUtils.getUserId(rundata),
-        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_OTHER,
-        ALAccessControlConstants.VALUE_ACL_INSERT);
-
-    // 他のユーザーの編集権限
-    hasAclXlsExport =
-      aclhandler.hasAuthority(
-        ALEipUtils.getUserId(rundata),
-        aclPortletFeature,
-        ALAccessControlConstants.VALUE_ACL_EXPORT);
-
-    if (!hasAclSummaryOther) {
-      // 他ユーザーの閲覧権限がないときには、グループを未選択にする。
-      target_group_name = "only";
-      aclPortletFeature =
-        ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_SELF;
-      hasAclXlsExport =
-        aclhandler.hasAuthority(
-          ALEipUtils.getUserId(rundata),
-          ALAccessControlConstants.POERTLET_FEATURE_TIMECARD_TIMECARD_SELF,
-          ALAccessControlConstants.VALUE_ACL_EXPORT);
-    }
+    updateAclInfo(rundata);
 
     datemap = new LinkedHashMap<Integer, ExtTimecardSummaryResultData>();
 
