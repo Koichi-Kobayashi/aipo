@@ -189,9 +189,6 @@ aipo.system.deleteElement = function(className) {
 	}
 	delete aipo.system.holidayList[className];
 	delete aipo.system.holidayDateValue[className];
-	delete aipo.system.holidayYearValue[className];
-	delete aipo.system.holidayMonthValue[className];
-	delete aipo.system.holidayDayValue[className];
 	delete aipo.system.holidayNameValue[className];
 }
 
@@ -202,26 +199,14 @@ aipo.system.allDelete = function() {
 	for(var key1 in aipo.system.holidayDateValue){
 		delete aipo.system.holidayDateValue[key1];
 		    }
-	for(var key2 in aipo.system.holidayYearValue){
-		delete aipo.system.holidayYearValue[key2];
-		    }
-	for(var key3 in aipo.system.holidayMonthValue){
-		delete aipo.system.holidayMonthValue[key3];
-		    }
-	for(var key4 in aipo.system.holidayDayValue){
-		delete aipo.system.holidayDayValue[key4];
-		    }
-	for(var key4 in aipo.system.holidayNameValue){
-		delete aipo.system.holidayNameValue[key4];
+	for(var key2 in aipo.system.holidayNameValue){
+		delete aipo.system.holidayNameValue[key2];
 		    }
 
 }
 
 aipo.system.holidayDateValue = {};
 aipo.system.holidayNameValue = {};
-aipo.system.holidayYearValue = {};
-aipo.system.holidayMonthValue = {};
-aipo.system.holidayDayValue = {};
 
 aipo.system.addHolidayDateValue = function(){
     var Year = document.getElementById('holidayDate_year');
@@ -241,23 +226,6 @@ aipo.system.addHolidayDateValue = function(){
                 same_date_flag = true;
             }
         }
-        for(var key1 in aipo.system.holidayYearValue){
-            if (Date.value == aipo.system.holidayYearValue[key1].getAttribute('data-date')){
-                aipo.system.holidayYearValue[key1].setAttribute('value', Year.value);
-            }
-        }
-        for(var key2 in aipo.system.holidayMonthValue){
-            if (Date.value == aipo.system.holidayMonthValue[key2].getAttribute('data-date')){
-                aipo.system.holidayMonthValue[key2].setAttribute('value', Month.value);
-            }
-        }
-        for(var key3 in aipo.system.holidayDayValue){
-            if (Date.value == aipo.system.holidayDayValue[key3].getAttribute('data-date')){
-                aipo.system.holidayDayValue[key3].setAttribute('value', Day.value);
-            }
-        }
-
-
         if(!same_date_flag){
             var input_element = document.createElement('input');
             input_element.setAttribute('class', 'add' + ClassName);
@@ -269,35 +237,6 @@ aipo.system.addHolidayDateValue = function(){
             aipo.system.holidayDateValue[input_element.getAttribute('class')] = input_element;
             parent.appendChild(input_element);
 
-            var input_element_year = document.createElement('input');
-            input_element_year.setAttribute('class', 'add' + ClassName);
-            input_element_year.setAttribute('data-date', Date.value);
-            input_element_year.setAttribute('type', 'hidden');
-            input_element_year.setAttribute('name', 'p_holiday_year');
-            input_element_year.setAttribute('value', Year.value);
-
-            aipo.system.holidayYearValue[input_element.getAttribute('class')] = input_element_year;
-            parent.insertBefore(input_element_year, input_element.nextSibling);
-
-            var input_element_month = document.createElement('input');
-            input_element_month.setAttribute('class', 'add' + ClassName);
-            input_element_month.setAttribute('data-date', Date.value);
-            input_element_month.setAttribute('type', 'hidden');
-            input_element_month.setAttribute('name', 'p_holiday_month');
-            input_element_month.setAttribute('value', Month.value);
-
-            aipo.system.holidayMonthValue[input_element.getAttribute('class')] = input_element_month;
-            parent.insertBefore(input_element_month, input_element_year.nextSibling);
-
-            var input_element_day = document.createElement('input');
-            input_element_day.setAttribute('class', 'add' + ClassName);
-            input_element_day.setAttribute('data-date', Date.value);
-            input_element_day.setAttribute('type', 'hidden');
-            input_element_day.setAttribute('name', 'p_holiday_day');
-            input_element_day.setAttribute('value', Day.value);
-
-            aipo.system.holidayDayValue[input_element.getAttribute('class')] = input_element_day;
-            parent.insertBefore(input_element_day, input_element_month.nextSibling);
         }
        }
 
