@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.jar.Attributes;
 
 import org.apache.cayenne.exp.Expression;
@@ -44,6 +45,7 @@ import com.aimluck.eip.eventlog.util.ALEventlogUtils;
 import com.aimluck.eip.eventlog.util.EventlogUtils;
 import com.aimluck.eip.modules.actions.common.ALAction;
 import com.aimluck.eip.orm.Database;
+import com.aimluck.eip.orm.query.Operations;
 import com.aimluck.eip.orm.query.ResultList;
 import com.aimluck.eip.orm.query.SelectQuery;
 import com.aimluck.eip.util.ALEipUtils;
@@ -56,8 +58,8 @@ public class EventlogSelectData extends
     ALAbstractSelectData<EipTEventlog, EipTEventlog> implements ALData {
 
   /** logger */
-  private static final JetspeedLogger logger =
-    JetspeedLogFactoryService.getLogger(EventlogSelectData.class.getName());
+  private static final JetspeedLogger logger = JetspeedLogFactoryService
+    .getLogger(EventlogSelectData.class.getName());
 
   /** イベントログの書き出し可能最大数 */
   private static final int MAX_SIZE = 50000;
@@ -82,14 +84,10 @@ public class EventlogSelectData extends
       throws ALPageNotFoundException, ALDBErrorException {
     String sort = ALEipUtils.getTemp(rundata, context, LIST_SORT_STR);
     if (sort == null || sort.equals("")) {
-      ALEipUtils.setTemp(
-        rundata,
-        context,
-        LIST_SORT_STR,
-        ALEipUtils
-          .getPortlet(rundata, context)
-          .getPortletConfig()
-          .getInitParameter("p2a-sort"));
+      ALEipUtils.setTemp(rundata, context, LIST_SORT_STR, ALEipUtils
+        .getPortlet(rundata, context)
+        .getPortletConfig()
+        .getInitParameter("p2a-sort"));
     }
 
     String sort_type = ALEipUtils.getTemp(rundata, context, LIST_SORT_TYPE_STR);
@@ -182,9 +180,8 @@ public class EventlogSelectData extends
     cal.setTime(end_date.getValue());
     cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
     Expression exp2 =
-      ExpressionFactory.lessExp(
-        EipTEventlog.EVENT_DATE_PROPERTY,
-        cal.getTime());
+      ExpressionFactory
+        .lessExp(EipTEventlog.EVENT_DATE_PROPERTY, cal.getTime());
     query.andQualifier(exp1.andExp(exp2));
   }
 
@@ -206,6 +203,58 @@ public class EventlogSelectData extends
   }
 
   /**
+   * queryにFilterをセットします。
+   *
+   * @param query
+   * @param rundata
+   * @param context
+   * @return
+   */
+  @Override
+  protected SelectQuery<EipTEventlog> buildSelectQueryForFilter(
+      SelectQuery<EipTEventlog> query, RunData rundata, Context context) {
+    String filter = ALEipUtils.getTemp(rundata, context, LIST_FILTER_STR);
+    String filter_type =
+      ALEipUtils.getTemp(rundata, context, LIST_FILTER_TYPE_STR);
+    String crt_key = null;
+    Attributes map = getColumnMap();
+    if (filter == null || filter_type == null || filter.equals("")) {
+      return query;
+    }
+    crt_key = map.getValue(filter_type);
+    if (crt_key == null) {
+      return query;
+    }
+    if (crt_key.equals(EipTEventlog.PORTLET_TYPE_PROPERTY)) {
+      SelectQuery<EipTEventlog> mapquery = Database.query(EipTEventlog.class);
+      mapquery.where(Operations.eq(EipTEventlog.PORTLET_TYPE_PROPERTY, Integer
+        .valueOf(filter)));
+      List<EipTEventlog> eventlogMapList = mapquery.fetchList();
+      List<Integer> eventlogIdList = new ArrayList<Integer>();
+      for (EipTEventlog emap : eventlogMapList) {
+        eventlogIdList.add(emap.getEventlogId());
+      }
+
+      // if facility not exist, add no one match id
+      if (eventlogIdList.size() == 0) {
+        eventlogIdList.add(Integer.valueOf(0));
+      }
+
+      Expression exp =
+        ExpressionFactory.inDbExp(
+          EipTEventlog.EVENTLOG_ID_PK_COLUMN,
+          eventlogIdList);
+      query.andQualifier(exp);
+    } else {
+      Expression exp = ExpressionFactory.matchExp(crt_key, filter);
+      query.andQualifier(exp);
+    }
+    current_filter = filter;
+    current_filter_type = filter_type;
+    return query;
+  }
+
+  /**
    * ResultData に値を格納して返します。（一覧データ） <BR>
    *
    * @param obj
@@ -222,14 +271,8 @@ public class EventlogSelectData extends
 
       TurbineUser user = record.getTurbineUser();
 
-      rd.setUserFullName(
-        user == null
-          ? ""
-          : new StringBuffer()
-            .append(user.getLastName())
-            .append(" ")
-            .append(user.getFirstName())
-            .toString());
+      rd.setUserFullName(user == null ? "" : new StringBuffer().append(
+        user.getLastName()).append(" ").append(user.getFirstName()).toString());
 
       if (user != null
         && user.getLastName().trim().equals("")
@@ -238,8 +281,8 @@ public class EventlogSelectData extends
       }
 
       rd.setEventDate(df.format(record.getUpdateDate()));
-      rd.setPortletName(
-        ALEventlogUtils.getPortletAliasName(record.getPortletType()));
+      rd.setPortletName(ALEventlogUtils.getPortletAliasName(record
+        .getPortletType()));
       rd.setEntityId(record.getEntityId().longValue());
       rd.setIpAddr(record.getIpAddr());
       rd.setEventName(ALEventlogUtils.getEventAliasName(record.getEventType()));
@@ -279,8 +322,10 @@ public class EventlogSelectData extends
       rd.setEventlogId(record.getEventlogId().longValue());
 
       String userFullName =
-        ALEipUtils.getUserFullName(
-          record.getTurbineUser().getUserId().intValue());
+        ALEipUtils.getUserFullName(record
+          .getTurbineUser()
+          .getUserId()
+          .intValue());
 
       if (userFullName != null && !userFullName.trim().equals("")) {
         rd.setUserFullName(userFullName);
@@ -291,17 +336,16 @@ public class EventlogSelectData extends
       }
 
       rd.setEventDate(df.format(record.getUpdateDate()));
-      rd.setPortletName(
-        ALEventlogUtils.getPortletAliasName(record.getPortletType()));
+      rd.setPortletName(ALEventlogUtils.getPortletAliasName(record
+        .getPortletType()));
       rd.setEntityId(record.getEntityId().longValue());
       rd.setIpAddr(record.getIpAddr());
       rd.setEventName(ALEventlogUtils.getEventAliasName(record.getEventType()));
       rd.setNote(record.getNote());
       // 各ポートレットのデータ名を取得
       String dataName =
-        EventlogUtils.getPortletDataName(
-          record.getPortletType(),
-          record.getEntityId());
+        EventlogUtils.getPortletDataName(record.getPortletType(), record
+          .getEntityId());
       if (dataName != null && !"".equals(dataName)) {
         rd.setDataName(dataName);
         rd.setDataNameFlag(true);
@@ -337,11 +381,9 @@ public class EventlogSelectData extends
   protected Attributes getColumnMap() {
     Attributes map = new Attributes();
     map.putValue("event_date", EipTEventlog.EVENT_DATE_PROPERTY);
-    map.putValue(
-      "user_name",
-      EipTEventlog.TURBINE_USER_PROPERTY
-        + "."
-        + TurbineUser.LAST_NAME_KANA_PROPERTY);
+    map.putValue("user_name", EipTEventlog.TURBINE_USER_PROPERTY
+      + "."
+      + TurbineUser.LAST_NAME_KANA_PROPERTY);
     map.putValue("portlet_id", EipTEventlog.PORTLET_TYPE_PROPERTY);
     map.putValue("event_type", EipTEventlog.EVENT_TYPE_PROPERTY);
     map.putValue("ip_addr", EipTEventlog.IP_ADDR_PROPERTY);
