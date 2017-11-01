@@ -94,7 +94,9 @@
 #ALtablefooter()
 #ALbuttonheader()
 ##<input name="$name" class="auiButtonAction" type="button" value="$action_str" onclick="" />
-#ALsubmit($event_submit $action_str)
+##ALsubmit($event_submit $action_str)
+<input name="$event_submit" class="auiButtonAction" type="submit" value="$action_str" onclick="aimluck.io.setHiddenValue(this);aipo.system.allDelete();" />
+
 #ALajaxbuttonClose()
 #ALbuttonfooter()
 #if($mode=="new_form")

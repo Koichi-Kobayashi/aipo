@@ -195,6 +195,28 @@ aipo.system.deleteElement = function(className) {
 	delete aipo.system.holidayNameValue[className];
 }
 
+aipo.system.allDelete = function() {
+	for(var key in aipo.system.holidayList){
+		delete aipo.system.holidayList[key];
+		  }
+	for(var key1 in aipo.system.holidayDateValue){
+		delete aipo.system.holidayDateValue[key1];
+		    }
+	for(var key2 in aipo.system.holidayYearValue){
+		delete aipo.system.holidayYearValue[key2];
+		    }
+	for(var key3 in aipo.system.holidayMonthValue){
+		delete aipo.system.holidayMonthValue[key3];
+		    }
+	for(var key4 in aipo.system.holidayDayValue){
+		delete aipo.system.holidayDayValue[key4];
+		    }
+	for(var key4 in aipo.system.holidayNameValue){
+		delete aipo.system.holidayNameValue[key4];
+		    }
+
+}
+
 aipo.system.holidayDateValue = {};
 aipo.system.holidayNameValue = {};
 aipo.system.holidayYearValue = {};
