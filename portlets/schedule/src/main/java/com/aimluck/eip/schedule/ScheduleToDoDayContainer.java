@@ -124,6 +124,7 @@ public class ScheduleToDoDayContainer implements ALData {
     // Date now = today.getValue();
     // boolean isPersonalHoliday = false;
     // SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+    // if (query.fetchList().size() != 0) {
     // Expression exp1 =
     // ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
     // query.setQualifier(exp1);
@@ -132,8 +133,9 @@ public class ScheduleToDoDayContainer implements ALData {
     // isPersonalHoliday = true;
     // }
     //
-    // if (holiday != null || isPersonalHoliday) {
+    // if (isPersonalHoliday) {
     // return true;
+    // }
     // }
     return (holiday == null) ? false : true;
   }
@@ -151,6 +153,7 @@ public class ScheduleToDoDayContainer implements ALData {
   // Date now = today.getValue();
   // boolean isPersonalHoliday = false;
   // SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
+  // if (query.fetchList().size() != 0) {
   // Expression exp1 =
   // ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
   // query.setQualifier(exp1);
@@ -160,8 +163,10 @@ public class ScheduleToDoDayContainer implements ALData {
   // isPersonalHoliday = true;
   // }
   //
-  // if (isPersonalHoliday) {
+  // if (holiday == null && isPersonalHoliday) {
   // return p_holiday.get(0).getHolidayName();
+  // } else {}
+  // return holiday.getName().getValue();
   // }
   // return holiday.getName().getValue();
   // }

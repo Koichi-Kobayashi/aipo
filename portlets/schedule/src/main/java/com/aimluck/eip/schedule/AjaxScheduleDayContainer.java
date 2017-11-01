@@ -208,16 +208,18 @@ public class AjaxScheduleDayContainer implements ALData {
     Date now = today.getValue();
     boolean isPersonalHoliday = false;
     SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
-    Expression exp1 =
-      ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
-    query.setQualifier(exp1);
+    if (query.fetchList().size() != 0) {
+      Expression exp1 =
+        ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
+      query.setQualifier(exp1);
 
-    if (!query.getResultList().isEmpty()) {
-      isPersonalHoliday = true;
-    }
+      if (!query.getResultList().isEmpty()) {
+        isPersonalHoliday = true;
+      }
 
-    if (isPersonalHoliday) {
-      return true;
+      if (isPersonalHoliday) {
+        return true;
+      }
     }
     return (holiday == null) ? false : true;
   }
@@ -257,18 +259,23 @@ public class AjaxScheduleDayContainer implements ALData {
     Date now = today.getValue();
     boolean isPersonalHoliday = false;
     SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
-    Expression exp1 =
-      ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
-    query.setQualifier(exp1);
+    if (query.fetchList().size() != 0) {
+      Expression exp1 =
+        ExpressionFactory.matchExp(EipMHoliday.HOLIDAY_DATE_PROPERTY, now);
+      query.setQualifier(exp1);
 
-    List<EipMHoliday> p_holiday = query.fetchList();
-    if (!query.getResultList().isEmpty()) {
-      isPersonalHoliday = true;
-    }
+      List<EipMHoliday> p_holiday = query.fetchList();
+      if (!query.getResultList().isEmpty()) {
+        isPersonalHoliday = true;
+      }
 
-    if (isPersonalHoliday) {
-      return p_holiday.get(0).getHolidayName();
+      if (holiday == null && isPersonalHoliday) {
+        return p_holiday.get(0).getHolidayName();
+      } else {
+      }
+      return holiday.getName().getValue();
     }
     return holiday.getName().getValue();
   }
+
 }
