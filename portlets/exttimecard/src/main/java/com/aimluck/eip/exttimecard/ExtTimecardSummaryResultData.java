@@ -172,6 +172,8 @@ public class ExtTimecardSummaryResultData implements ALData {
   /** 法定休日深夜残業時間 */
   private ALNumberField statutory_off_day_midnight_work_hour = null;
 
+  private Double paid_holiday_double = null;
+
   /**
    *
    *
@@ -327,8 +329,8 @@ public class ExtTimecardSummaryResultData implements ALData {
    *
    * @param days
    */
-  public void setPaidHoliday(int days) {
-    paid_holiday.setValue(days);
+  public void setPaidHoliday(double days) {
+    paid_holiday.setValue((long) days);
   }
 
   /**
@@ -474,6 +476,24 @@ public class ExtTimecardSummaryResultData implements ALData {
    */
   public ALNumberField getPaidHoliday() {
     return paid_holiday;
+  }
+
+  /**
+   * 有休日数を設定します。
+   *
+   * @param days
+   */
+  public void setPaidHolidayDouble(double days) {
+    paid_holiday_double = days;
+  }
+
+  /**
+   * 有休日数を少数点以下まで取得します。
+   *
+   * @return
+   */
+  public double getPaidHolidayDouble() {
+    return paid_holiday_double;
   }
 
   /**

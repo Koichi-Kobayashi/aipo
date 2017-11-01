@@ -116,7 +116,13 @@ $l10n.EXTTIMECARD_CONSIDERED_OVERTIME_NOTHING
   </p>
 </div>
 #ALtditemfooter()
-
+#if($!result.isNewRule())
+#ALtdcaption($l10n.EXTTIMECARD_ADMIN_HALFDAY_OFF)
+#ALtditemheader()
+<p>$l10n.EXTTIMECARD_ADMIN_MORNING_OFF_MESSAGE1$!{result.Detail.MorningOff}$l10n.EXTTIMECARD_ADMIN_HALFDAY_OFF_MESSAGE1</p>
+<p>$l10n.EXTTIMECARD_ADMIN_AFTERNOON_OFF_MESSAGE1$!{result.Detail.AfternoonOff}$l10n.EXTTIMECARD_ADMIN_HALFDAY_OFF_MESSAGE1</p>
+#ALtditemfooter()
+#end
 #ALtablefooter()
 #ALbuttonheader()
 #if($!{result.PortletName} == "ExtTimecardSystem")

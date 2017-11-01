@@ -93,3 +93,8 @@ UPDATE `eip_t_ext_timecard_system` SET `resttime_end_hour` =13;
 UPDATE `eip_t_ext_timecard_system` SET `resttime_end_minute` =0;
 UPDATE `eip_t_ext_timecard_system` SET `considered_overtime` = 0;
 -- 20170825
+
+-- 20171006
+ALTER TABLE `eip_t_ext_timecard_system` ADD `morning_off` int(11) DEFAULT 240 AFTER `holiday_of_week`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `afternoon_off` int(11) DEFAULT 240 AFTER `morning_off`;
+-- 20171006

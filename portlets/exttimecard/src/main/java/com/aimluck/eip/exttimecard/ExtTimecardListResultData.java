@@ -617,6 +617,9 @@ public class ExtTimecardListResultData implements ALData {
         int resttimes = (int) (time / worktimein);
         return time - resttimes * resttimein;
       } else {
+        // 午前休・午後休の場合には所定労働時間を加算する
+        time += addHalfDayTime();
+
         // 法定外残業の場合 就業時間の合計が決められた残業時間以上の場合 残業時間を返す
         /** 外出時間を就業時間に含めない場合 */
         if ("F".equals(timecard_system.getOutgoingAddFlag())) {
@@ -660,6 +663,21 @@ public class ExtTimecardListResultData implements ALData {
         }
       }
     }
+  }
+
+  /**
+   * @param rd2
+   * @param timecard_system2
+   * @return
+   */
+  private float addHalfDayTime() {
+    if (rd.getIsTypeM()) {
+      return (timecard_system.getMorningOff() / 60f);
+    }
+    if (rd.getIsTypeN()) {
+      return (timecard_system.getAfternoonOff() / 60f);
+    }
+    return 0;
   }
 
   public float getWorkHourWithoutRestHour(boolean round) {
@@ -1890,9 +1908,20 @@ public class ExtTimecardListResultData implements ALData {
         }
       }
     }
-    float tmp1 = time - getAgreedHours();
+    // 午前休・午後休の場合には所定労働時間を加算する
+    float halfDayTime = addHalfDayTime();
+    float tmp1 = time + halfDayTime - getAgreedHours();
     if (tmp1 <= 0) {
       return 0f;
+    }
+    // 残業時間の計算
+    float tmp2 = time - getAgreedHours();
+    if (tmp2 <= 0) {
+      tmp2 = 0f;
+    }
+    float tmp4 = time + halfDayTime - getAgreedHours() - tmp2;
+    if (tmp4 <= 0) {
+      tmp4 = 0f;
     }
     float overTime =
       ExtTimecardUtils.getOvertimeMinuteByDay(timecard_system) / 60f;
@@ -1900,6 +1929,7 @@ public class ExtTimecardListResultData implements ALData {
       return tmp1;
     } else {
       float tmp3 = overTime - getAgreedHours();
+      tmp3 += tmp4;
       if (tmp3 > 0) {
         return tmp3;
       } else {
