@@ -443,10 +443,7 @@ public class ExtTimecardListResultData implements ALData {
     /** 決まった時間ごとの休憩時間を取らせます。 */
     if (ExtTimecardUtils.isResttimePoints(timecard_system)) {
       float resttime =
-        ExtTimecardUtils.getResttime(
-          rd.getClockInTime().getValue(),
-          rd.getClockOutTime().getValue(),
-          timecard_system);
+        ExtTimecardUtils.getResttime(startDate, endDate, timecard_system);
       if (resttime != 0F) {
         time -= resttime;
       }
@@ -618,7 +615,7 @@ public class ExtTimecardListResultData implements ALData {
         return time - resttimes * resttimein;
       } else {
         // 午前休・午後休の場合には所定労働時間を加算する
-        time += addHalfDayTime();
+        // time += addHalfDayTime();
 
         // 法定外残業の場合 就業時間の合計が決められた残業時間以上の場合 残業時間を返す
         /** 外出時間を就業時間に含めない場合 */
@@ -666,6 +663,8 @@ public class ExtTimecardListResultData implements ALData {
   }
 
   /**
+   * 午前休・午後休の場合の所定労働時間
+   *
    * @param rd2
    * @param timecard_system2
    * @return
@@ -1923,6 +1922,7 @@ public class ExtTimecardListResultData implements ALData {
     if (tmp4 <= 0) {
       tmp4 = 0f;
     }
+
     float overTime =
       ExtTimecardUtils.getOvertimeMinuteByDay(timecard_system) / 60f;
     if (time < overTime) {
