@@ -305,18 +305,15 @@ aipo.message.latestMessageList = function() {
 aipo.message.moreMessageRightList = function() {
     var screen = aipo.message.jslink + "?template=MessageSearchListScreen";
     var cursor = aipo.message.getLastMessageRightId();
-    var param_keyword = "";
     if (cursor) {
         aipo.message.moreMessageLock = true;
         screen += "&c=" + cursor;
         screen += "&js_peid=" + aipo.message.portletId;
-        screen += "&k=" + encodeURIComponent(aipo.message.currentMessageSearchKeyword);
-        param_keyword = aipo.message.currentMessageSearchKeyword;
         dojo.xhrPost({
             url : screen,
             timeout : 30000,
             encoding : "utf-8",
-            content: {"keyword":param_keyword},
+            content: {"k": aipo.message.currentMessageSearchKeyword},
             handleAs : "text",
             headers : {
                 X_REQUESTED_WITH : "XMLHttpRequest"
