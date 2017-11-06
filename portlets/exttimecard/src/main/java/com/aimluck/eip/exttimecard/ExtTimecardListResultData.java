@@ -615,7 +615,7 @@ public class ExtTimecardListResultData implements ALData {
         return time - resttimes * resttimein;
       } else {
         // 午前休・午後休の場合には所定労働時間を加算する
-        // time += addHalfDayTime();
+        time += addHalfDayTime();
 
         // 法定外残業の場合 就業時間の合計が決められた残業時間以上の場合 残業時間を返す
         /** 外出時間を就業時間に含めない場合 */
@@ -654,8 +654,16 @@ public class ExtTimecardListResultData implements ALData {
 
         agreedHours = this.getAgreedHours();
         if (time >= agreedHours) {
+          if (addHalfDayTime() > 0) {
+            // 午前休・午後休の場合には所定労働時間を引く
+            agreedHours -= addHalfDayTime();
+          }
           return agreedHours;
         } else {
+          if (addHalfDayTime() > 0) {
+            // 午前休・午後休の場合には所定労働時間を引く
+            time -= addHalfDayTime();
+          }
           return time;
         }
       }
