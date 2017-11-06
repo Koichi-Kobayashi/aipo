@@ -267,7 +267,7 @@
 		#ALtdcellfooter()
 
 		## 遅刻日数の代入
-		#if ( $rdlist.isLateComing() )
+		#if ( !$!{rd.isTypeM} && $rdlist.isLateComing() )
 			#set($late_coming_day = 1)
 		#else
 			#set($late_coming_day = 0)
@@ -278,7 +278,7 @@
 		#ALtdcellfooter()
 
 		## 早退日数の代入
-		#if ( $rdlist.isEarlyLeaving() )
+		#if ( !$!{rd.isTypeN} && $rdlist.isEarlyLeaving() )
 			#set($early_leaving_day = 1)
 		#else
 			#set($early_leaving_day = 0)
@@ -302,6 +302,10 @@
 		## 有休日数の代入
 		#if ( $rd.isTypeH )
 			#set($paid_holiday = 1)
+		#elseif( $rd.isTypeM )
+			#set($paid_holiday = "0.5")
+		#elseif( $rd.isTypeN )
+			#set($paid_holiday = "0.5")
 		#else
 			#set($paid_holiday = 0)
 		#end

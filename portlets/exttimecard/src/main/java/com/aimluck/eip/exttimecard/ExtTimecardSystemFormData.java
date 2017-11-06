@@ -129,6 +129,10 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
 
   private ALStringField holiday;
 
+  private ALNumberField morning_off;
+
+  private ALNumberField afternoon_off;
+
   private ALStringField considered_overtime_flag;
 
   private ALNumberField considered_overtime;
@@ -249,6 +253,12 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
     holiday = new ALStringField();
     holiday.setFieldName(
       ALLocalizationUtils.getl10n("EXTTIMECARD_HOLIDAY_SETTING_HOLIDAY"));
+    morning_off = new ALNumberField();
+    morning_off.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_ADMIN_HALFDAY_OFF"));
+    afternoon_off = new ALNumberField();
+    afternoon_off.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_ADMIN_HALFDAY_OFF"));
     considered_overtime_flag = new ALStringField();
     considered_overtime = new ALNumberField();
     considered_overtime.setFieldName(
@@ -343,6 +353,8 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
         holiday.setValue(
           record.getHolidayOfWeek().charAt(9) != '0' ? "1" : null);
       }
+      morning_off.setValue(record.getMorningOff());
+      afternoon_off.setValue(record.getAfternoonOff());
 
     } catch (Exception ex) {
       logger.error("exttimecard", ex);
@@ -451,6 +463,9 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
         b.append("1".equals(holiday.getValue()) ? "1" : "0");
       }
       record.setHolidayOfWeek(b.toString());
+
+      record.setMorningOff((int) morning_off.getValue());
+      record.setAfternoonOff((int) afternoon_off.getValue());
 
       // イベントログに保存
       ALEventlogFactoryService.getInstance().getEventlogHandler().log(
@@ -601,6 +616,10 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
         b.append("1".equals(holiday.getValue()) ? "1" : "0");
       }
       record.setHolidayOfWeek(b.toString());
+
+      record.setMorningOff((int) morning_off.getValue());
+      record.setAfternoonOff((int) afternoon_off.getValue());
+
       Database.commit();
 
       // イベントログに保存
@@ -712,6 +731,8 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
             holiday.setValue(
               record.getHolidayOfWeek().charAt(9) != '0' ? "1" : null);
           }
+          morning_off.setValue(record.getMorningOff());
+          afternoon_off.setValue(record.getAfternoonOff());
         } catch (Exception ex) {
           logger.error("[ExtTimecardSystemFormData]", ex);
         }
@@ -746,6 +767,8 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
     resttime_end_minute.limitValue(0, 59);
     overtime_type_minute.limitValue(0, 1440);
     overtime_type_week_hour.limitValue(0, 168);
+    morning_off.limitValue(0, 480);
+    afternoon_off.limitValue(0, 480);
     considered_overtime.limitValue(0, 100);
   }
 
@@ -786,6 +809,8 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
       if (isNewRule) {
         overtime_type_minute.validate(msgList);
         overtime_type_week_hour.validate(msgList);
+        morning_off.validate(msgList);
+        afternoon_off.validate(msgList);
       }
     } catch (Exception ex) {
       logger.error("exttimecard", ex);
@@ -1062,6 +1087,20 @@ public class ExtTimecardSystemFormData extends ALAbstractFormData {
 
   public ALStringField getHoliday() {
     return holiday;
+  }
+
+  /**
+   * @return morning_off
+   */
+  public ALNumberField getMorningOff() {
+    return morning_off;
+  }
+
+  /**
+   * @return afternoon_off
+   */
+  public ALNumberField getAfternoonOff() {
+    return afternoon_off;
   }
 
   public ALStringField getConsideredOvertimeFlag() {
