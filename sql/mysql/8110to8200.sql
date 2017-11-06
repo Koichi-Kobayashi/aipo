@@ -103,3 +103,8 @@ ALTER TABLE `activity` ADD INDEX activity_index1(`priority`);
 ALTER TABLE `turbine_user_group_role` ADD INDEX turbine_user_group_role_index1(`user_id`,`group_id`);
 -- 20170829
 
+
+-- 20171006
+ALTER TABLE `eip_t_ext_timecard_system` ADD `morning_off` int(11) DEFAULT 240 AFTER `holiday_of_week`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `afternoon_off` int(11) DEFAULT 240 AFTER `morning_off`;
+-- 20171006

@@ -247,7 +247,7 @@ public class ExtTimecardSummaryNewXlsExportScreen extends ALXlsScreen {
       // 欠勤日数
       String absent_day = tclistrd.getAbsentDay().getValueAsString();
       // 有休日数
-      String paid_holiday = tclistrd.getPaidHoliday().getValueAsString();
+      String paid_holiday = String.valueOf(tclistrd.getPaidHolidayDouble());
       // 代休日数
       String compensatory_holiday =
         tclistrd.getCompensatoryHoliday().getValueAsString();

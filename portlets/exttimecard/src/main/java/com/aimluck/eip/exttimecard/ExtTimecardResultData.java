@@ -97,6 +97,10 @@ public class ExtTimecardResultData implements ALData {
 
   private boolean isTypeH;
 
+  private boolean isTypeM;
+
+  private boolean isTypeN;
+
   private boolean isTypeC;
 
   private boolean isTypeE;
@@ -126,6 +130,8 @@ public class ExtTimecardResultData implements ALData {
     isTypeP = false;
     isTypeA = false;
     isTypeH = false;
+    isTypeM = false;
+    isTypeN = false;
     isTypeC = false;
     isTypeE = false;
     outgoing_time = new ArrayList<ALDateTimeField>();
@@ -584,6 +590,14 @@ public class ExtTimecardResultData implements ALData {
     return isTypeH;
   }
 
+  public boolean getIsTypeM() {
+    return isTypeM;
+  }
+
+  public boolean getIsTypeN() {
+    return isTypeN;
+  }
+
   public boolean getIsTypeC() {
     return isTypeC;
   }
@@ -610,6 +624,14 @@ public class ExtTimecardResultData implements ALData {
 
   public void setIsTypeH(boolean b) {
     isTypeH = b;
+  }
+
+  public void setIsTypeM(boolean b) {
+    isTypeM = b;
+  }
+
+  public void setIsTypeN(boolean b) {
+    isTypeN = b;
   }
 
   public void setIsTypeC(boolean b) {
