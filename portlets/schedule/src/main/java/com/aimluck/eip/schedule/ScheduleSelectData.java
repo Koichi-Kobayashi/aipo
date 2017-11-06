@@ -88,7 +88,7 @@ public class ScheduleSelectData extends
   /** <code>type</code> マップ種別（ユーザ or 設備） */
   private String type;
 
-  /** <code</code> マップ有効性（有効 or 無効） */
+  /** <code></code> マップ有効性（有効 or 無効） */
   private String enabledMapsFlag;
 
   /** <code>loginuserid</code> ログインユーザーID */

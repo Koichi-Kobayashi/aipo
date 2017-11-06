@@ -21,6 +21,7 @@ package com.aimluck.eip.exttimecard;
 import com.aimluck.commons.field.ALNumberField;
 import com.aimluck.commons.field.ALStringField;
 import com.aimluck.commons.utils.ALStringUtil;
+import com.aimluck.eip.exttimecard.util.ExtTimecardUtils;
 import com.aimluck.eip.util.ALLocalizationUtils;
 
 /**
@@ -50,6 +51,16 @@ public class ExtTimecardSystemDetailResultData extends
   private ALNumberField worktime_out;
 
   private ALNumberField resttime_out;
+
+  private ALNumberField resttime_start_hour;
+
+  private ALNumberField resttime_start_minute;
+
+  private ALNumberField resttime_end_hour;
+
+  private ALNumberField resttime_end_minute;
+
+  private ALStringField resttime_type;
 
   private ALNumberField change_hour;
 
@@ -85,7 +96,15 @@ public class ExtTimecardSystemDetailResultData extends
 
   private ALStringField holiday;
 
+  private ALStringField considered_overtime_flag;
+
+  private ALNumberField considered_overtime;
+
   private boolean hasHoliday;
+
+  private ALNumberField morning_off;
+
+  private ALNumberField afternoon_off;
 
   /**
    *
@@ -104,6 +123,11 @@ public class ExtTimecardSystemDetailResultData extends
     resttime_in = new ALNumberField();
     worktime_out = new ALNumberField();
     resttime_out = new ALNumberField();
+    resttime_start_hour = new ALNumberField();
+    resttime_start_minute = new ALNumberField();
+    resttime_end_hour = new ALNumberField();
+    resttime_end_minute = new ALNumberField();
+    resttime_type = new ALStringField();
     change_hour = new ALNumberField();
     outgoing_add_flag = new ALStringField();
     create_date = new ALStringField();
@@ -120,6 +144,10 @@ public class ExtTimecardSystemDetailResultData extends
     week7 = new ALStringField();
     statutoryHoliday = new ALStringField();
     holiday = new ALStringField();
+    morning_off = new ALNumberField();
+    afternoon_off = new ALNumberField();
+    considered_overtime_flag = new ALStringField();
+    considered_overtime = new ALNumberField();
   }
 
   public String getUserId() {
@@ -381,6 +409,155 @@ public class ExtTimecardSystemDetailResultData extends
    */
   public void setHasHoliday(boolean hasHoliday) {
     this.hasHoliday = hasHoliday;
+  }
+
+  /**
+   * @return morning_off
+   */
+  public ALNumberField getMorningOff() {
+    return morning_off;
+  }
+
+  /**
+   * @param morning_off
+   *          セットする morning_off
+   */
+  public void setMorningOff(int i) {
+    morning_off.setValue(i);
+  }
+
+  /**
+   * @return afternoon_off
+   */
+  public ALNumberField getAfternoonOff() {
+    return afternoon_off;
+  }
+
+  /**
+   * @param afternoon_off
+   *          セットする afternoon_off
+   */
+  public void setAfternoonOff(int i) {
+    afternoon_off.setValue(i);
+  }
+
+  /**
+   *
+   * @return considered_overtime_flag
+   */
+  public ALStringField getConsideredOvertimeFlag() {
+    return considered_overtime_flag;
+  }
+
+  /**
+   * @param considered_overtime_flag
+   *          セットする considered_overtime_flag
+   */
+
+  public void setConsideredOvertimeFlag(String type) {
+    considered_overtime_flag.setValue(type);
+  }
+
+  /**
+   * @return considered_overtime
+   */
+  public ALNumberField getConsideredOvertime() {
+    return considered_overtime;
+  }
+
+  /**
+   * @param considered_overtime
+   *          セットする considered_overtime
+   */
+
+  public void setConsideredOvertime(int i) {
+    considered_overtime.setValue(i);
+  }
+
+  public ALNumberField getResttimeStartHour() {
+    return resttime_start_hour;
+  }
+
+  /**
+   * @param resttime_start_hour
+   *          セットする resttime_start_hour
+   */
+  public void setResttimeStartHour(int i) {
+    resttime_start_hour.setValue(i);
+  }
+
+  /**
+   * @return resttime_start_minute
+   */
+  public ALNumberField getResttimeStartMinute() {
+    return resttime_start_minute;
+  }
+
+  /**
+   * @param resttime_start_minute
+   *          セットする resttime_start_minute
+   */
+  public void setResttimeStartMinute(int i) {
+    resttime_start_minute.setValue(i);
+  }
+
+  /**
+   * @return resttime_end_hour
+   */
+  public ALNumberField getResttimeEndHour() {
+    return resttime_end_hour;
+  }
+
+  /**
+   * @param resttime_end_hour
+   *          セットする resttime_end_hour
+   */
+  public void setResttimeEndHour(int i) {
+    resttime_end_hour.setValue(i);
+  }
+
+  /**
+   * @return resttime_end_minute
+   */
+  public ALNumberField getResttimeEndMinute() {
+    return resttime_end_minute;
+  }
+
+  /**
+   * @param resttime_end_minute
+   *          セットする resttime_end_minute
+   */
+  public void setResttimeEndMinute(int i) {
+    resttime_end_minute.setValue(i);
+  }
+
+  /**
+   * @return resttime_type
+   */
+  public ALStringField getResttimeType() {
+    return resttime_type;
+  }
+
+  /**
+   * @param resttime_type
+   *          セットする resttime_type
+   */
+  public void setResttimeType(String type) {
+    resttime_type.setValue(type);
+  }
+
+  public boolean isResttimeTypePoints() {
+    return ExtTimecardUtils.EXTTIMECARD_RESTTIME_TIME_POINTS.equals(
+      resttime_type.getValue());
+  }
+
+  public String getRestTimeSpan() {
+    return ALLocalizationUtils.getl10nFormat(
+      "EXTTIMECARD_HOUR_MINUTE_FORMAT_SPAN",
+      resttime_start_hour.toString(),
+      ALStringUtil.toTwoDigitString(resttime_start_minute),
+      resttime_end_hour.toString(),
+      ALStringUtil.toTwoDigitString(resttime_end_minute));
   }
 
 }
