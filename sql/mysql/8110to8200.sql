@@ -104,3 +104,8 @@ CREATE TABLE `eip_m_holiday` (
     PRIMARY KEY (`holiday_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- 20170928
+
+-- 20171006
+ALTER TABLE `eip_t_ext_timecard_system` ADD `morning_off` int(11) DEFAULT 240 AFTER `holiday_of_week`;
+ALTER TABLE `eip_t_ext_timecard_system` ADD `afternoon_off` int(11) DEFAULT 240 AFTER `morning_off`;
+-- 20171006

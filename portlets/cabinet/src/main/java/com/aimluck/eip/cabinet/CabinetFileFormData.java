@@ -572,10 +572,6 @@ public class CabinetFileFormData extends ALAbstractFormData {
 
         // ファイルパス
         file.setFilePath(CabinetUtils.getRelativePath(filename));
-        // 作成者
-        file.setCreateUserId(Integer.valueOf(uid));
-        // 作成日
-        file.setCreateDate(Calendar.getInstance().getTime());
       }
 
       // 親フォルダ

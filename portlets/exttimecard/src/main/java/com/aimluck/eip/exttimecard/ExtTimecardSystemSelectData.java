@@ -169,6 +169,8 @@ public class ExtTimecardSystemSelectData extends
           String.valueOf(record.getHolidayOfWeek().charAt(8)));
         rd.setHoliday(record.getHolidayOfWeek().charAt(9) != '0' ? "1" : null);
       }
+      rd.setMorningOff(record.getMorningOff());
+      rd.setAfternoonOff(record.getAfternoonOff());
 
       return rd;
     } catch (Exception ex) {
@@ -239,6 +241,8 @@ public class ExtTimecardSystemSelectData extends
           String.valueOf(record.getHolidayOfWeek().charAt(8)));
         rd.setHoliday(record.getHolidayOfWeek().charAt(9) != '0' ? "1" : null);
       }
+      rd.setMorningOff(record.getMorningOff());
+      rd.setAfternoonOff(record.getAfternoonOff());
 
       return rd;
     } catch (Exception ex) {

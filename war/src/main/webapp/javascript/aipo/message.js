@@ -309,11 +309,11 @@ aipo.message.moreMessageRightList = function() {
         aipo.message.moreMessageLock = true;
         screen += "&c=" + cursor;
         screen += "&js_peid=" + aipo.message.portletId;
-        screen += "&k=" + encodeURIComponent(aipo.message.currentMessageSearchKeyword);
-        dojo.xhrGet({
+        dojo.xhrPost({
             url : screen,
             timeout : 30000,
             encoding : "utf-8",
+            content: {"k": aipo.message.currentMessageSearchKeyword},
             handleAs : "text",
             headers : {
                 X_REQUESTED_WITH : "XMLHttpRequest"
