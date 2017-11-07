@@ -104,10 +104,10 @@ public class ExtTimecardSummaryListSelectData extends
   private String nowtime;
 
   /** ユーザーマップ */
-  private Map<Integer, List<ExtTimecardResultData>> usermap;
+  private final Map<Integer, List<ExtTimecardResultData>> usermap;
 
   /** 日付マップ */
-  private Map<Integer, ExtTimecardSummaryResultData> datemap;
+  private final Map<Integer, ExtTimecardSummaryResultData> datemap;
 
   /** アクセス権限の機能名 */
   private String aclPortletFeature = null;
@@ -125,28 +125,28 @@ public class ExtTimecardSummaryListSelectData extends
   private boolean hasAclXlsExport;
 
   /** <code>viewMonth</code> 現在の月 */
-  private ALDateTimeField viewMonth;
+  private final ALDateTimeField viewMonth;
 
   /** <code>prevMonth</code> 前の月 */
-  private ALDateTimeField prevMonth;
+  private final ALDateTimeField prevMonth;
 
   /** <code>nextMonth</code> 次の月 */
-  private ALDateTimeField nextMonth;
+  private final ALDateTimeField nextMonth;
 
   /** <code>currentMonth</code> 今月 */
-  private ALDateTimeField currentMonth;
+  private final ALDateTimeField currentMonth;
 
   /** <code>today</code> 今日 */
   private ALDateTimeField today;
 
   /** <code>viewStart</code> 表示開始日時 */
-  private ALDateTimeField viewStart;
+  private final ALDateTimeField viewStart;
 
   /** <code>viewEnd</code> 表示終了日時 */
-  private ALDateTimeField viewEnd;
+  private final ALDateTimeField viewEnd;
 
   /** <code>viewEndCrt</code> 表示終了日時 (Criteria) */
-  private ALDateTimeField viewEndCrt;
+  private final ALDateTimeField viewEndCrt;
 
   private final String MODE = "summary";
 
@@ -161,8 +161,7 @@ public class ExtTimecardSummaryListSelectData extends
   /**
    *
    */
-  @Override
-  public void initField() {
+  public ExtTimecardSummaryListSelectData() {
     // POST/GET から yyyy-MM の形式で受け渡される。
     // 現在の月
     viewMonth = new ALDateTimeField("yyyy-MM");
@@ -490,8 +489,7 @@ public class ExtTimecardSummaryListSelectData extends
         context,
         ALAccessControlConstants.VALUE_ACL_LIST);
       action.setMode(ALEipConstants.MODE_LIST);
-      for (int i = 0; i < userList.size(); i++) {
-        ALEipUser eipUser = userList.get(i);
+      for (ALEipUser eipUser : userList) {
         List<EipTExtTimecard> aList =
           selectList(rundata, context, eipUser.getUserId().getValueAsString());
         if (aList != null) {
@@ -532,8 +530,8 @@ public class ExtTimecardSummaryListSelectData extends
    * @throws ALPageNotFoundException
    * @throws ALDBErrorException
    */
-  protected List<EipTExtTimecard> selectList(RunData rundata, Context context,
-      String target_user_id) throws ALPageNotFoundException,
+  protected ResultList<EipTExtTimecard> selectList(RunData rundata,
+      Context context, String target_user_id) throws ALPageNotFoundException,
       ALDBErrorException {
     try {
       // 指定グループや指定ユーザをセッションに設定する．
@@ -567,25 +565,7 @@ public class ExtTimecardSummaryListSelectData extends
   @Override
   protected ResultList<EipTExtTimecard> selectList(RunData rundata,
       Context context) throws ALPageNotFoundException, ALDBErrorException {
-    try {
-      // 指定グループや指定ユーザをセッションに設定する．
-      setupLists(rundata, context);
-
-      if (!"".equals(target_user_id)) {
-
-        SelectQuery<EipTExtTimecard> query =
-          getSelectQuery(rundata, context, target_user_id);
-        buildSelectQueryForListView(query);
-        query.orderAscending(EipTExtTimecard.PUNCH_DATE_PROPERTY);
-
-        return query.getResultList();
-      } else {
-        return null;
-      }
-    } catch (Exception ex) {
-      logger.error("exttimecard", ex);
-      return null;
-    }
+    return selectList(rundata, context, target_user_id);
   }
 
   /**
@@ -989,8 +969,7 @@ public class ExtTimecardSummaryListSelectData extends
     List<ExtTimecardSummaryResultData> list =
       new ArrayList<ExtTimecardSummaryResultData>();
     /** 以下、ユーザーごとの処理 */
-    for (int i = 0; i < userList.size(); i++) {
-      ALEipUser eipUser = userList.get(i);
+    for (ALEipUser eipUser : userList) {
       int user_id = Integer.parseInt(eipUser.getUserId().getValueAsString());
       ALBaseUser user = ALEipUtils.getBaseUser(user_id);
       List<ExtTimecardResultData> userlist = usermap.get(user_id);
