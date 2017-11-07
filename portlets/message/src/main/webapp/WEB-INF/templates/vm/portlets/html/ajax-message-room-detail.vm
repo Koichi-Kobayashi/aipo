@@ -36,6 +36,25 @@
 
 #ALajaxIndicator("$indicator_id" "$!portlet.ID" "")
 
+
+#if(${result.isNewRoom()})
+## ルームがまだ作成されていない場合
+## else以下は実行しない(if内で完結する)
+## else以下と重複が大きいので直したほうが良いかもしれない
+<div class="roomDetail">
+<div class="clearfix">
+	#foreach ($record in $result.List)
+		<span class="avatar">
+		#if("${record.userId}" != "${result.userId}")
+			<img #if($!record.isHasPhoto())src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!record.UserId).addQueryData("t", "$!record.PhotoModified"))"#else src="themes/default/images/common/icon_user100.png"#end title="$!record.LastName $!record.FirstName" class="avatar_l">
+		</span>
+			<span class="name">${record.lastName} ${record.firstName}</span>
+		#end
+	#end
+</div>
+</div>
+#else
+
 <div class="roomDetail">
 <div class="clearfix">
 			<span class="avatar">
@@ -112,5 +131,5 @@
 #draw_user($record)
 #end
 </ul>
-
+#end
 <img src="images/common/dot.gif" width="1" height="1" onload="if(aipo && aipo.customize){aipo.customize.addAutoHideMenuTrigger();aipo.customize.positionInitialize();}" style="display:none" />

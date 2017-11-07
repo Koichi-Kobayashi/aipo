@@ -25,7 +25,7 @@ import org.apache.velocity.context.Context;
 
 import com.aimluck.eip.cayenne.om.portlet.EipTMessageRoom;
 import com.aimluck.eip.common.ALEipUser;
-import com.aimluck.eip.message.MessageRoomMemberListSelectData;
+import com.aimluck.eip.message.MessageRoomDetailSelectData;
 import com.aimluck.eip.message.util.MessageUtils;
 import com.aimluck.eip.util.ALEipUtils;
 
@@ -81,8 +81,7 @@ public class MessageRoomDetailScreen extends ALVelocityScreen {
         isNewRoom = true;
       }
 
-      MessageRoomMemberListSelectData listData =
-        new MessageRoomMemberListSelectData();
+      MessageRoomDetailSelectData listData = new MessageRoomDetailSelectData();
 
       if (isNewRoom) {
         listData.setTargetUserId((int) targetUser.getUserId().getValue());
@@ -95,7 +94,7 @@ public class MessageRoomDetailScreen extends ALVelocityScreen {
       String layout_template = "portlets/html/ajax-message-room-detail.vm";
       setTemplate(rundata, context, layout_template);
     } catch (Exception ex) {
-      logger.error("MessageRoomListScreen.doOutput", ex);
+      logger.error("MessageRoomDetailScreen.doOutput", ex);
       ALEipUtils.redirectDBError(rundata);
     }
   }
