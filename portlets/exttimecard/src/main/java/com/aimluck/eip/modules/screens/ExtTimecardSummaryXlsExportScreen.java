@@ -63,7 +63,7 @@ public class ExtTimecardSummaryXlsExportScreen extends ALXlsScreen {
 
   /**
    * 初期化処理を行います。
-   * 
+   *
    * @param action
    * @param rundata
    * @param context
@@ -182,14 +182,22 @@ public class ExtTimecardSummaryXlsExportScreen extends ALXlsScreen {
       String work_day = tclistrd.getWorkDay().getValueAsString(); // 出勤日数
       String work_hour = tclistrd.getWorkHour().getValueAsString();// 就業時間
       String overtime_day = tclistrd.getOvertimeDay().getValueAsString();// 残業日数
-      String overtime_hour = tclistrd.getOvertimeHour().getValueAsString();// 残業時間
+      // みなし外残業時間を見て-1ならみなし残業設定なしで通常の残業時間、それ以外だったらみなし外残業時間を残業時間として返す
+      String tmp =
+        tclistrd.getConsideredOvertimeOutsideHour().getValueAsString();
+      String overtime_hour;
+      if (tmp.equals("-1.0")) {
+        overtime_hour = tclistrd.getOvertimeHour().getValueAsString();
+      } else {
+        overtime_hour = tmp;
+      }
       String off_day = tclistrd.getOffDay().getValueAsString();// 休出日数
       String off_hour = tclistrd.getOffHour().getValueAsString();// 休出時間
       String late_coming_day = tclistrd.getLateComingDay().getValueAsString();// 遅刻日数
       String early_leaving_day =
         tclistrd.getEarlyLeavingDay().getValueAsString();// 早退日数
       String absent_day = tclistrd.getAbsentDay().getValueAsString();// 欠勤日数
-      String paid_holiday = tclistrd.getPaidHoliday().getValueAsString();// 有休日数
+      String paid_holiday = String.valueOf(tclistrd.getPaidHolidayDouble());// 有休日数
       String compensatory_holiday =
         tclistrd.getCompensatoryHoliday().getValueAsString();// 代休日数
       String other_day = tclistrd.getOtherDay().getValueAsString();// その他日数
@@ -234,7 +242,7 @@ public class ExtTimecardSummaryXlsExportScreen extends ALXlsScreen {
   /**
    * アクセス権限チェック用メソッド。<br />
    * アクセス権限の機能名を返します。
-   * 
+   *
    * @return
    */
   @Override

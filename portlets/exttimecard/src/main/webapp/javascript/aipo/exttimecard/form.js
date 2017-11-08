@@ -110,6 +110,25 @@ aipo.exttimecard.addHiddenValue = function(form, name, value) {
   }
 }
 
+aipo.exttimecard.getButtonvalue = function(){
+	var elements = document.getElementsByName('type');
+	var exist = dojo.byId('required_time');
+	if(exist != null){
+	for ( var a="", i=elements.length; i--; ) {
+		if ( elements[i].checked ) {
+			var a = elements[i].value ;
+			break ;
+		}
+	}
+	if(a=="P"){
+		dojo.addClass("required_time", "required" );
+	}
+	else{
+		dojo.removeClass("required_time", "required");
+	   }
+	}
+}
+
 aipo.exttimecard.addYearMonthDayHiddenValue = function(form, name) {
   var hour_str = name + "_hour";
   var minute_str = name + "_minute";
@@ -269,6 +288,7 @@ aipo.exttimecard.hideTimeBox = function() {
 aipo.exttimecard.displayTimeBox = function() {
   aipo.exttimecard.displayBox("clock_time_box");
   aipo.exttimecard.displayBox("outgoing_comeback_box");
+  aipo.exttimecard.getButtonvalue();
 }
 
 

@@ -70,8 +70,8 @@ import com.aimluck.eip.util.ALLocalizationUtils;
 public class ExtTimecardFormData extends ALAbstractFormData {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ExtTimecardFormData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(ExtTimecardFormData.class.getName());
 
   private ALNumberField timecard_id;
 
@@ -200,31 +200,31 @@ public class ExtTimecardFormData extends ALAbstractFormData {
     user_id = new ALNumberField();
 
     type = new ALStringField();
-    type.setFieldName(ALLocalizationUtils
-      .getl10n("EXTTIMECARD_SETFIELDNAME_KINDS"));
+    type.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_SETFIELDNAME_KINDS"));
     type.setValue("");
 
     punch_date = new ALDateTimeField();
-    punch_date.setFieldName(ALLocalizationUtils
-      .getl10n("EXTTIMECARD_SETFIELDNAME_DATE"));
+    punch_date.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_SETFIELDNAME_DATE"));
 
     clock_in_time = new ALDateTimeField();
-    clock_in_time.setFieldName(ALLocalizationUtils
-      .getl10n("EXTTIMECARD_SETFIELDNAME_WORKTIME"));
+    clock_in_time.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_SETFIELDNAME_WORKTIME"));
     clock_out_time = new ALDateTimeField();
 
     outgoing_comeback = new ALDateTimeField();
-    outgoing_comeback.setFieldName(ALLocalizationUtils
-      .getl10n("EXTTIMECARD_SETFIELDNAME_OUTGOINGTIME"));
+    outgoing_comeback.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_SETFIELDNAME_OUTGOINGTIME"));
 
     reason = new ALStringField();
-    reason.setFieldName(ALLocalizationUtils
-      .getl10n("EXTTIMECARD_SETFIELDNAME_REASON"));
+    reason.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_SETFIELDNAME_REASON"));
     reason.setValue("");
 
     remarks = new ALStringField();
-    remarks.setFieldName(ALLocalizationUtils
-      .getl10n("EXTTIMECARD_SETFIELDNAME_REMARKS"));
+    remarks.setFieldName(
+      ALLocalizationUtils.getl10n("EXTTIMECARD_SETFIELDNAME_REMARKS"));
     remarks.setValue("");
 
     create_date = new ALDateField();
@@ -286,19 +286,20 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       }
 
       boolean isedit =
-        (ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID) != null);
+        (ALEipUtils.getTemp(
+          rundata,
+          context,
+          ALEipConstants.ENTITY_ID) != null);
 
-      action.setMode(isedit
-        ? ALEipConstants.MODE_EDIT_FORM
-        : ALEipConstants.MODE_NEW_FORM);
+      action.setMode(
+        isedit ? ALEipConstants.MODE_EDIT_FORM : ALEipConstants.MODE_NEW_FORM);
       setMode(action.getMode());
 
       List<String> msgList = new ArrayList<String>();
       boolean res =
-        (isedit) ? loadFormData(rundata, context, msgList) : setFormData(
-          rundata,
-          context,
-          msgList);
+        (isedit)
+          ? loadFormData(rundata, context, msgList)
+          : setFormData(rundata, context, msgList);
 
       int aclType = ALAccessControlConstants.VALUE_ACL_INSERT;
       if (isedit) {
@@ -361,8 +362,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
   protected boolean validate(List<String> msgList) {
     try {
       if (type.getValue().equals("")) {
-        msgList.add(ALLocalizationUtils
-          .getl10n("EXTTIMECARD_ALERT_SELECT_KIND"));
+        msgList.add(
+          ALLocalizationUtils.getl10n("EXTTIMECARD_ALERT_SELECT_KIND"));
       }
 
       if (!"punchin".equals(edit_mode)
@@ -370,7 +371,7 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         && !"outgoing".equals(edit_mode)
         && !"comeback".equals(edit_mode)) {
         // time has changed or not at work
-        if (isModify() || isNotAtWork()) {
+        if (isModify() || !"".equals(type.getValue())) {
           // Plans for the future is not checked
           if (isNotFuture()) {
             reason.setNotNull(true);
@@ -383,8 +384,9 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         SelectQuery<EipTExtTimecard> workflg_query =
           Database.query(EipTExtTimecard.class);
         Expression workflg_exp =
-          ExpressionFactory.matchExp(EipTExtTimecard.USER_ID_PROPERTY, Integer
-            .valueOf(login_uid));
+          ExpressionFactory.matchExp(
+            EipTExtTimecard.USER_ID_PROPERTY,
+            Integer.valueOf(login_uid));
         workflg_query.setQualifier(workflg_exp);
         workflg_query.orderDesending(EipTExtTimecard.PUNCH_DATE_PROPERTY);
         List<EipTExtTimecard> workflg_list = workflg_query.fetchList();
@@ -394,15 +396,19 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       }
 
       /** 更新・挿入時 */
-      if (edit_mode.equals("") && "P".equals(type.getValue())) {
+      if (edit_mode.equals("")
+        && ("P".equals(type.getValue())
+          || "M".equals(type.getValue())
+          || "N".equals(type.getValue()))) {
         /** 日付を punch_date に合わせる */
         if (ajustDate(clock_in_time, punch_date)
           && ajustDate(clock_out_time, punch_date)) {
           if (clock_in_time.getValue().getTime() > clock_out_time
             .getValue()
             .getTime()) {
-            msgList.add(ALLocalizationUtils
-              .getl10n("EXTTIMECARD_ALERT_SELECT_PUNCH_OUT_TIME"));
+            msgList.add(
+              ALLocalizationUtils.getl10n(
+                "EXTTIMECARD_ALERT_SELECT_PUNCH_OUT_TIME"));
           }
         }
 
@@ -415,16 +421,32 @@ public class ExtTimecardFormData extends ALAbstractFormData {
           out_flag = false;
         }
 
-        if (getIsPast() && "P".equals(type.getValue())) {
+        boolean notime_flag = false;
+
+        if (getIsPast()
+          && ("M".equals(type.getValue()) || "N".equals(type.getValue()))) {
+
+          if (clock_in_time.isNullHour()
+            && clock_in_time.isNullMinute()
+            && clock_out_time.isNullHour()
+            && clock_out_time.isNullMinute()) {
+            notime_flag = true;
+          } else {
+            notime_flag = false;
+          }
+        }
+
+        if (getIsPast() && !notime_flag) {
           if (!clock_in_time.isNotNullValue()
             || (!clock_out_time.isNotNullValue() && out_flag)
             || current_clock_out_time_hour == -1
-            && current_clock_out_time_minute != -1
+              && current_clock_out_time_minute != -1
             || current_clock_out_time_hour != -1
-            && current_clock_out_time_minute == -1) {
-            msgList.add(ALLocalizationUtils.getl10nFormat(
-              "EXTTIMECARD_ALERT_TYPE_CLOCKINTIME",
-              clock_in_time.getFieldName()));
+              && current_clock_out_time_minute == -1) {
+            msgList.add(
+              ALLocalizationUtils.getl10nFormat(
+                "EXTTIMECARD_ALERT_TYPE_CLOCKINTIME",
+                clock_in_time.getFieldName()));
           }
 
           /** 外出復帰時間が適切に入力されているかチェック */
@@ -435,10 +457,11 @@ public class ExtTimecardFormData extends ALAbstractFormData {
             ALDateTimeField outgoing = (ALDateTimeField) field_out.get(this);
             ALDateTimeField comeback = (ALDateTimeField) field_come.get(this);
             if (!outgoing.isNotNullValue() || !comeback.isNotNullValue()) {
-              msgList.add(ALLocalizationUtils.getl10nFormat(
-                "EXTTIMECARD_ALERT_TYPE_OUTGOING_COMEBACK",
-                outgoing_comeback.getFieldName(),
-                i));
+              msgList.add(
+                ALLocalizationUtils.getl10nFormat(
+                  "EXTTIMECARD_ALERT_TYPE_OUTGOING_COMEBACK",
+                  outgoing_comeback.getFieldName(),
+                  i));
             }
           }
 
@@ -457,24 +480,27 @@ public class ExtTimecardFormData extends ALAbstractFormData {
               if (from <= to) {
                 if (clock_in_time.isNotNullValue()
                   && from < clock_in_time.getValue().getTime()) {
-                  msgList.add(ALLocalizationUtils.getl10nFormat(
-                    "EXTTIMECARD_ALERT_SELECT_OUTGOING_AFTER_PUNCH_IN",
-                    i));
+                  msgList.add(
+                    ALLocalizationUtils.getl10nFormat(
+                      "EXTTIMECARD_ALERT_SELECT_OUTGOING_AFTER_PUNCH_IN",
+                      i));
                 }
                 if (clock_out_time.isNotNullValue()
                   && to > clock_out_time.getValue().getTime()) {
-                  msgList.add(ALLocalizationUtils.getl10nFormat(
-                    "EXTTIMECARD_ALERT_SELECT_COMEBACK_AFTER_PUNCH_OUT",
-                    i));
+                  msgList.add(
+                    ALLocalizationUtils.getl10nFormat(
+                      "EXTTIMECARD_ALERT_SELECT_COMEBACK_AFTER_PUNCH_OUT",
+                      i));
                 }
                 HashMap<String, Long> from_to = new HashMap<String, Long>();
                 from_to.put("from", outgoing.getValue().getTime());
                 from_to.put("to", comeback.getValue().getTime());
                 list_from_to.add(from_to);
               } else {
-                msgList.add(ALLocalizationUtils.getl10nFormat(
-                  "EXTTIMECARD_ALERT_SELECT_COMEBACK_AFTER_OUTGOING",
-                  i));
+                msgList.add(
+                  ALLocalizationUtils.getl10nFormat(
+                    "EXTTIMECARD_ALERT_SELECT_COMEBACK_AFTER_OUTGOING",
+                    i));
               }
             } else if (ajustDate(outgoing, punch_date)
               && !ajustDate(comeback, punch_date)
@@ -536,8 +562,9 @@ public class ExtTimecardFormData extends ALAbstractFormData {
                   }
                 }
                 if (duplicate_flag) {
-                  msgList.add(ALLocalizationUtils
-                    .getl10n("EXTTIMECARD_ALERT_OUTGOINGTIME"));
+                  msgList.add(
+                    ALLocalizationUtils.getl10n(
+                      "EXTTIMECARD_ALERT_OUTGOINGTIME"));
                   return false;
                 }
               }
@@ -608,11 +635,15 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       }
 
       remarks.validate(msgList);
-    } catch (RuntimeException ex) {
+    } catch (
+
+    RuntimeException ex) {
       // RuntimeException
       logger.error("exttimecard", ex);
       return false;
-    } catch (Exception ex) {
+    } catch (
+
+    Exception ex) {
       logger.error("exttimecard", ex);
       return false;
     }
@@ -799,9 +830,11 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       rest_num.setValue(Integer.toString(rest_num_tmp));
 
       // 日時をセッションに保存
-      ALEipUtils.setTemp(rundata, context, "punch_date", punch_date
-        .getValue()
-        .toString());
+      ALEipUtils.setTemp(
+        rundata,
+        context,
+        "punch_date",
+        punch_date.getValue().toString());
 
     } catch (Exception ex) {
       logger.error("exttimecard", ex);
@@ -900,14 +933,35 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         /** 未来時刻への打刻は不可 */
 
         if (cal.getTime().after(punch_date.getValue())) {
-          if (!"P".equals(type.getValue())) {
+          if (!"P".equals(type.getValue())
+            && !"M".equals(type.getValue())
+            && !"N".equals(type.getValue())) {
             // 出退勤時間
             timecard.setClockInTime(null);
             timecard.setClockOutTime(null);
             // 外出・復帰時間
-            for (int i = 1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
+            for (int i =
+              1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
               timecard.setOutgoingTime(null, i);
               timecard.setComebackTime(null, i);
+            }
+            /** 午前午後休で勤怠時間が入力されてないなら勤怠時間は無視する */
+          } else if ("M".equals(type.getValue())
+            || "N".equals(type.getValue())) {
+            if (clock_in_time.isNotNullValue()) {
+              timecard.setClockInTime(clock_in_time.getValue());
+              if (clock_out_time.isNotNullValue()) {
+                timecard.setClockOutTime(clock_out_time.getValue());
+              } else {
+                // 初期化
+                timecard.setClockOutTime(null);
+              }
+            } else if (clock_in_time.getHour().equals("")
+              && clock_in_time.getMinute().equals("")
+              && clock_out_time.getHour().equals("")
+              && clock_out_time.getMinute().equals("")) {
+              timecard.setClockInTime(null);
+              timecard.setClockOutTime(null);
             }
           } else {
             // 出退勤時間
@@ -919,7 +973,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
             // 外出・復帰時間
             Field field_out, field_come;
-            for (int i = 1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
+            for (int i =
+              1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
               field_out = this.getClass().getDeclaredField("outgoing_time" + i);
               field_come =
                 this.getClass().getDeclaredField("comeback_time" + i);
@@ -990,8 +1045,11 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
     try {
       if (!edit_mode.equals("")) {
-        ALEipUtils.setTemp(rundata, context, ALEipConstants.ENTITY_ID, String
-          .valueOf(entity_id));
+        ALEipUtils.setTemp(
+          rundata,
+          context,
+          ALEipConstants.ENTITY_ID,
+          String.valueOf(entity_id));
       }
       EipTExtTimecard timecard =
         ExtTimecardUtils.getEipTExtTimecard(rundata, context);
@@ -1009,7 +1067,10 @@ public class ExtTimecardFormData extends ALAbstractFormData {
       if (edit_mode.equals("punchin")) {
         // 出勤
         timecard.setClockInTime(cal.getTime());
-        timecard.setType(EipTExtTimecard.TYPE_WORK);
+        // 未選択状態のときはtypeをPに変更してそれ以外のときはいじらない
+        if ("D".equals(timecard.getType())) {
+          timecard.setType(EipTExtTimecard.TYPE_WORK);
+        }
       } else if (edit_mode.equals("punchout")) {
         // 退勤
         timecard.setClockOutTime(cal.getTime());
@@ -1036,14 +1097,35 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         // Calendar cal = Calendar.getInstance();
         if (cal.getTime().after(punch_date.getValue())) {
           // 削除する
-          if (!"P".equals(type.getValue())) {
+          if (!"P".equals(type.getValue())
+            && !"M".equals(type.getValue())
+            && !"N".equals(type.getValue())) {
             // 出退勤時間
             timecard.setClockInTime(null);
             timecard.setClockOutTime(null);
             // 外出・復帰時間
-            for (int i = 1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
+            for (int i =
+              1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
               timecard.setOutgoingTime(null, i);
               timecard.setComebackTime(null, i);
+            }
+            /** 午前午後休で勤怠時間が入力されてないなら勤怠時間は無視する */
+          } else if ("M".equals(type.getValue())
+            || "N".equals(type.getValue())) {
+            if (clock_in_time.isNotNullValue()) {
+              timecard.setClockInTime(clock_in_time.getValue());
+              if (clock_out_time.isNotNullValue()) {
+                timecard.setClockOutTime(clock_out_time.getValue());
+              } else {
+                // 初期化
+                timecard.setClockOutTime(null);
+              }
+            } else if (clock_in_time.getHour().equals("")
+              && clock_in_time.getMinute().equals("")
+              && clock_out_time.getHour().equals("")
+              && clock_out_time.getMinute().equals("")) {
+              timecard.setClockInTime(null);
+              timecard.setClockOutTime(null);
             }
           } else {
             // 出退勤時間
@@ -1058,7 +1140,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
             // 外出・復帰時間
             Field field_out, field_come;
-            for (int i = 1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
+            for (int i =
+              1; i <= EipTExtTimecard.OUTGOING_COMEBACK_PER_DAY; i++) {
               field_out = this.getClass().getDeclaredField("outgoing_time" + i);
               field_come =
                 this.getClass().getDeclaredField("comeback_time" + i);
@@ -1089,12 +1172,16 @@ public class ExtTimecardFormData extends ALAbstractFormData {
         ALEventlogConstants.PORTLET_TYPE_EXTTIMECARD,
         null);
 
-    } catch (RuntimeException ex) {
+    } catch (
+
+    RuntimeException ex) {
       // RuntimeException
       Database.rollback();
       logger.error("exttimecard", ex);
       return false;
-    } catch (Exception ex) {
+    } catch (
+
+    Exception ex) {
       Database.rollback();
       logger.error("exttimecard", ex);
       return false;
@@ -1109,8 +1196,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
     // ここから「打刻のIPアドレス制限」
     boolean is_enabled =
-      "T".equals(ALConfigService
-        .get(ALConfigHandler.Property.EXTTIMECARD_IP_ENABLED));
+      "T".equals(
+        ALConfigService.get(ALConfigHandler.Property.EXTTIMECARD_IP_ENABLED));
     String[] ip_addresses = ExtTimecardAdminUtils.getIpAddresses();
 
     String ip = rundata.getRemoteAddr();
@@ -1149,8 +1236,8 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
     {// ここから「打刻のIPアドレス制限」
       boolean is_enabled =
-        "T".equals(ALConfigService
-          .get(ALConfigHandler.Property.EXTTIMECARD_IP_ENABLED));
+        "T".equals(
+          ALConfigService.get(ALConfigHandler.Property.EXTTIMECARD_IP_ENABLED));
       String[] ip_addresses = ExtTimecardAdminUtils.getIpAddresses();
 
       String ip = rundata.getRemoteAddr();
@@ -1266,8 +1353,10 @@ public class ExtTimecardFormData extends ALAbstractFormData {
     boolean is_today = false;
     if ((Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) < change_hour) {
       Calendar tmp_cal = Calendar.getInstance();
-      tmp_cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal
-        .get(Calendar.DATE));
+      tmp_cal.set(
+        cal.get(Calendar.YEAR),
+        cal.get(Calendar.MONTH),
+        cal.get(Calendar.DATE));
       is_today = ExtTimecardUtils.sameDay(date, tmp_cal.getTime());
     } else {
       is_today = ExtTimecardUtils.sameDay(date, cal.getTime());
@@ -1447,7 +1536,9 @@ public class ExtTimecardFormData extends ALAbstractFormData {
    * @return
    */
   private boolean ajustDate(ALDateTimeField datetime, ALDateTimeField ajustto) {
-    if (datetime != null && !datetime.isNullHour() && !datetime.isNullMinute()) {
+    if (datetime != null
+      && !datetime.isNullHour()
+      && !datetime.isNullMinute()) {
       Date punch = ajustto.getValue();
       Calendar cal = Calendar.getInstance();
       cal.setTime(punch);
@@ -1513,11 +1604,15 @@ public class ExtTimecardFormData extends ALAbstractFormData {
           // フィールドが ALDateTimeField の場合
           if (obj instanceof ALDateTimeField) {
             String hourString =
-              new StringBuffer().append(name).append(
-                ALEipConstants.POST_DATE_HOUR).toString();
+              new StringBuffer()
+                .append(name)
+                .append(ALEipConstants.POST_DATE_HOUR)
+                .toString();
             String minitusString =
-              new StringBuffer().append(name).append(
-                ALEipConstants.POST_DATE_MINUTE).toString();
+              new StringBuffer()
+                .append(name)
+                .append(ALEipConstants.POST_DATE_MINUTE)
+                .toString();
             current_clock_out_time_hour =
               rundata.getParameters().getInt(hourString);
             current_clock_out_time_minute =
@@ -1543,10 +1638,6 @@ public class ExtTimecardFormData extends ALAbstractFormData {
 
   private boolean isNotFuture() {
     return Calendar.getInstance().getTime().after(punch_date.getValue());
-  }
-
-  private boolean isNotAtWork() {
-    return !"P".equals(type.getValue());
   }
 
   public boolean isNewRule() {
