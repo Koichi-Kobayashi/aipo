@@ -30,23 +30,23 @@ import org.apache.turbine.util.parser.DefaultParameterParser;
 /**
  * DefaultJetspeedParameterParser is a utility object to handle parsing and
  * retrieving the data passed via the GET/POST/PATH_INFO arguments.
- * 
+ *
  * <p>
  * NOTE: The name= portion of a name=value pair may be converted to lowercase or
  * uppercase when the object is initialized and when new data is added. This
  * behaviour is determined by the url.case.folding property in
  * TurbineResources.properties. Adding a name/value pair may overwrite existing
  * name=value pairs if the names match:
- * 
+ *
  * <pre>
  * ParameterParser pp = data.getParameters();
  * pp.add(&quot;ERROR&quot;, 1);
  * pp.add(&quot;eRrOr&quot;, 2);
  * int result = pp.getInt(&quot;ERROR&quot;);
  * </pre>
- * 
+ *
  * In the above example, result is 2.
- * 
+ *
  * @author <a href="mailto:shinsuke@yahoo.co.jp">Shinsuke SUGAYA </a>
  */
 public class DefaultJetspeedParameterParser extends DefaultParameterParser {
@@ -70,11 +70,11 @@ public class DefaultJetspeedParameterParser extends DefaultParameterParser {
    * GET/POST/PATH_INFO data and store the data into a Hashtable. There are
    * convenience methods for retrieving the data as a number of different
    * datatypes. The PATH_INFO data must be a URLEncoded() string.
-   * 
+   *
    * <p>
    * To add name/value pairs to this set of parameters, use the
    * <code>add()</code> methods.
-   * 
+   *
    * @param req
    *          An HttpServletRequest.
    */
@@ -104,7 +104,8 @@ public class DefaultJetspeedParameterParser extends DefaultParameterParser {
         characterSet = media.getCharacterSet();
       }
     }
-    setCharacterEncoding(characterSet);
+    // setCharacterEncoding(characterSet);
+    setCharacterEncoding("UTF-8");
 
     // String mimeCode = cm.getPreferredType().getCode();
     // if ( mimeCode != null )
@@ -123,7 +124,7 @@ public class DefaultJetspeedParameterParser extends DefaultParameterParser {
   /**
    * Return a String for the given name. If the name does not exist, return
    * null.
-   * 
+   *
    * @param name
    *          A String with the name.
    * @return A String.

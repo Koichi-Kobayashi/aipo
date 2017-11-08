@@ -273,4 +273,17 @@ aipo.system.addHolidayNameValue = function(){
             parent.appendChild(input_element);
         }
        }
+}
+
+aipo.system.deleteHolidayList = {};
+
+aipo.system.deleteRegisteredHoliday = function(id){
+	var input_element = document.createElement('input');
+	input_element.setAttribute('class', 'delete');
+	input_element.setAttribute('type', 'hidden');
+	input_element.setAttribute('name', 'delete_id');
+	input_element.setAttribute('value', id);
+	aipo.system.deleteHolidayList[input_element.getAttribute('value')] = input_element;
+	var parent = document.getElementById('hiddenDeleteValue');
+	parent.appendChild(input_element);
 };

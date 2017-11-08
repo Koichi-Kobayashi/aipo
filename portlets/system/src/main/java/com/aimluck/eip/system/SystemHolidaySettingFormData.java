@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
 import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.turbine.util.RunData;
@@ -37,6 +39,7 @@ import com.aimluck.eip.common.ALDBErrorException;
 import com.aimluck.eip.common.ALPageNotFoundException;
 import com.aimluck.eip.modules.actions.common.ALAction;
 import com.aimluck.eip.orm.Database;
+import com.aimluck.eip.orm.query.SelectQuery;
 import com.aimluck.eip.services.config.ALConfigHandler;
 import com.aimluck.eip.services.config.ALConfigService;
 import com.aimluck.eip.util.ALLocalizationUtils;
@@ -79,6 +82,10 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
 
   /** 個別の休日の名前 */
   private List<ALStringField> p_holiday_nameList;
+
+  private ALStringField delete_id;
+
+  private List<ALStringField> delete_idList;
 
   @Override
   public void init(ALAction action, RunData rundata, Context context)
@@ -128,6 +135,12 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
 
     // 個別の休日の名前
     p_holiday_nameList = new ArrayList<ALStringField>();
+
+    delete_id = new ALStringField();
+    delete_id.setFieldName(ALLocalizationUtils
+      .getl10n("HOLIDAY_SETTING_PERSONAL_HOLIDAY"));
+    delete_id.setTrim(true);
+    delete_idList = new ArrayList<ALStringField>();
   }
 
   @Override
@@ -141,20 +154,57 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
         p_holidayList.add(cast);
       }
     }
-    // p_holidayList.add(p_holiday);
-    // p_holiday_nameList.add(p_holiday_name);
+
+    String DeleteList[] = rundata.getParameters().getStrings("delete_id");
+    if (DeleteList != null && DeleteList.length > 0) {
+      for (int i = 0; i < DeleteList.length; i++) {
+        ALStringField cast = new ALStringField(DeleteList[i]);
+        delete_idList.add(cast);
+      }
+    }
+    // try {
+    // rundata.setCharSet("UTF-8");
+    // String NameList[] = rundata.getParameters().getStrings("p_holiday_name");
+    // if (NameList != null && NameList.length > 0) {
+    // for (int i = 0; i < NameList.length; i++) {
+    // byte byte1[] = NameList[i].toString().getBytes("UTF-8");
+    // String newStr = new String(byte1, "UTF-8");
+    // ALStringField cast = new ALStringField(newStr);
+    // p_holiday_nameList.add(cast);
+    // }
+    // }
+    // } catch (UnsupportedEncodingException e) {
+    // e.printStackTrace();
+    // }
+
+    // rundata.setCharSet("Windows-31J");
     String NameList[] = rundata.getParameters().getStrings("p_holiday_name");
     if (NameList != null && NameList.length > 0) {
       for (int i = 0; i < NameList.length; i++) {
-        // String eucjpStr =
-        // new String(NameList[i].toString().getBytes("UTF-8"), "EUC_JP");
-        ALStringField cast = new ALStringField(NameList[i].toString());
+        ALStringField cast = new ALStringField(NameList[i]);
         p_holiday_nameList.add(cast);
       }
     }
 
     return res;
   }
+
+  // protected boolean setFormData(HttpServletRequest request,
+  // HttpServletResponse resp) throws ALPageNotFoundException,
+  // ALDBErrorException, ServletException, IOException {
+  //
+  // SystemHolidaySettingEncode encode = new SystemHolidaySettingEncode();
+  // String NameList[] = encode.getNameList();
+  // encode.doPost(request, resp);
+  // if (NameList != null && NameList.length > 0) {
+  // for (int i = 0; i < NameList.length; i++) {
+  // ALStringField cast = new ALStringField(NameList[i]);
+  // p_holiday_nameList.add(cast);
+  // }
+  // }
+  //
+  // return true;
+  // }
 
   @Override
   protected void setValidator() throws ALPageNotFoundException,
@@ -342,21 +392,28 @@ public class SystemHolidaySettingFormData extends ALAbstractFormData {
   protected boolean deleteFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     // // オブジェクトモデルを取得
-    // EipMHoliday p_holiday_data = SystemUtils.getEipTTodo(rundata, context,
-    // false);
-    // if (p_holiday_data == null) {
-    // return false;
-    // }
-    //
-    // // entityIdの取得
-    // int entityId = p_holiday_data.getHolidayId();
-    // // タイトルの取得
-    // String todoName = p_holiday_data.getHolidayName();
-    //
-    // // Todoを削除
-    // Database.delete(p_holiday_data);
-    // Database.commit();
+    SelectQuery<EipMHoliday> query = Database.query(EipMHoliday.class);
 
+    if (query.fetchList().size() != 0) {
+      if (delete_idList.size() != 0) {
+        for (int i = 0; i < delete_idList.size(); i++) {
+
+          Expression exp1 =
+            ExpressionFactory.matchDbExp(
+              EipMHoliday.HOLIDAY_ID_PK_COLUMN,
+              delete_idList.get(i).getValue());
+          query.setQualifier(exp1);
+
+          List<EipMHoliday> list = query.fetchList();
+          EipMHoliday holiday = list.get(0);
+
+          // Todoを削除
+          Database.delete(holiday);
+
+        }
+      }
+    }
+    Database.commit();
     return false;
   }
 

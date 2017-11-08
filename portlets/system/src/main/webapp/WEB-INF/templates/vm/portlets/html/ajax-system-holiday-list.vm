@@ -48,11 +48,11 @@
 </thead>
  <tbody id="holidayListTable">
 #foreach($record in $result.List)
-<tr class="registered" id ="$!{record.HolidayDate.Year}$!{record.HolidayDate.Month}$!{record.HolidayDate.Day}" data-year="$!{record.HolidayDate.Year}" data-month="$!{record.HolidayDate.Month}" data-day="$!{record.HolidayDate.Day}">
+<tr class="registered" id ="$!{record.HolidayDate.Year}$!{record.HolidayDate.Month}$!{record.HolidayDate.Day}" data-year="$!{record.HolidayDate.Year}" data-month="$!{record.HolidayDate.Month}" data-day="$!{record.HolidayDate.Day}"  data-id="$!{record.HolidayId}">
 #ALtdcell("<div>$!record.HolidayDateString</div>")
 #ALtdcell("<div>$!record.HolidayName</div>")
 <td>
-<input name="$name" class="button" type="button" value="$l10n.HOLIDAY_SETTING_DELETE" onclick="" />
+<input class="button" type="button" value="$l10n.HOLIDAY_SETTING_DELETE" onclick="aipo.system.deleteRegisteredHoliday($!{record.HolidayId});" />
 </td>
 </tr>
 #end

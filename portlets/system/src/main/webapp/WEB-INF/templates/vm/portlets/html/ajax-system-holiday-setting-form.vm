@@ -88,7 +88,7 @@
 
 <div id="hiddenDateValue"></div>
 <div id="hiddenNameValue"></div>
-
+<div id="hiddenDeleteValue"></div>
 
 
 #ALtablefooter()

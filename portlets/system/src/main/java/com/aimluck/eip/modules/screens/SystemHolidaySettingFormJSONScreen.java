@@ -18,6 +18,12 @@
  */
 package com.aimluck.eip.modules.screens;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import net.sf.json.JSONArray;
 
 import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
@@ -25,7 +31,10 @@ import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
+import com.aimluck.eip.common.ALDBErrorException;
 import com.aimluck.eip.common.ALEipConstants;
+import com.aimluck.eip.common.ALPageNotFoundException;
+import com.aimluck.eip.system.SystemHolidaySettingEncode;
 import com.aimluck.eip.system.SystemHolidaySettingFormData;
 
 /**
@@ -70,6 +79,27 @@ public class SystemHolidaySettingFormJSONScreen extends ALJSONScreen {
 
     } catch (Exception e) {
       logger.error("[SystemHolidaySettingFormJSONScreen]", e);
+    }
+
+    return result;
+  }
+
+  protected String getJSONString(HttpServletRequest request,
+      HttpServletResponse resp) throws ALPageNotFoundException,
+      ALDBErrorException {
+    String result = new JSONArray().toString();
+    String mode = this.getMode();
+    try {
+
+      SystemHolidaySettingEncode encode = new SystemHolidaySettingEncode();
+      encode.doPost(request, resp);
+
+    } catch (ServletException ex) {
+      logger.error("SystemHolidaySettingFormData", ex);
+      return null;
+    } catch (IOException ex) {
+      logger.error("SystemHolidaySettingFormData", ex);
+      return null;
     }
 
     return result;
