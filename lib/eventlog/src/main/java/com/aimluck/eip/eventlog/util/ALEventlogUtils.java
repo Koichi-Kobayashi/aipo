@@ -20,6 +20,7 @@ package com.aimluck.eip.eventlog.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import org.apache.jetspeed.om.profile.Entry;
 import org.apache.jetspeed.om.profile.Portlets;
@@ -28,6 +29,7 @@ import org.apache.jetspeed.services.logging.JetspeedLogger;
 import org.apache.jetspeed.services.rundata.JetspeedRunData;
 import org.apache.turbine.util.RunData;
 
+import com.aimluck.eip.eventlog.action.ALActionEventlogConstants;
 import com.aimluck.eip.eventlog.beans.EventlogPortletBean;
 import com.aimluck.eip.services.eventlog.ALEventlogFactoryService;
 
@@ -36,8 +38,8 @@ import com.aimluck.eip.services.eventlog.ALEventlogFactoryService;
  */
 public class ALEventlogUtils {
 
-  private static final JetspeedLogger logger =
-    JetspeedLogFactoryService.getLogger(ALEventlogUtils.class.getName());
+  private static final JetspeedLogger logger = JetspeedLogFactoryService
+    .getLogger(ALEventlogUtils.class.getName());
 
   /**
    * mode を DB に保存するための数値に変換します。
@@ -134,6 +136,7 @@ public class ALEventlogUtils {
 
     ArrayList<EventlogPortletBean> arrayList =
       new ArrayList<EventlogPortletBean>();
+
     for (Integer key : map.keySet()) {
       EventlogPortletBean bean = new EventlogPortletBean();
       bean.initField();
@@ -141,6 +144,46 @@ public class ALEventlogUtils {
       bean.setPortletName(map.get(key));
       arrayList.add(bean);
     }
-    return arrayList;
+
+    ArrayList<EventlogPortletBean> filteredList =
+      arrayList.stream().filter(
+        element -> element.getPortletName().equals(
+          ALActionEventlogConstants.PORTLET_TYPE_STR_LOGIN)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_LOGOUT)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_SYSTEM)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_TIMELINE)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_SCHEDULE)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_EXTTIMECARD)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_MSGBOARD)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_NOTE)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_ADDRESSBOOK)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_TODO)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_CABINET_FILE)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_WORKFLOW)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_REPORT)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_BLOG)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_WEBMAIL)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_GPDB)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_WIKI)
+          || element.getPortletName().equals(
+            ALActionEventlogConstants.PORTLET_TYPE_STR_MANHOUR)).collect(
+        Collectors.toCollection(ArrayList::new));
+    return filteredList;
   }
 }
