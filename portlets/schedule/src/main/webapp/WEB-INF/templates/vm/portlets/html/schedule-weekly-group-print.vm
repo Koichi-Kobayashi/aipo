@@ -318,6 +318,7 @@ $!{record4.TermResultData.WbrName}
 </div></div>
 #end
 <div class="calendarFooter"></div>
+</div>
 </td>
 #set($show_tr = $show_tr + 1 )
 #end
