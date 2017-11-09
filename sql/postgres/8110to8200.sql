@@ -106,9 +106,9 @@ UPDATE EIP_T_EXT_TIMECARD_SYSTEM SET CONSIDERED_OVERTIME = 0;
 -- 20170904
 CREATE INDEX eip_t_report_map_index1 ON eip_t_report_map (USER_ID,REPORT_ID);
 CREATE INDEX eip_t_report_map_index2 ON eip_t_report_map (USER_ID,REPORT_ID,STATUS);
-CREATE INDEX eip_t_report_index1 ON eip_t_report (USER_ID,PARENT_ID,UPDATE_DATE);
-CREATE INDEX eip_t_report_index2 ON eip_t_report (PARENT_ID,UPDATE_DATE);
+CREATE INDEX eip_t_report_index1 ON eip_t_report (PARENT_ID,UPDATE_DATE);
 CREATE INDEX activity_index1 ON activity (PRIORITY);
+CREATE INDEX turbine_user_group_role_index1 ON turbine_user_group_role(USER_ID,GROUP_ID);
 -- 20170904
 
 

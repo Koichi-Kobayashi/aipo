@@ -97,8 +97,7 @@ UPDATE `eip_t_ext_timecard_system` SET `considered_overtime` = 0;
 -- 20170829
 ALTER TABLE `eip_t_report_map` ADD INDEX eip_t_report_map_index1(`user_id`,`report_id`);
 ALTER TABLE `eip_t_report_map` ADD INDEX eip_t_report_map_index2(`user_id`,`report_id`,`status`);
-ALTER TABLE `eip_t_report` ADD INDEX eip_t_report_index1(`user_id`,`parent_id`,`update_date`);
-ALTER TABLE `eip_t_report` ADD INDEX eip_t_report_index2(`parent_id`,`update_date`);
+ALTER TABLE `eip_t_report` ADD INDEX eip_t_report_index1(`parent_id`,`update_date`);
 ALTER TABLE `activity` ADD INDEX activity_index1(`priority`);
 ALTER TABLE `turbine_user_group_role` ADD INDEX turbine_user_group_role_index1(`user_id`,`group_id`);
 -- 20170829

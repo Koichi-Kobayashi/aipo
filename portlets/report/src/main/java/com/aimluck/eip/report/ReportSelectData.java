@@ -347,7 +347,6 @@ public class ReportSelectData extends
    */
 
   public SQLTemplate<EipTReport> getSQLTemplate(RunData rundata, Context context) {
-    boolean onlyUnread = false;
     boolean isMySQL = Database.isJdbcMySQL();
     uid = ALEipUtils.getUserId(rundata);
     StringBuilder select = new StringBuilder();
@@ -355,7 +354,7 @@ public class ReportSelectData extends
     StringBuilder body = new StringBuilder();
 
     count.append("SELECT ");
-    count.append(" COUNT(*) AS C ");
+    count.append(" count(DISTINCT t0.report_id) AS C");
 
     if ((target_keyword != null) && (!target_keyword.getValue().equals(""))) {
       ALEipUtils.setTemp(rundata, context, LIST_SEARCH_STR, target_keyword
@@ -364,97 +363,52 @@ public class ReportSelectData extends
       ALEipUtils.removeTemp(rundata, context, LIST_SEARCH_STR);
     }
 
+    select.append("SELECT DISTINCT ");
+    select.append(" t0.create_date, ");
+    select.append(" t0.end_date, ");
+    select.append(" t0.note, ");
+    select.append(" t0.parent_id, ");
+    select.append(" t0.user_id, ");
+    select.append(" t0.report_id, ");
+    select.append(" t0.report_name, ");
+    select.append(" t0.start_date, ");
+    select.append(" t0.update_date ");
+    body.append(" FROM eip_t_report t0 ");
+    if (isMySQL) {
+      body.append(" FORCE INDEX (eip_t_report_index1) ");
+    }
+    body
+      .append(" LEFT JOIN eip_t_report_map t1 ON t0.report_id = t1.report_id ");
+    body.append(" LEFT JOIN eip_t_report t2 ");
+    if (isMySQL) {
+      body.append(" FORCE INDEX (eip_t_report_index1) ");
+    }
+    body.append(" ON t0.report_id = t2.parent_id ");
+
     if (ALEipUtils.getTemp(rundata, context, "Report_Maximize") == "false") {
-      onlyUnread = true;
       // 通常画面
       // 受信したもので未読
-      select.append("SELECT ");
-      select.append(" t0.create_date, ");
-      select.append(" t0.end_date, ");
-      select.append(" t0.note, ");
-      select.append(" t0.parent_id, ");
-      select.append(" t0.user_id, ");
-      select.append(" t0.report_id, ");
-      select.append(" t0.report_name, ");
-      select.append(" t0.start_date, ");
-      select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_index2) ");
-      }
-      body.append(" ,eip_t_report_map t1 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_map_index2) ");
-      }
       body.append(" WHERE ");
       body.append(" t1.user_id = #bind($login_user_id) AND ");
-      body.append(" t0.report_id = t1.report_id AND ");
       body.append(" t1.status = 'U' AND ");
       body.append(" t0.parent_id = 0 ");
 
     } else if (SUBMENU_CREATED.equals(currentSubMenu)) {
       // 送信
-      select.append("SELECT ");
-      select.append(" t0.create_date, ");
-      select.append(" t0.end_date, ");
-      select.append(" t0.note, ");
-      select.append(" t0.parent_id, ");
-      select.append(" t0.user_id, ");
-      select.append(" t0.report_id, ");
-      select.append(" t0.report_name, ");
-      select.append(" t0.start_date, ");
-      select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0 ");
       body.append(" WHERE ");
       body.append(" t0.user_id = #bind($login_user_id) AND ");
       body.append(" t0.parent_id = 0 ");
 
     } else if (SUBMENU_REQUESTED.equals(currentSubMenu)) {
       // 受信
-      select.append("SELECT ");
-      select.append(" t0.create_date, ");
-      select.append(" t0.end_date, ");
-      select.append(" t0.note, ");
-      select.append(" t0.parent_id, ");
-      select.append(" t0.user_id, ");
-      select.append(" t0.report_id, ");
-      select.append(" t0.report_name, ");
-      select.append(" t0.start_date, ");
-      select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_index2) ");
-      }
-      body.append(" ,eip_t_report_map t1 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_map_index1) ");
-      }
       body.append(" WHERE ");
       body.append("  t1.user_id = #bind($login_user_id) AND ");
-      body.append("  t0.report_id = t1.report_id AND ");
       body.append("  t0.parent_id = 0 ");
 
     } else if (SUBMENU_ALL.equals(currentSubMenu)) {
       // 全て
-      select.append("SELECT ");
-      select.append(" t0.create_date, ");
-      select.append(" t0.end_date, ");
-      select.append(" t0.note, ");
-      select.append(" t0.parent_id, ");
-      select.append(" t0.user_id, ");
-      select.append(" t0.report_id, ");
-      select.append(" t0.report_name, ");
-      select.append(" t0.start_date, ");
-      select.append(" t0.update_date ");
-      body.append(" FROM eip_t_report t0 ");
-      if (isMySQL) {
-        body.append(" FORCE INDEX (eip_t_report_index2) ");
-      }
       body.append(" WHERE ");
-      body.append(" EXISTS ");
-      body
-        .append(" (SELECT * FROM eip_t_report_map t1 WHERE t0.report_id = t1.report_id) AND ");
-      body.append(" parent_id = 0 ");
+      body.append(" t0.parent_id = 0 ");
     }
     String group = buildSQLForFilter(rundata, context);
     if (!"".equals(group)) {
@@ -468,7 +422,9 @@ public class ReportSelectData extends
 
     if (search != null && !"".equals(search)) {
       body.append(" AND(t0.report_name LIKE '%" + search + "%' OR ");
-      body.append(" t0.note LIKE '%" + search + "%' ) ");
+      body.append(" t0.note LIKE '%" + search + "%'  OR ");
+      body.append(" t2.report_name LIKE '%" + search + "%' OR ");
+      body.append(" t2.note LIKE '%" + search + "%' ) ");
     }
 
     SQLTemplate<EipTReport> countQuery =
